@@ -19,6 +19,6 @@ For submitting, please follow [the instructions available in the book][book].
 
 ## Description
 
-This is a simple template for an agent that babbles random commands.
+This is a simple template for an ROS agent that does Lane Following with the Duckietown stack.
 
-[This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/embodied_classic.html).
+[This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/ros_baseline.html).
