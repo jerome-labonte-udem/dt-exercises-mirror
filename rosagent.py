@@ -1,6 +1,6 @@
 import rospy
 from sensor_msgs.msg import CompressedImage, CameraInfo
-from duckietown_msgs.msg import Twist2DStamped
+from duckietown_msgs.msg import Twist2DStamped, WheelsCmdStamped
 import numpy as np
 import os
 import cv2
@@ -11,9 +11,12 @@ class ROSAgent(object):
         # Get the vehicle name, which comes in as HOSTNAME
         self.vehicle = os.getenv('HOSTNAME')
         
-        # Subscribes to the output of the lane_controller_node
+        # Subscribes to the output of the lane_controller_node and IK node
         self.action_sub = rospy.Subscriber('/{}/lane_controller_node/car_cmd'.format(
             self.vehicle), Twist2DStamped, self._action_cb)
+        self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
+            self.vehicle), WheelsCmdStamped, self._ik_action_cb)
+        
         # Place holder for the action
         self.action = np.array([0, 0])
 
@@ -39,7 +42,16 @@ class ROSAgent(object):
         """
         v = msg.v
         omega = msg.omega
-        self.action = np.array([v, omega])
+        
+
+    def _ik_action_cb(self, msg):
+        """
+        Callback to listen to last outputted action from lane_controller_node
+        Stores it and sustains same action until new message published on topic
+        """
+        vl = msg.vel_left
+        vr = msg.vel_right
+        self.action = np.array([vl, vr])
     
     def _publish_info(self):
         """
@@ -73,3 +85,4 @@ class ROSAgent(object):
             self._publish_img(img)
             self._publish_info()
             self.r.sleep()
+            
