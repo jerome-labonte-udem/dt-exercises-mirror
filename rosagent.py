@@ -16,7 +16,7 @@ class ROSAgent(object):
             self.vehicle), Twist2DStamped, self._action_cb)
         self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
             self.vehicle), WheelsCmdStamped, self._ik_action_cb)
-        
+
         # Place holder for the action
         self.action = np.array([0, 0])
 
@@ -37,6 +37,7 @@ class ROSAgent(object):
 
     def _action_cb(self, msg):
         """
+        Now Just for Debugging Purposes: No longer using heading/velocity - instead use vl / vr
         Callback to listen to last outputted action from lane_controller_node
         Stores it and sustains same action until new message published on topic
         """
@@ -85,4 +86,3 @@ class ROSAgent(object):
             self._publish_img(img)
             self._publish_info()
             self.r.sleep()
-            
