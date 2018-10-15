@@ -5,7 +5,7 @@
 <a href="http://aido.duckietown.org"><img width="200" src="https://www.duckietown.org/wp-content/uploads/2018/07/AIDO-768x512.png"/></a>
 
 
-## Template "ROS-based Lane Following" for challenge `aido1_LF1-v3`
+## "ROS-based Lane Following" for challenge `aido1_LF1-v3`
 
 This is a template for one of the challenges in the [the AI Driving Olympics](http://aido.duckietown.org/).
 
@@ -19,6 +19,6 @@ For submitting, please follow [the instructions available in the book][book].
 
 ## Description
 
-This is a simple template for an agent that babbles random commands.
+This is a simple template for an ROS agent that does Lane Following with the Duckietown stack.
 
-[This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/embodied_classic.html).
+[This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/ros_baseline.html).
