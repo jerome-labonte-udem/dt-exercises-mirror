@@ -30,13 +30,11 @@ def solve(gym_environment, cis):
     # While there are no signal of completion (simulation done)
     # we run the predictions for a number of episodes, don't worry, we have the control on this part
 
-    # Now, initialize the ROS stuff here:
-    uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-    roslaunch.configure_logging(uuid)
-    roslaunch_path = os.path.join(os.getcwd(), "lf_slim.launch")
-    launch = roslaunch.parent.ROSLaunchParent(uuid, [roslaunch_path])
-    launch.start()
- 
+    # We need to launch the ROS stuff in the background
+    # ROSLaunch API doesn't play well with our environment setup, so we use subprocess
+    import subprocess
+    subprocess.Popen(["roslaunch lf_slim.launch"], shell=True)
+    
     # Start the ROSAgent, which handles publishing images and subscribing to action 
     agent = ROSAgent()
     r = rospy.Rate(15)
@@ -74,6 +72,7 @@ def solve(gym_environment, cis):
 
 class Submission(ChallengeSolution):
     def run(self, cis):
+        # Now, initialize the ROS stuff here: 
         assert isinstance(cis, ChallengeInterfaceSolution)  # this is a hack that would help with autocompletion
 
         # get the configuration parameters for this challenge

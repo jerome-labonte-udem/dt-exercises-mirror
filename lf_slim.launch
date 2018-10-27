@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <launch>
     <!-- start basic args -->
-    <arg name="veh" default="$(env VEHICLE_NAME)"/>
+    <arg name="veh" default="default"/>
     <arg name="config" default="baseline" />
     <arg name="param_file_name" default="default" />
     <arg name="verbose" default="true" />
