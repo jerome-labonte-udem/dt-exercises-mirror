@@ -19,6 +19,10 @@ def launch_local_experiment(gym_environment=None):
     # Use our environment launcher
     env = launch_env(gym_environment)
 
+    # If you want to use a wrapper, just import it!
+    # from utils.wrappers import ResizeWrapper
+    # env = ResizeWrapper(env)
+
     observation = env.reset()
     # While there are no signal of completion (simulation done)
     # we run the predictions for a number of episodes, don't worry, we have the control on this part

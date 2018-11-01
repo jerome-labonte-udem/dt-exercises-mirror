@@ -24,6 +24,11 @@ def solve(gym_environment, cis):
     # We get environment from the Evaluation Engine
     cis.info('Making environment')
     env = gym.make(gym_environment)
+
+    # If you want to use a wrapper, just import it!
+    # from utils.wrappers import ResizeWrapper
+    # env = ResizeWrapper(env)
+
     # Then we make sure we have a connection with the environment and it is ready to go
     cis.info('Reset environment')
     observation = env.reset()
