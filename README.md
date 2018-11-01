@@ -30,3 +30,11 @@ To run locally:
 1. `pip2 install --user -r requirements.txt`
 2. `pip2 install --user -e git://github.com/duckietown/gym-duckietown.git#egg=gym-duckietown`
 3. `python2 local_experiment.py`
+
+If you are looking to use the old Duckietown stack (as is the case, running it out of the box), you will need to follow these steps in addition to 1 and 2 above:
+
+2a. Clone this [repository](https://github.com/duckietown/Software)
+2b. `cd Software/catkin_ws && catkin_make`
+2c. `source devel/setup.bash`
+
+And then, you can run step 3.
