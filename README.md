@@ -34,7 +34,9 @@ To run locally:
 If you are looking to use the old Duckietown stack (as is the case, running it out of the box), you will need to follow these steps in addition to 1 and 2 above:
 
 2a. Clone this [repository](https://github.com/duckietown/Software)
+
 2b. `cd Software/catkin_ws && catkin_make`
+
 2c. `source devel/setup.bash`
 
 And then, you can run step 3.
