@@ -32,54 +32,53 @@
                 </include>
             </group>
 
-            <!-- Ground Projection -->
-            <group if="$(arg /lane_following/ground_projection)">
-                    <include file="$(find ground_projection)/launch/ground_projection.launch">
-                        <arg name="veh" value="$(arg veh)"/>
-                        <arg name="config" value="$(arg config)"/>
-                        <arg name="param_file_name" value="$(arg param_file_name)"/>
-                    </include>
-            </group>
-
-            <!-- Lane Filter -->
-            <group if="$(arg /lane_following/lane_filter)">
-                <remap from="lane_filter_node/segment_list" to="ground_projection/lineseglist_out"/>
-                <remap from="lane_filter_node/car_cmd" to="/$(arg veh)/car_cmd"/>
-                <include file="$(find lane_filter)/launch/lane_filter_node.launch">
+        <!-- Ground Projection -->
+        <group if="$(arg /lane_following/ground_projection)">
+                <include file="$(find ground_projection)/launch/ground_projection.launch">
                     <arg name="veh" value="$(arg veh)"/>
                     <arg name="config" value="$(arg config)"/>
                     <arg name="param_file_name" value="$(arg param_file_name)"/>
                 </include>
-            </group>
-            
-            <!-- Lane controller -->
-            <group if="$(arg /lane_following/lane_controller)">
-                <remap from="lane_controller_node/lane_pose" to="lane_filter_node/lane_pose"/>
-                <remap from="lane_controller_node/wheels_cmd_executed" to="wheels_driver_node/wheels_cmd_executed" />
-                <remap from="lane_controller_node/actuator_limits" to="inverse_kinematics_node/actuator_limits" />
+        </group>
 
-                <include file="$(find lane_control)/launch/lane_controller_node.launch">
-                    <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
-                    <arg name="param_file_name" value="$(arg param_file_name)"/>
-                </include>
-            </group>
+        <!-- Lane Filter -->
+        <group if="$(arg /lane_following/lane_filter)">
+            <remap from="lane_filter_node/segment_list" to="ground_projection/lineseglist_out"/>
+            <remap from="lane_filter_node/car_cmd" to="/$(arg veh)/car_cmd"/>
+            <include file="$(find lane_filter)/launch/lane_filter_node.launch">
+                <arg name="veh" value="$(arg veh)"/>
+                <arg name="config" value="$(arg config)"/>
+                <arg name="param_file_name" value="$(arg param_file_name)"/>
+            </include>
+        </group>
 
-            <!-- Inverse Kinematic Node -->
-            <group if="$(arg inverse_kinematics)">
-                <remap from="inverse_kinematics_node/car_cmd" to="lane_controller_node/car_cmd"/>
-                <remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
-                <include file="$(find dagu_car)/launch/inverse_kinematics_node.launch">
-                    <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
-                </include>
-            </group>
+        <!-- Lane controller -->
+        <group if="$(arg /lane_following/lane_controller)">
+            <remap from="lane_controller_node/lane_pose" to="lane_filter_node/lane_pose"/>
+            <remap from="lane_controller_node/wheels_cmd_executed" to="wheels_driver_node/wheels_cmd_executed" />
+            <remap from="lane_controller_node/actuator_limits" to="inverse_kinematics_node/actuator_limits" />
+
+            <include file="$(find lane_control)/launch/lane_controller_node.launch">
+                <arg name="veh" value="$(arg veh)"/>
+                <arg name="config" value="$(arg config)"/>
+                <arg name="param_file_name" value="$(arg param_file_name)"/>
+            </include>
+        </group>
+
+        <!-- Inverse Kinematic Node -->
+        <group if="$(arg inverse_kinematics)">
+            <remap from="inverse_kinematics_node/car_cmd" to="lane_controller_node/car_cmd"/>
+            <remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
+            <include file="$(find dagu_car)/launch/inverse_kinematics_node.launch">
+                <arg name="veh" value="$(arg veh)"/>
+                <arg name="config" value="$(arg config)"/>
+            </include>
+        </group>
 
     </group>
     <!-- End Lane Control -->
 
     <!-- Start Test Node -->
-    <!-- <node pkg="dt_dependent_node" name="dt_dependent_node" type="dt_dependent_node.py" output="screen"> 
-    </node> -->
+<!--         <node pkg="dt_dependent_node" name="dt_dependent_node" type="dt_dependent_node.py" output="screen" />  -->
     <!-- End Test Node -->
 </launch>
