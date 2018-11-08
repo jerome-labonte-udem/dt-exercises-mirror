@@ -28,10 +28,11 @@ This is a simple template for an ROS agent that does Lane Following with the Duc
 To run locally:
 
 1. `pip2 install --user -r requirements.txt`
-2. `pip2 install --user -e git://github.com/duckietown/gym-duckietown.git#egg=gym-duckietown`
-3. `python2 local_experiment.py`
+2. `git clone https://github.com/duckietown/gym-duckietown src/gym-duckietown/`
+3. `pip2 install --user src/gym-duckietown`
+4. `python2 local_experiment.py`
 
-If you are looking to use the old Duckietown stack (as is the case, running it out of the box), you will need to follow these steps in addition to 1 and 2 above:
+If you are looking to use the old Duckietown stack (as is the case, running it out of the box), you will need to follow these steps in addition:
 
 2a. Clone this [repository](https://github.com/duckietown/Software)
 
@@ -39,4 +40,4 @@ If you are looking to use the old Duckietown stack (as is the case, running it o
 
 2c. `source devel/setup.bash`
 
-And then, you can run step 3.
+And then, you can run step 4.
