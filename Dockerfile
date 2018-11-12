@@ -19,7 +19,7 @@ COPY lf_slim.launch ./
 # RUN /bin/bash -c "mkdir -p custom_ws/src/"
 
 ## Copy or init your packages in here
-# COPY dt_dependent_node custom_ws/dt_dependent_node
+# COPY dt_dependent_node custom_ws/src/dt_dependent_node
 # RUN chmod +x custom_ws/src/dt_dependent_node/dt_dependent_node.py
 
 ## Do not change the below line! This ensures that your workspace is overlayed on top of the Duckietown stack!  
