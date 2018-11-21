@@ -10,8 +10,7 @@ RUN ["cross-build-start"]
 COPY solution.py ./
 
 # For ROS Agent - Additional Files
-COPY rosagent.py ./
-COPY lf_slim.launch ./
+COPY rosagent.py lf_slim.launch ./
 
 ## Uncomment these to build your own catkin_ws
 #### START CUSTOM CATKIN_WS ####
