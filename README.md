@@ -4,8 +4,9 @@
 
 <a href="http://aido.duckietown.org"><img width="200" src="https://www.duckietown.org/wp-content/uploads/2018/07/AIDO-768x512.png"/></a>
 
-
 ## "ROS-based Lane Following" for challenge `aido1_LF1-v3`
+
+[![Docker Hub](https://img.shields.io/docker/pulls/duckietown/rpi-ros-kinetic-base.svg)](https://hub.docker.com/r/duckietown/challenge-aido1_lf1-template-ros)
 
 This is a template for one of the challenges in the [the AI Driving Olympics](http://aido.duckietown.org/).
 
