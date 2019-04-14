@@ -1,4 +1,6 @@
-challenge: aido1_LF1_r3-v3
+# challenge name(s); defaults to all compatible challenges
+# challenge: [c1,c2]
+
 protocol: aido1_remote3-v3
 user-label: "ROS-based Lane Following"
 description: |
