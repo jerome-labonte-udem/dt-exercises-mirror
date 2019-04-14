@@ -23,22 +23,3 @@ For submitting, please follow [the instructions available in the book][book].
 This is a simple template for an ROS agent that does Lane Following with the Duckietown stack.
 
 [This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/ros_baseline.html).
-
-## Running Locally
-
-To run locally:
-
-1. `pip2 install --user -r requirements.txt`
-2. `git clone https://github.com/duckietown/gym-duckietown src/gym-duckietown/`
-3. `pip2 install --user src/gym-duckietown`
-4. `python2 local_experiment.py`
-
-If you are looking to use the old Duckietown stack (as is the case, running it out of the box), you will need to follow these steps in addition:
-
-2a. Clone this [repository](https://github.com/duckietown/Software)
-
-2b. `cd Software/catkin_ws && catkin_make`
-
-2c. `source devel/setup.bash`
-
-And then, you can run step 4.
