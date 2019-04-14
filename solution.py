@@ -9,7 +9,7 @@ import numpy as np
 
 from rosagent import ROSAgent
 
-class ROSTemplateAgent(object):
+class ROSBaselineAgent(object):
     def __init__(self, load_model=False, model_path=None):
         # Now, initialize the ROS stuff here:
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -73,5 +73,5 @@ def jpg2rgb(image_data):
 
 
 if __name__ == '__main__':
-    agent = ROSTemplateAgent()
+    agent = ROSBaselineAgent()
     wrap_direct(agent)

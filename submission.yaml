@@ -1,7 +1,7 @@
 challenge:
   - aido2-LF-sim-testing
 protocol: aido2_db18_agent-z2
-user-label: "Template solution using ROS"
+user-label: "Baseline solution using ROS"
 user-payload: {}
 description: |
-    This is a simple random agent that operates through ROS
+    This is a simple baseline agent that operates through ROS using small portions of the Duckietown stack

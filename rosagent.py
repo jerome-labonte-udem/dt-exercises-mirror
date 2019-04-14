@@ -11,9 +11,7 @@ class ROSAgent(object):
         # Get the vehicle name, which comes in as HOSTNAME
         self.vehicle = os.getenv('HOSTNAME')
         
-        # Subscribes to the output of the lane_controller_node and IK node
-        self.action_sub = rospy.Subscriber('/{}/lane_controller_node/car_cmd'.format(
-            self.vehicle), Twist2DStamped, self._action_cb)
+        # Subscribes to the output of the lane_controller_node
         self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
             self.vehicle), WheelsCmdStamped, self._ik_action_cb)
 
@@ -32,7 +30,7 @@ class ROSAgent(object):
         # Initializes the node
         rospy.init_node('ROSAgent')
 
-        # 10Hz ROS Cycle - TODO: What is this number?
+        # 15Hz ROS Cycle - TODO: What is this number?
         self.r = rospy.Rate(15)
 
     def _ik_action_cb(self, msg):

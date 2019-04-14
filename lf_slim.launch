@@ -6,6 +6,7 @@
     <arg name="param_file_name" default="default" />
     <arg name="verbose" default="true" />
     <arg name="loc" default="-1"/>
+    <arg name="local" default="true"/>
     <arg name="line_detector_param_file_name" default="$(arg param_file_name)"/>
 
     <arg name="lane_following" default="true"/>
@@ -29,6 +30,7 @@
                     <!-- NOTE: "line_detector_param_file_name" as special case -->
                     <arg name="param_file_name" value="$(arg line_detector_param_file_name)"/>
                     <arg name="verbose" value="$(arg verbose)" />
+                    <arg name="local" value="$(arg local)"/>
                 </include>
             </group>
 
@@ -38,8 +40,21 @@
                     <arg name="veh" value="$(arg veh)"/>
                     <arg name="config" value="$(arg config)"/>
                     <arg name="param_file_name" value="$(arg param_file_name)"/>
+                    <arg name="local" value="$(arg local)"/>
                 </include>
         </group>
+
+        <!-- Inverse Kinematic Node -->
+        <group if="$(arg inverse_kinematics)">
+            <remap from="inverse_kinematics_node/car_cmd" to="lane_controller_node/car_cmd"/>
+            <remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
+            <include file="$(find dagu_car)/launch/inverse_kinematics_node.launch">
+                <arg name="veh" value="$(arg veh)"/>
+                <arg name="config" value="$(arg config)"/>
+                <arg name="local" value="$(arg local)"/>
+            </include>
+        </group>
+
 
         <!-- Lane Filter -->
         <group if="$(arg /lane_following/lane_filter)">
@@ -49,6 +64,7 @@
                 <arg name="veh" value="$(arg veh)"/>
                 <arg name="config" value="$(arg config)"/>
                 <arg name="param_file_name" value="$(arg param_file_name)"/>
+                <arg name="local" value="$(arg local)"/>
             </include>
         </group>
 
@@ -61,20 +77,10 @@
             <include file="$(find lane_control)/launch/lane_controller_node.launch">
                 <arg name="veh" value="$(arg veh)"/>
                 <arg name="config" value="$(arg config)"/>
-                <arg name="param_file_name" value="$(arg param_file_name)"/>
+                <!-- <arg name="param_file_name" value="$(arg param_file_name)"/> -->
+                <arg name="local" value="$(arg local)"/>
             </include>
         </group>
-
-        <!-- Inverse Kinematic Node -->
-        <group if="$(arg inverse_kinematics)">
-            <remap from="inverse_kinematics_node/car_cmd" to="lane_controller_node/car_cmd"/>
-            <remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
-            <include file="$(find dagu_car)/launch/inverse_kinematics_node.launch">
-                <arg name="veh" value="$(arg veh)"/>
-                <arg name="config" value="$(arg config)"/>
-            </include>
-        </group>
-
     </group>
     <!-- End Lane Control -->
 
