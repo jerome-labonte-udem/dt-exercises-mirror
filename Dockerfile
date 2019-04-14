@@ -1,7 +1,7 @@
 # Definition of Submission container
 
 # We start from the AIDO1_LF1 ROS template
-FROM duckietown/challenge-aido1_lf1-template-ros:v3
+FROM duckietown/challenge-aido_lf-template-ros:master19
 
 RUN ["cross-build-start"]
 
@@ -30,7 +30,7 @@ COPY rosagent.py lf_slim.launch ./
 #### END CUSTOM CATKIN_WS ####
 
 # DO NOT MODIFY: your submission won't run if you do
-ENV DUCKIETOWN_SERVER=evaluator
+ENV HOSTNAME=default
 
 RUN ["cross-build-end"]
 ENTRYPOINT ["qemu3-arm-static"]

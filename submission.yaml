@@ -1,9 +1,7 @@
-# challenge name(s); defaults to all compatible challenges
-# challenge: [c1,c2]
-
-protocol: aido1_remote3-v3
-user-label: "ROS-based Lane Following"
+challenge:
+  - aido2-LF-sim-testing
+protocol: aido2_db18_agent-z2
+user-label: "Template solution using ROS"
+user-payload: {}
 description: |
-    This is a simple template for an agent that does ROS-based Lane Following - Velocities
-
-    [This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/embodied_classic.html).
+    This is a simple random agent that operates through ROS

@@ -1,101 +1,77 @@
-#!/usr/bin/env python
-import gym
-# noinspection PyUnresolvedReferences
-import gym_duckietown_agent  # DO NOT CHANGE THIS IMPORT (the environments are defined here)
-import numpy as np
-from duckietown_challenges import wrap_solution, ChallengeSolution, ChallengeInterfaceSolution, InvalidSubmission
+#!/usr/bin/env python2
+from __future__ import unicode_literals
 
-# ROS imports
+from zuper_nodes_python2 import wrap_direct
 import os
 import rospy
 import roslaunch
+import numpy as np
+
 from rosagent import ROSAgent
-import subprocess
-import time
+
+class ROSTemplateAgent(object):
+    def __init__(self, load_model=False, model_path=None):
+        # Now, initialize the ROS stuff here:
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+        roslaunch_path = os.path.join(os.getcwd(), "lf_slim.launch")
+        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [roslaunch_path])
+        self.launch.start()
+     
+        # Start the ROSAgent, which handles publishing images and subscribing to action 
+        self.agent = ROSAgent()
+
+    def init(self, context, data):
+        context.info('init()')
+
+    def on_received_seed(self, context, data):
+        np.random.seed(data)
+
+    def on_received_episode_start(self, context, data):
+        context.info('Starting episode %s.' % data)
+
+    def on_received_observations(self, context, data):
+        jpg_data = data['camera']['jpg_data']
+        obs = jpg2rgb(jpg_data)
+        self.agent._publish_img(obs)
+        self.agent._publish_info()
+
+    def on_received_get_commands(self, context, data):
+        pwm_left, pwm_right = self.agent.action
+
+        rgb = {'r': 0.5, 'g': 0.5, 'b': 0.5}
+        commands = {
+            'wheels': {
+                'motor_left': pwm_left,
+                'motor_right': pwm_right
+            },
+            'LEDS': {
+                'center': rgb,
+                'front_left': rgb,
+                'front_right': rgb,
+                'back_left': rgb,
+                'back_right': rgb
+
+            }
+        }
+        context.write('commands', commands)
+
+    def finish(self, context):
+        context.info('finish()')
 
 
-def solve(gym_environment, cis):
-    # python has dynamic typing, the line below can help IDEs with autocompletion
-    assert isinstance(cis, ChallengeInterfaceSolution)
-    # after this cis. will provide you with some autocompletion in some IDEs (e.g.: pycharm)
-    cis.info('Creating model.')
-    # you can have logging capabilties through the solution interface (cis).
-    # the info you log can be retrieved from your submission files.
-    # We get environment from the Evaluation Engine
-    cis.info('Making environment')
-    env = gym.make(gym_environment)
-
-    # If you want to use a wrapper, just import it!
-    # from utils.wrappers import ResizeWrapper
-    # env = ResizeWrapper(env)
-
-    # Then we make sure we have a connection with the environment and it is ready to go
-    cis.info('Reset environment')
-    observation = env.reset()
-    # While there are no signal of completion (simulation done)
-    # we run the predictions for a number of episodes, don't worry, we have the control on this part
-
-    # We need to launch the ROS stuff in the background
-    # ROSLaunch API doesn't play well with our environment setup, so we use subprocess
-    import subprocess
-    subprocess.Popen(["roslaunch lf_slim.launch"], shell=True)
-    
-    # Start the ROSAgent, which handles publishing images and subscribing to action 
-    agent = ROSAgent()
-    r = rospy.Rate(15)
-
-    while not rospy.is_shutdown():
-        # we passe the observation to our model, and we get an action in return
-        # we tell the environment to perform this action and we get some info back in OpenAI Gym style
-        
-        # To trigger the lane following pipeline, we publish the image 
-        # and camera_infos to the correct topics defined in rosagent
-        agent._publish_img(observation)
-        agent._publish_info()
-
-        # The action is updated inside of agent by other nodes asynchronously
-        action = agent.action
-        # Edge case - if the nodes aren't ready yet
-        if np.array_equal(action, np.array([0, 0])):
-            continue
-            
-        observation, reward, done, info = env.step(action)
-        # here you may want to compute some stats, like how much reward are you getting
-        # notice, this reward may no be associated with the challenge score.
-
-        # it is important to check for this flag, the Evalution Engine will let us know when should we finish
-        # if we are not careful with this the Evaluation Engine will kill our container and we will get no score
-        # from this submission
-        if 'simulation_done' in info:
-            break
-        if done:
-            env.reset()
-
-        # Run the main loop at 15Hz
-        r.sleep()
-
-
-class Submission(ChallengeSolution):
-    def run(self, cis):
-        # Now, initialize the ROS stuff here: 
-        assert isinstance(cis, ChallengeInterfaceSolution)  # this is a hack that would help with autocompletion
-
-        # get the configuration parameters for this challenge
-        params = cis.get_challenge_parameters()
-        cis.info('Parameters: %s' % params)
-
-        gym_environment = params['env']
-
-        try:
-            cis.info('Starting.')
-            solve(gym_environment, cis)  # let's try to solve the challenge, exciting ah?
-        except BaseException as e:
-            raise InvalidSubmission(str(e))
-
-        cis.set_solution_output_dict({})
-        cis.info('Finished.')
+def jpg2rgb(image_data):
+    """ Reads JPG bytes as RGB"""
+    from PIL import Image
+    import io
+    im = Image.open(io.BytesIO(image_data))
+    im = im.convert('RGB')
+    data = np.array(im) 
+    assert data.ndim == 3
+    assert data.dtype == np.uint8
+    return data
 
 
 if __name__ == '__main__':
-    print('Starting submission')
-    wrap_solution(Submission())
+    agent = ROSTemplateAgent()
+    wrap_direct(agent)

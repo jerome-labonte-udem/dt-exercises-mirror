@@ -33,17 +33,7 @@ class ROSAgent(object):
         rospy.init_node('ROSAgent')
 
         # 10Hz ROS Cycle - TODO: What is this number?
-        self.r = rospy.Rate(10)
-
-    def _action_cb(self, msg):
-        """
-        Now Just for Debugging Purposes: No longer using heading/velocity - instead use vl / vr
-        Callback to listen to last outputted action from lane_controller_node
-        Stores it and sustains same action until new message published on topic
-        """
-        v = msg.v
-        omega = msg.omega
-        
+        self.r = rospy.Rate(15)
 
     def _ik_action_cb(self, msg):
         """
@@ -74,15 +64,4 @@ class ROSAgent(object):
         contig = cv2.cvtColor(np.ascontiguousarray(obs), cv2.COLOR_BGR2RGB)
         img_msg.data = np.array(cv2.imencode('.jpg', contig)[1]).tostring()
   
-        self.cam_pub.publish(img_msg)    
-
-    def spin(self):
-        """
-        Main loop
-        Steps the sim with the last action at rate of 10Hz
-        """
-        while not rospy.is_shutdown():
-            img, r , d, _ = self.sim.step(self.action)
-            self._publish_img(img)
-            self._publish_info()
-            self.r.sleep()
+        self.cam_pub.publish(img_msg)
