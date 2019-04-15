@@ -1,2 +1,0 @@
--e git://github.com/AndreaCensi/zuper-nodes-python2.git@z2#egg=zuper-nodes-python2
-cbor2

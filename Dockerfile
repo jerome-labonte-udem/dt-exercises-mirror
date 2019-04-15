@@ -1,14 +1,11 @@
 # Definition of Submission container
 
 # We start from the ROS Template
-# TODO: Issue 419 DT Software, til fixed, pull from master18
-# FROM duckietown/challenge-aido_lf-template-ros:master18
+FROM duckietown/challenge-aido_lf-template-ros:aido2
 
-FROM duckietown/challenge-aido1_lf1-template-ros:v3
 
 RUN ["cross-build-start"]
 
-# Can remove after 419Fixed!
 COPY requirements.txt .
 RUN pip install -r requirements.txt 
 

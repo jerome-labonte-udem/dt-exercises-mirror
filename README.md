@@ -2,24 +2,25 @@
  
 # AI Driving Olympics
 
-<a href="http://aido.duckietown.org"><img width="200" src="https://www.duckietown.org/wp-content/uploads/2018/07/AIDO-768x512.png"/></a>
+<a href="http://aido.duckietown.org"><img width="200" src="https://www.duckietown.org/wp-content/uploads/2018/12/AIDO_no_text-e1544555660271.png"/></a>
 
-## "ROS-based Lane Following" for challenge `aido1_LF1-v3`
 
-[![Docker Hub](https://img.shields.io/docker/pulls/duckietown/rpi-ros-kinetic-base.svg)](https://hub.docker.com/r/duckietown/challenge-aido1_lf1-template-ros)
+## Template "ROS-based Random Agent" for challenge [`aido_LF`][lf], [`aido_LFV`][lfv] and [`aido_LFVI`][lfvi]
 
 This is a template for one of the challenges in the [the AI Driving Olympics](http://aido.duckietown.org/).
 
-The [online description of this challenge is here][online].
-
 For submitting, please follow [the instructions available in the book][book].
  
-[book]: http://docs.duckietown.org/DT18/AIDO/out/
+[book]: http://docs.duckietown.org/DT19/AIDO/out/
 
-[online]: https://challenges.duckietown.org/v3/humans/challenges/aido1_LF1-v3
+[lf]: http://docs.duckietown.org/DT19/AIDO/out/lf.html
+
+[lfv]: http://docs.duckietown.org/DT19/AIDO/out/lf_v.html
+
+[lfvi]: http://docs.duckietown.org/DT19/AIDO/out/lf_v_i.html
 
 ## Description
 
 This is a simple template for an ROS agent that does Lane Following with the Duckietown stack.
 
-[This code is documented here](https://docs.duckietown.org/DT18/AIDO/out/ros_baseline.html).
+[This code is documented here](https://docs.duckietown.org/DT19/AIDO/out/ros_baseline.html).
