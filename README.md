@@ -5,7 +5,7 @@
 <a href="http://aido.duckietown.org"><img width="200" src="https://www.duckietown.org/wp-content/uploads/2018/12/AIDO_no_text-e1544555660271.png"/></a>
 
 
-## Template "ROS-based Random Agent" for challenge [`aido_LF`][lf], [`aido_LFV`][lfv] and [`aido_LFVI`][lfvi]
+## Baseline "Duckietown" for challenge [`aido_LF`][lf], [`aido_LFV`][lfv] and [`aido_LFVI`][lfvi]
 
 This is a template for one of the challenges in the [the AI Driving Olympics](http://aido.duckietown.org/).
 
