@@ -1,0 +1,5 @@
+-e git://github.com/AndreaCensi/zuper-nodes-python2.git@z2#egg=zuper-nodes-python2
+cbor2
+SystemCmd==2.2.2
+compmake==3.6.1
+comptests==1.4.27

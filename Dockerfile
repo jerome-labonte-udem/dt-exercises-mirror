@@ -3,8 +3,8 @@
 # We start from the ROS Template
 FROM duckietown/challenge-aido_lf-template-ros:aido2
 
-
-RUN ["cross-build-start"]
+RUN rm -r /workspace; mkdir /workspace
+WORKDIR /workspace
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt 
@@ -14,7 +14,8 @@ RUN pip install -r requirements.txt
 COPY solution.py ./
 
 # For ROS Agent - Additional Files
-COPY rosagent.py lf_slim.launch ./
+COPY rosagent.py ./
+COPY lf_slim.launch ./
 
 ## Uncomment these to build your own catkin_ws
 #### START CUSTOM CATKIN_WS ####
@@ -36,8 +37,5 @@ COPY rosagent.py lf_slim.launch ./
 # DO NOT MODIFY: your submission won't run if you do
 ENV HOSTNAME=default
 
-RUN ["cross-build-end"]
-ENTRYPOINT ["qemu3-arm-static"]
-
 # let's see what you've got there...
-CMD ["/bin/bash", "-ci", "./solution.py"]
+CMD ["python", "solution.py"]
