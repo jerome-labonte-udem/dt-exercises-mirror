@@ -29,7 +29,7 @@ services:
     lanefollow:
         build: 
             context: .
-            dockerfile: DockerfileCatkin
+            dockerfile: Dockerfile
         networks:
         - gym-duckietown-net
         command: /bin/bash -c  "source /home/software/docker/env.sh && 
