@@ -2,7 +2,7 @@ FROM duckietown/rpi-duckiebot-base:master18
 
 RUN ["cross-build-start"]
 
-# Change from here
+#### START CUSTOM CATKIN_WS ####
 RUN /bin/bash -c "mkdir -p custom_ws/src/"
 
 # Copy or init your packages in here
@@ -27,5 +27,6 @@ RUN /bin/bash -c "source custom_ws/devel/setup.bash"
 
 # Copy your launch file over
 COPY lf_slim.launch .
+#### END CUSTOM CATKIN_WS ####
 
 RUN ["cross-build-end"]
