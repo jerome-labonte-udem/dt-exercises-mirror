@@ -1,0 +1,63 @@
+version: '3'
+services:
+    gym-duckietown-ros:
+        image: duckietown/gym-duckietown-ros-agent
+        command: /bin/bash -c "./agent/run_display.bash &&
+                               source dt_msg_ws/devel/setup.bash && 
+                               /usr/bin/python agent/rosagent.py"
+        depends_on:
+        - "lanefollow"
+        volumes:
+        - .:/workspace/agent/
+        networks:
+        - gym-duckietown-net
+        environment:
+        - "ROS_MASTER_URI=http://lanefollow:11311"
+        - "DUCKIETOWN_SERVER=gym-duckietown-server"
+        - "HOSTNAME=default"
+        - "DISPLAY=:99"
+        - "DUCKIETOWN_CHALLENGE=LF"
+        expose:
+        - "8902"
+        - "5558"
+        volumes:
+        - /tmp/.X11-unix:/tmp/.X11-unix
+        ports:
+        - "8902:8902"
+        - "5558:5558"
+
+    lanefollow:
+        build: 
+            context: .
+            dockerfile: DockerfileCatkin
+        networks:
+        - gym-duckietown-net
+        command: /bin/bash -c  "source /home/software/docker/env.sh && 
+                                ./set_vehicle_name.sh && 
+                                source /home/software/custom_ws/devel/setup.bash && 
+                                roslaunch lf_slim.launch"
+        entrypoint:
+        - "qemu3-arm-static"
+        environment:
+        - "ROS_MASTER_URI=http://lanefollow:11311"
+        - DUCKIETOWN_SERVER=gym-duckietown-server
+        - "HOSTNAME=default"
+
+    # Optional: Just records a bagfile for monitoring purposes
+    rosmonitor:
+        image: ros:kinetic-perception
+        networks:
+        - gym-duckietown-net
+        depends_on:
+        - "lanefollow"
+        command: bash -c "sleep 10 && rosbag record /default/line_detector_node/image_with_lines -O /tmp/rosbag/full.bag -l 1000"
+        volumes:
+        - /tmp/rosbag:/tmp/rosbag
+        environment:
+        - "ROS_MASTER_URI=http://lanefollow:11311"
+        - DUCKIETOWN_SERVER=gym-duckietown-server
+        - "HOSTNAME=default"
+
+
+networks:
+  gym-duckietown-net:
