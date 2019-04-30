@@ -1,4 +1,4 @@
-FROM duckietown/rpi-duckiebot-base:master18
+FROM duckietown/rpi-duckiebot-base:master19
 
 RUN ["cross-build-start"]
 
