@@ -42,7 +42,7 @@ class ROSBaselineAgent(object):
             time.sleep(0.01)
 
         pwm_left, pwm_right = self.agent.action
-        self.agent.updated = False
+        self.agent.updated = True
 
         rgb = {'r': 0.5, 'g': 0.5, 'b': 0.5}
         commands = {
