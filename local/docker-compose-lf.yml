@@ -6,7 +6,7 @@ services:
             dockerfile: DockerfileRosAgent
         command: /bin/bash -c "./agent/run_display.bash &&
                                source dt_msg_ws/devel/setup.bash && 
-                               /usr/bin/python agent/rosagent.py"
+                               /usr/bin/python3 agent/rosagent.py"
         depends_on:
         - "lanefollow"
         volumes:
@@ -34,16 +34,12 @@ services:
             dockerfile: Dockerfile
         networks:
         - gym-duckietown-net
-        command: /bin/bash -c  "source /home/software/docker/env.sh && 
-                                ./set_vehicle_name.sh && 
-                                source /home/software/custom_ws/devel/setup.bash && 
-                                roslaunch lf_slim.launch"
-        entrypoint:
-        - "qemu3-arm-static"
+        command: /bin/bash -c  "roslaunch lf_slim.launch"
         environment:
         - "ROS_MASTER_URI=http://lanefollow:11311"
         - DUCKIETOWN_SERVER=gym-duckietown-server
         - "HOSTNAME=default"
+        - "VEHICLE_NAME=default"
 
     # Optional: Just records a bagfile for monitoring purposes
     rosmonitor:

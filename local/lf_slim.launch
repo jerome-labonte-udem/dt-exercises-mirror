@@ -2,7 +2,6 @@
 <launch>
     <!-- start basic args -->
     <arg name="veh" default="$(env VEHICLE_NAME)"/>
-    <arg name="config" default="baseline" />
     <arg name="param_file_name" default="default" />
     <arg name="verbose" default="true" />
     <arg name="loc" default="-1"/>
@@ -24,18 +23,15 @@
                 <remap from="line_detector_node/corrected_image/compressed" to="corrected_image/compressed"/>
                 <include file="$(find line_detector)/launch/line_detector_node.launch">
                     <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
-                    <!-- NOTE: "line_detector_param_file_name" as special case -->
                     <arg name="param_file_name" value="$(arg line_detector_param_file_name)"/>
-                    <arg name="verbose" value="$(arg verbose)" />
                 </include>
             </group>
 
             <!-- Ground Projection -->
             <group if="$(arg /lane_following/ground_projection)">
+            <remap from="~lineseglist_in" to="line_detector_node/segment_list"/>
                     <include file="$(find ground_projection)/launch/ground_projection.launch">
                         <arg name="veh" value="$(arg veh)"/>
-                        <arg name="config" value="$(arg config)"/>
                         <arg name="param_file_name" value="$(arg param_file_name)"/>
                     </include>
             </group>
@@ -46,7 +42,6 @@
                 <remap from="lane_filter_node/car_cmd" to="/$(arg veh)/car_cmd"/>
                 <include file="$(find lane_filter)/launch/lane_filter_node.launch">
                     <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
                     <arg name="param_file_name" value="$(arg param_file_name)"/>
                 </include>
             </group>
@@ -59,7 +54,6 @@
 
                 <include file="$(find lane_control)/launch/lane_controller_node.launch">
                     <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
                     <arg name="param_file_name" value="$(arg param_file_name)"/>
                 </include>
             </group>
@@ -70,7 +64,6 @@
                 <remap from="inverse_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
                 <include file="$(find dagu_car)/launch/inverse_kinematics_node.launch">
                     <arg name="veh" value="$(arg veh)"/>
-                    <arg name="config" value="$(arg config)"/>
                 </include>
             </group>
 

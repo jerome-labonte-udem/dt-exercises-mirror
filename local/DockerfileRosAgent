@@ -1,2 +1,2 @@
-FROM duckietown/gym-duckietown-ros-agent
+FROM duckietown/gym-duckietown-ros-agent:daffy-amd64
 COPY env.py agent/
