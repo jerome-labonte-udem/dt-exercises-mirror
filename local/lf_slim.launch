@@ -14,7 +14,7 @@
     <arg name="/lane_following/lane_controller" default="true"/>
 
     <arg name="inverse_kinematics" default="true"/>
-
+    
     <group if="$(arg lane_following)">
 
         <!-- Line Detector -->
@@ -39,7 +39,7 @@
             <!-- Lane Filter -->
             <group if="$(arg /lane_following/lane_filter)">
                 <remap from="lane_filter_node/segment_list" to="ground_projection/lineseglist_out"/>
-                <remap from="lane_filter_node/car_cmd" to="/$(arg veh)/car_cmd"/>
+                <remap from="lane_filter_node/car_cmd" to="forward_kinematics_node/velocity"/>
                 <include file="$(find lane_filter)/launch/lane_filter_node.launch">
                     <arg name="veh" value="$(arg veh)"/>
                     <arg name="param_file_name" value="$(arg param_file_name)"/>
@@ -67,6 +67,13 @@
                 </include>
             </group>
 
+            <!-- Forward Kinematics: turns wheels-level commands into chassis-level velocities -->
+            <remap from="forward_kinematics_node/wheels_cmd" to="wheels_driver_node/wheels_cmd" />
+            <include file="$(find dagu_car)/launch/forward_kinematics_node.launch">
+              <arg name="veh" value="$(arg veh)"/>
+            </include>
+
+            
     </group>
     <!-- End Lane Control -->
 
