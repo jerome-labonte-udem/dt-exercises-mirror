@@ -4,7 +4,8 @@ services:
         build: 
             context: .
             dockerfile: DockerfileRosAgent
-        command: /bin/bash -c "./agent/run_display.bash &&
+        command: /bin/bash -c "rm -f /tmp/.X99-lock &&
+                              ./agent/run_display.bash &&
                                source dt_msg_ws/devel/setup.bash && 
                                /usr/bin/python3 agent/rosagent.py"
         depends_on:
