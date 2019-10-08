@@ -1,7 +1,7 @@
 # Definition of Submission container
 
 # We start from the ROS Template
-FROM duckietown/challenge-aido_lf-template-ros:aido2
+FROM duckietown/challenge-aido_lf-template-ros:daffy
 
 RUN rm -r /workspace; mkdir /workspace
 WORKDIR /workspace
