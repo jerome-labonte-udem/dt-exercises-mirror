@@ -37,5 +37,10 @@ COPY lf_slim.launch ./
 # DO NOT MODIFY: your submission won't run if you do
 ENV HOSTNAME=default
 
+ENV DUCKIEFLEET_ROOT /data/config
+
+RUN mkdir -p /data/config
+RUN git clone https://github.com/duckietown/duckiefleet.git /data/config
+
 # let's see what you've got there...
 CMD ["python", "solution.py"]

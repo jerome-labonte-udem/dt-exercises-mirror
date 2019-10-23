@@ -18,6 +18,7 @@
     <include file="$(find car_interface)/launch/all.launch">
       <arg name="veh" value="$(arg veh)"/>
       <arg name="param_file_name" value="$(arg param_file_name)"/>
+    </include>
     
     <!-- Start Lane Control -->
     <group if="$(arg lane_following)">

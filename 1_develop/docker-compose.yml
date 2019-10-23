@@ -12,10 +12,9 @@ services:
         - "sim"
         volumes:
         - ./catkin_ws:/duckietown/catkin_ws
-        - ./notebooks:/duckietown/notebooks
         - ./utils:/duckietown/utils
         - ./custom:/duckietown/custom
-        - ./custom_ws:/duckietown/custom_ws
+        - ./sim_ws:/duckietown/sim_ws
         - ./simulation:/duckietown/simulation
         - /tmp/.X11-unix:/tmp/.X11-unix
         environment:
@@ -29,10 +28,7 @@ services:
         - "8888:8888"
 
     novnc:
-        image: duckietown/dt-novnc:udem
-        build:
-            context: .
-            dockerfile: DockerfileNoVNC
+        image: duckietown/docker-ros-vnc:daffy
         networks:
         - duckietown-docker-net
         environment:
