@@ -1,29 +1,40 @@
 #!/usr/bin/env python2
 from __future__ import unicode_literals
 
-from zuper_nodes_python2 import wrap_direct
 import os
-import rospy
-import roslaunch
-import numpy as np
 import time
 
+import numpy as np
+import roslaunch
 from rosagent import ROSAgent
 
-class ROSBaselineAgent(object):
-    def __init__(self, load_model=False, model_path=None):
-        # Now, initialize the ROS stuff here:
-        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        roslaunch.configure_logging(uuid)
-        roslaunch_path = os.path.join(os.getcwd(), "lf_slim.launch")
-        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [roslaunch_path])
-        self.launch.start()
-     
-        # Start the ROSAgent, which handles publishing images and subscribing to action 
-        self.agent = ROSAgent()
+from zuper_nodes_python2 import logger, wrap_direct
 
-    def init(self, context, data):
-        context.info('init()')
+
+class ROSBaselineAgent(object):
+    def __init__(self):
+        logger.info('started __init__()')
+        # Now, initialize the ROS stuff here:
+
+        # logger.info('Configuring logging')
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        # roslaunch.configure_logging(uuid)
+        # print('configured logging 2')
+        roslaunch_path = os.path.join(os.getcwd(), "lf_slim.launch")
+        logger.info('Creating ROSLaunchParent')
+        self.launch = roslaunch.parent.ROSLaunchParent(uuid, [roslaunch_path])
+
+        logger.info('about to call start()')
+
+        self.launch.start()
+        logger.info('returning from start()')
+
+        # Start the ROSAgent, which handles publishing images and subscribing to action
+        logger.info('starting ROSAgent()')
+        self.agent = ROSAgent()
+        logger.info('started ROSAgent()')
+
+        logger.info('completed __init__()')
 
     def on_received_seed(self, context, data):
         np.random.seed(data)
@@ -71,7 +82,7 @@ def jpg2rgb(image_data):
     import io
     im = Image.open(io.BytesIO(image_data))
     im = im.convert('RGB')
-    data = np.array(im) 
+    data = np.array(im)
     assert data.ndim == 3
     assert data.dtype == np.uint8
     return data

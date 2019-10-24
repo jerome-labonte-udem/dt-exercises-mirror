@@ -22,14 +22,14 @@ class ROSAgent(object):
         self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
             self.vehicle), WheelsCmdStamped, self._ik_action_cb)
         # Place holder for the action, which will be read by the agent in solution.py
-        self.action = np.array([0, 0])
+        self.action = np.array([0.0, 0.0])
         self.updated = True
 
-        # Publishes onto the corrected image topic 
+        # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
         self.cam_pub = rospy.Publisher('/{}/image/compressed'.format(
             self.vehicle), CompressedImage, queue_size=10)
-        
+
         # Publisher for camera info - needed for the ground_projection
         self.cam_info_pub = rospy.Publisher('/{}/camera_info_topic'.format(
             self.vehicle), CameraInfo, queue_size=1)
@@ -46,13 +46,13 @@ class ROSAgent(object):
         vr = msg.vel_right
         self.action = np.array([vl, vr])
         self.updated = True
-    
+
     def _publish_info(self):
         """
         Publishes a default CameraInfo
         """
 
-        self.cam_info_pub.publish(CameraInfo())      
+        self.cam_info_pub.publish(CameraInfo())
 
     def publish_img(self, obs):
         """
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     rosagent = ROSAgent()
     env = launch_env()
     obs = env.reset()
-    r = rospy.Rate(15)  
+    r = rospy.Rate(15)
     rosagent.publish_img(obs)
 
     while not rospy.is_shutdown():

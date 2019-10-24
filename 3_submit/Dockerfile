@@ -7,7 +7,7 @@ RUN rm -r /workspace; mkdir /workspace
 WORKDIR /workspace
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt 
+RUN pip install -r requirements.txt
 
 # let's copy all our solution files to our workspace
 # if you have more file use the COPY command to move them to the workspace
@@ -26,7 +26,7 @@ COPY lf_slim.launch ./
 # COPY dt_dependent_node custom_ws/src/dt_dependent_node
 # RUN chmod +x custom_ws/src/dt_dependent_node/dt_dependent_node.py
 
-## Do not change the below line! This ensures that your workspace is overlayed on top of the Duckietown stack!  
+## Do not change the below line! This ensures that your workspace is overlayed on top of the Duckietown stack!
 ## MAKE sure this line is present in the build: This workspace overlays: /home/software/catkin_ws/devel;/opt/ros/kinetic
 # RUN /bin/bash -c "source /home/software/catkin_ws/devel/setup.bash && catkin_init_workspace && cd ../.."
 # RUN /bin/bash -c "source /home/software/catkin_ws/devel/setup.bash && catkin_make -j -C custom_ws/"
@@ -41,6 +41,6 @@ ENV DUCKIEFLEET_ROOT /data/config
 
 RUN mkdir -p /data/config
 RUN git clone https://github.com/duckietown/duckiefleet.git /data/config
-
+ENV VEHICLE_IP=127.0.0.1
 # let's see what you've got there...
 CMD ["python", "solution.py"]

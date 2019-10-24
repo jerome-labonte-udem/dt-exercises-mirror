@@ -1,38 +1,51 @@
 import rospy
 from sensor_msgs.msg import CompressedImage, CameraInfo
-from duckietown_msgs.msg import Twist2DStamped, WheelsCmdStamped
+from duckietown_msgs.msg import WheelsCmdStamped
 import numpy as np
 import os
 import cv2
+from zuper_nodes_python2 import logger
 
 
 class ROSAgent(object):
     def __init__(self):
+        logger.info('ROSAgent::__init__ starts')
         # Get the vehicle name, which comes in as HOSTNAME
         self.vehicle = os.getenv('HOSTNAME')
-        
-        # Subscribes to the output of the lane_controller_node
-        self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
-            self.vehicle), WheelsCmdStamped, self._ik_action_cb)
+
 
         # Place holder for the action
-        self.action = np.array([0, 0])
+        self.action = np.array([0.0, 0.0])
         self.updated = True
 
-        # Publishes onto the corrected image topic 
+        # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
+        logger.info('creating publishers')
         self.cam_pub = rospy.Publisher('/{}/corrected_image/compressed'.format(
             self.vehicle), CompressedImage, queue_size=10)
-        
+
         # Publisher for camera info - needed for the ground_projection
         self.cam_info_pub = rospy.Publisher('/{}/camera_node/camera_info'.format(
             self.vehicle), CameraInfo, queue_size=1)
 
         # Initializes the node
-        rospy.init_node('ROSAgent')
+        logger.info('Calling init_node')
+        try:
+            # rospy.init_node('ROSAgent', disable_signals=True)
+            rospy.init_node('ROSAgent')
+        except BaseException as e:
+            logger.info('exception in init_node: %s' % e)
+            raise
+        print('Creating subscriber 2')
+        logger.info('Creating subscriber')
+        # Subscribes to the output of the lane_controller_node
+        self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
+            self.vehicle), WheelsCmdStamped, self._ik_action_cb)
 
         # 15Hz ROS Cycle - TODO: What is this number?
         self.r = rospy.Rate(15)
+
+        logger.info('ROSAgent::__init__ complete.')
 
     def _ik_action_cb(self, msg):
         """
@@ -43,12 +56,12 @@ class ROSAgent(object):
         vr = msg.vel_right
         self.action = np.array([vl, vr])
         self.updated = True
-    
+
     def _publish_info(self):
         """
         Publishes a default CameraInfo - TODO: Fix after distortion applied in simulator
         """
-        self.cam_info_pub.publish(CameraInfo())      
+        self.cam_info_pub.publish(CameraInfo())
 
     def _publish_img(self, obs):
         """
@@ -63,5 +76,5 @@ class ROSAgent(object):
         img_msg.format = "jpeg"
         contig = cv2.cvtColor(np.ascontiguousarray(obs), cv2.COLOR_BGR2RGB)
         img_msg.data = np.array(cv2.imencode('.jpg', contig)[1]).tostring()
-  
+
         self.cam_pub.publish(img_msg)
