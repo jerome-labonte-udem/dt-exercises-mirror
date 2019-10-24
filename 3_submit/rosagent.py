@@ -13,7 +13,12 @@ class ROSAgent(object):
         # Get the vehicle name, which comes in as HOSTNAME
         self.vehicle = os.getenv('HOSTNAME')
 
+        logger.info('Creating subscriber')
+        # Subscribes to the output of the lane_controller_node
+        self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
+            self.vehicle), WheelsCmdStamped, self._ik_action_cb)
 
+        
         # Place holder for the action
         self.action = np.array([0.0, 0.0])
         self.updated = True
@@ -21,7 +26,7 @@ class ROSAgent(object):
         # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
         logger.info('creating publishers')
-        self.cam_pub = rospy.Publisher('/{}/corrected_image/compressed'.format(
+        self.cam_pub = rospy.Publisher('/{}/image/compressed'.format(
             self.vehicle), CompressedImage, queue_size=10)
 
         # Publisher for camera info - needed for the ground_projection
@@ -36,11 +41,6 @@ class ROSAgent(object):
         except BaseException as e:
             logger.info('exception in init_node: %s' % e)
             raise
-        print('Creating subscriber 2')
-        logger.info('Creating subscriber')
-        # Subscribes to the output of the lane_controller_node
-        self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
-            self.vehicle), WheelsCmdStamped, self._ik_action_cb)
 
         # 15Hz ROS Cycle - TODO: What is this number?
         self.r = rospy.Rate(15)
@@ -67,6 +67,7 @@ class ROSAgent(object):
         """
         Publishes the image to the compressed_image topic, which triggers the lane following loop
         """
+        logger.info("got image")
         img_msg = CompressedImage()
 
         time = rospy.get_rostime()
