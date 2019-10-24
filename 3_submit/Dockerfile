@@ -36,6 +36,9 @@ COPY lf_slim.launch ./
 
 # DO NOT MODIFY: your submission won't run if you do
 ENV HOSTNAME=default
+ENV VEHICLE_NAME=default
+ENV ROS_HOSTNAME=localhost
+ENV ROS_MASTER_URI=http://localhost:11311
 
 ENV DUCKIEFLEET_ROOT /data/config
 
