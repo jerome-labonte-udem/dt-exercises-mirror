@@ -28,8 +28,6 @@ RUN echo 'source catkin_ws/devel/setup.bash' >> ~/.bashrc
 
 RUN echo 'echo if you got a message about "catkin_ws/devel/setup.bash does not exist" then you need to build the catkin_ws with "catkin build --workspace catkin_ws" ' >> ~/.bashrc
 
-RUN echo 'echo don't forget to start the car_interface if you haven't already with ./launch_car_interface.sh ' >> ~/.bashrc
-
 ENV ROS_PYTHON_VERSION 3
 ENV SHELL /bin/bash
 ENV DISPLAY :99
