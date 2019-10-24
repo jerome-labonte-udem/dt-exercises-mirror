@@ -41,6 +41,6 @@ ENV DUCKIEFLEET_ROOT /data/config
 
 RUN mkdir -p /data/config
 RUN git clone https://github.com/duckietown/duckiefleet.git /data/config
-ENV VEHICLE_IP=127.0.0.1
+
 # let's see what you've got there...
 CMD ["python", "solution.py"]
