@@ -1,3 +1,0 @@
-FROM duckietown/gym-duckietown-ros-agent:daffy-amd64
-RUN rm -f /tmp/.X99-lock
-COPY env.py agent/

@@ -1,4 +1,4 @@
-[submodule "gym-duckietown"]
+[submodule "simulation"]
 	path = 1_develop/simulation
 	url = https://github.com/duckietown/gym-duckietown
         branch = daffy

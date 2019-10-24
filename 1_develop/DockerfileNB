@@ -41,8 +41,6 @@ RUN python get-pip.py
 COPY setup/requirementspy2.txt duckietown
 RUN python -m pip install -r duckietown/requirementspy2.txt
 
-COPY setup/launch_car_interface.sh duckietown
-
 WORKDIR /duckietown
 CMD  rm -f /tmp/.X99-lock &&  ./run_display.bash &&  jupyter-notebook --allow-root --ip="*" --no-browser 
 

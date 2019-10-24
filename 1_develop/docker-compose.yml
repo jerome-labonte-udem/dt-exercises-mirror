@@ -1,7 +1,7 @@
 version: '3'
 services:
     lanefollow:
-        image: duckietown/dt-notebook:udem
+        image: duckietown/dt-notebook:daffy
         build:
             context: .
             dockerfile: DockerfileNB
@@ -43,7 +43,7 @@ services:
         - "6901:6901"
 
     sim:
-        image: duckietown/dt-sim:udem
+        image: duckietown/dt-sim:daffy
         build:
             context: .
             dockerfile: DockerfileSim

@@ -12,6 +12,7 @@
     <arg name="/lane_following/lane_filter" default="true"/>
     <arg name="/lane_following/ground_projection" default="true"/>
     <arg name="/lane_following/lane_controller" default="true"/>
+    <arg name="visualization" default="true"/>
     
     <!-- Start Lane Control -->
     <group if="$(arg lane_following)">
@@ -58,7 +59,21 @@
                 <!-- <arg name="param_file_name" value="$(arg param_file_name)"/> -->
             </include>
         </group>
+
+	<group if="$(arg visualization)">
+          <remap from="duckiebot_visualizer/segment_list" to="ground_projection/lineseglist_out"/>
+          <include file="$(find duckiebot_visualizer)/launch/duckiebot_visualizer.launch">
+            <arg name="veh" value="$(arg veh)" />
+          </include>
+        </group>
+
         
+        <group if="$(arg visualization)">
+          <include file="$(find lane_filter)/launch/lane_pose_visualizer_node.launch">
+            <arg name="veh" value="$(arg veh)"/>
+          </include>
+        </group>
+
     </group>
     <!-- End Lane Control -->
 
