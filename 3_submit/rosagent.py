@@ -26,7 +26,7 @@ class ROSAgent(object):
         # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
         logger.info('creating publishers')
-        self.cam_pub = rospy.Publisher('/{}/image/compressed'.format(
+        self.cam_pub = rospy.Publisher('/{}/camera_node/image/compressed'.format(
             self.vehicle), CompressedImage, queue_size=10)
 
         # Publisher for camera info - needed for the ground_projection
