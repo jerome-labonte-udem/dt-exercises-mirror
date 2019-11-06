@@ -47,3 +47,5 @@ RUN git clone https://github.com/duckietown/duckiefleet.git /data/config
 
 # let's see what you've got there...
 CMD ["python", "solution.py"]
+## Uncomment this and comment out the above command to run your own packages.
+# CMD ["/bin/bash", "-c", "source custom_ws/devel/setup.bash && python solution.py"]
