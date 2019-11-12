@@ -18,6 +18,10 @@ COPY setup/requirements.txt duckietown
 COPY setup/initial.sh duckietown
 RUN cd duckietown && ./initial.sh 
 
+COPY simulation/requirements.txt duckietown
+RUN  pip install -r duckietown/requirements.txt
+
+
 ENV ROS_PYTHON_VERSION 3
 ENV SHELL /bin/bash
 
@@ -25,6 +29,7 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python get-pip.py
 COPY setup/requirementspy2.txt duckietown
 RUN python -m pip install -r duckietown/requirementspy2.txt
+
 
 WORKDIR /duckietown
 

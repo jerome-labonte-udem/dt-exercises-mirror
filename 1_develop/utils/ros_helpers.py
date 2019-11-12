@@ -1,6 +1,6 @@
 import sys
-if '/duckietown/simulation' not in sys.path:
-    sys.path.append('/duckietown/simulation')
+if '/duckietown/simulation/src' not in sys.path:
+    sys.path.append('/duckietown/simulation/src')
 
 def launch_env(simclass=None):
     print(sys.path)
@@ -9,7 +9,7 @@ def launch_env(simclass=None):
     simclass = Simulator if simclass is None else simclass
 
     env = simclass(
-        seed=123, # random seed
+        seed=4, # random seed
         map_name="loop_empty",
         max_steps=500001, # we don't want the gym to reset itself
         domain_rand=0,
