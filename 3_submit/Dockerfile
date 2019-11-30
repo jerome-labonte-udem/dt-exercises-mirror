@@ -1,7 +1,11 @@
 # Definition of Submission container
 
+ARG ARCH=amd64
+ARG MAJOR=daffy
+ARG BASE_TAG=${MAJOR}-${ARCH}
+
 # We start from the ROS Template
-FROM duckietown/challenge-aido_lf-template-ros:daffy
+FROM duckietown/challenge-aido_lf-template-ros:${BASE_TAG}
 
 RUN rm -r /workspace; mkdir /workspace
 WORKDIR /workspace
