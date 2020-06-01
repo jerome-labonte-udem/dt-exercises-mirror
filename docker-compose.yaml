@@ -1,0 +1,81 @@
+version: '3'
+services:
+  middleware_manager:
+    #image: courchesnea/dt-middleware:test
+    build:
+      context: fifos_connector/
+      dockerfile: Dockerfile
+    environment:
+      middleware_parameters: |
+        episodes_per_scenario: 1
+        episode_length_s: 100.0
+        min_episode_length_s: 1.0
+        seed: 42
+        physics_dt: 0.05
+        max_failures: 2
+        agent_in: /fifos/agent-in
+        agent_out: /fifos/agent-out
+        sim_in: /fifos/simulator-in
+        sim_out: /fifos/simulator-out
+        sm_in: None
+        sm_out: None
+        timeout_initialization: 15
+        timeout_regular: 30
+        #- "ROS_MASTER_URI=http://sim:11311"
+    volumes: &volumes
+      - fifos:/fifos
+    networks: &networks
+      - duckietown-docker-net
+
+
+  simulator:
+    #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+    #image: courchesnea/dt-simbridge:test
+    build:
+      context: ./simulator
+    environment:
+      AIDONODE_DATA_IN: /fifos/simulator-in
+      AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
+      AIDONODE_CONFIG: |
+        env_constructor: Simulator
+        env_parameters:
+          max_steps: 500001 # we don't want the gym to reset itself
+          domain_rand: 0
+          camera_width: 640
+          camera_height: 480
+          distortion: true
+    volumes: *volumes
+    networks: *networks
+
+  agent:
+    build:
+      context: challenge-aido_LF-template-random/ 
+      dockerfile: Dockerfile
+    environment:
+      AIDONODE_DATA_IN: /fifos/agent-in
+      AIDONODE_DATA_OUT: fifo:/fifos/agent-out
+    volumes: *volumes
+    networks: *networks
+
+  novnc:
+      image: duckietown/docker-ros-vnc:daffy
+      environment:
+      - "ROS_MASTER_URI=http://sim:11311"
+      - "HOSTNAME=default"
+      - "VEHICLE_NAME=default"
+      expose:
+      - "5901"
+      - "6901"
+      ports:
+      - "5901:5901"
+      - "6901:6901"
+      networks: *networks
+
+
+
+volumes:
+  fifos:
+
+networks:
+  duckietown-docker-net:
+
