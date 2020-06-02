@@ -1,7 +1,3 @@
-[submodule "simulation"]
-	path = 1_develop/simulation
-	url = https://github.com/duckietown/gym-duckietown
-        branch = daffy
 [submodule "dt-core"]
 	path = 1_develop/catkin_ws/src/dt-core
 	url = https://github.com/duckietown/dt-core.git
