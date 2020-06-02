@@ -20,8 +20,8 @@ services:
         sm_in: None
         sm_out: None
         timeout_initialization: 15
-        timeout_regular: 30
-        #- "ROS_MASTER_URI=http://sim:11311"
+        timeout_regular: 45
+      ROS_MASTER_URI: "http://sim:11311"
     volumes: &volumes
       - fifos:/fifos
     networks: &networks
@@ -31,8 +31,9 @@ services:
   simulator:
     #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
     #image: courchesnea/dt-simbridge:test
-    build:
-      context: ./simulator
+    image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+    #build:
+    #  context: ./simulator
     environment:
       AIDONODE_DATA_IN: /fifos/simulator-in
       AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
@@ -44,6 +45,7 @@ services:
           camera_width: 640
           camera_height: 480
           distortion: true
+      ROS_MASTER_URI: "http://sim:11311"
     volumes: *volumes
     networks: *networks
 
@@ -54,6 +56,7 @@ services:
     environment:
       AIDONODE_DATA_IN: /fifos/agent-in
       AIDONODE_DATA_OUT: fifo:/fifos/agent-out
+      ROS_MASTER_URI: "http://sim:11311"
     volumes: *volumes
     networks: *networks
 

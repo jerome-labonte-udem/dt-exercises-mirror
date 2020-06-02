@@ -1,4 +1,4 @@
-all: build
+all: test
 
 test:
 	docker-compose down --volumes

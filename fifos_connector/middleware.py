@@ -12,6 +12,7 @@ from typing import *
 
 import geometry
 import json
+# import duckietown_challenges as dc
 import duckietown_challenges as dc
 import logging
 import os
@@ -30,7 +31,7 @@ import yaml
 from aido_schemas import (EpisodeStart, protocol_agent, protocol_simulator, RobotObservations,
                           RobotPerformance, RobotState, Scenario, ScenarioRobotSpec, RobotConfiguration, SetMap,
                           SetRobotCommands, SimulationState, SpawnRobot,
-                          Step, GetRobotState, GetRobotObservations)
+                          Step, GetRobotState, GetRobotObservations, GetCommands)
 # from aido_schemas import (protocol_scenario_maker, protocol_simulator_duckiebot1)
 from aido_schemas.utils import TimeTracker
 # from aido_schemas.utils_drawing import read_and_draw
@@ -142,7 +143,7 @@ def main():
         vel = geometry.se2_from_linear_angular([0, 0], 0)
         logger.info(f"Got good starting pose at: {pose}")
         robot1_config = RobotConfiguration(pose=pose, velocity=vel)
-        robot1 = ScenarioRobotSpec(description="Development agent", playable=True, configuration=robot1_config)
+        robot1 = ScenarioRobotSpec(description="Development agent", playable=True, configuration=robot1_config, motion=None)
         scenario1 = Scenario("scenario1", environment=yaml_string, robots={"agent1": robot1})
         unique_episode = EpisodeSpec("episode1", scenario1)
 
@@ -310,7 +311,7 @@ def run_episode(sim_ci: ComponentInterface,
     for robot_name, robot_conf in scenario.robots.items():
         sim_ci.write_topic_and_expect_zero('spawn_robot',
                                            SpawnRobot(robot_name=robot_name, configuration=robot_conf.configuration,
-                                                      playable=robot_conf.playable))
+                                                      playable=robot_conf.playable, motion=None))
 
     # start episode
     sim_ci.write_topic_and_expect_zero('episode_start', EpisodeStart(episode_name))
@@ -361,7 +362,8 @@ def run_episode(sim_ci: ComponentInterface,
             with tt.measure(f'agent_compute-{robot_name}'):
                 try:
                     agent.write_topic_and_expect_zero('observations', recv.data.observations)
-                    r: MsgReceived = agent.write_topic_and_expect('get_commands', expect='commands')
+                    gc = GetCommands(at_time=time.time())
+                    r: MsgReceived = agent.write_topic_and_expect('get_commands',gc , expect='commands')
 
                 except BaseException as e:
                     msg = 'Trouble with communication to the agent.'
