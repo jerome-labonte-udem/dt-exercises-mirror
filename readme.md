@@ -6,3 +6,4 @@ Some info about the repo and directory structure (Still WIP)
 * The random template is only for testing; will be removed
 * The fifos connector is the image that bridge agent - simulation, similar to what the
   experiment manager and scenario maker do
+* Solution.py will also be used for local development to bridge ROS -> Middleware

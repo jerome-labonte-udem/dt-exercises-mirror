@@ -44,6 +44,8 @@ RUN git clone https://github.com/duckietown/duckiefleet /data/config
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 RUN python get-pip.py
 COPY setup/requirementspy2.txt duckietown
+RUN python -m pip install setuptools==44.1.1
+RUN python -m pip show setuptools
 RUN python -m pip install -r duckietown/requirementspy2.txt
 
 RUN mkdir duckietown/dt-ros-commons
@@ -54,7 +56,14 @@ RUN mkdir duckietown/dt-core/
 COPY catkin_ws/src/dt-core/dependencies-py.txt duckietown/dt-core
 RUN python -m pip install -r duckietown/dt-core/dependencies-py.txt
 
+COPY start.sh duckietown
+RUN chmod +x duckietown/start.sh
+
+COPY solution2.py duckietown/solution2.py
+COPY rosagent.py duckietown/rosagent.py
 
 WORKDIR /duckietown
-CMD  rm -f /tmp/.X99-lock &&  ./run_display.bash &&  jupyter-notebook --allow-root --ip="*" --no-browser 
+#CMD  rm -f /tmp/.X99-lock &&  ./run_display.bash &&  jupyter-notebook --allow-root --ip="*" --no-browser  && solution2.py
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["/duckietown/start.sh"]
 
