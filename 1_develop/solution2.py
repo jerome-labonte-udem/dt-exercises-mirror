@@ -7,12 +7,11 @@ import time
 import argparse
 import numpy as np
 import roslaunch
+import imp
+#rosagent = imp.load_source("rosagent", "rosagent.py")
 from rosagent import ROSAgent
 
 from zuper_nodes_python2 import logger, wrap_direct
-
-#TODO this should not be in the sim image
-#TODO starting roslaunch should be a switch
 
 class ROSBaselineAgent(object):
     def __init__(self, in_sim, launch_file):
@@ -44,12 +43,17 @@ class ROSBaselineAgent(object):
         #logger.info('returning from start()')
 
         # Start the ROSAgent, which handles publishing images and subscribing to action
+
         logger.info('starting ROSAgent()')
+        print("PStarting Rosagent")
         self.agent = ROSAgent()
         logger.info('started ROSAgent()')
+        print("PStarted Rosagent")
+        self.agent.init_node()
+        logger.info('node initialized')
 
         logger.info('completed __init__()')
-        print("Completed __init__()")
+        print("PCompleted __init__()")
 
     def on_received_seed(self, context, data):
         logger.info('Received seed from pipes')
@@ -112,5 +116,7 @@ if __name__ == '__main__':
     parser.add_argument("--launch_file",default="lf_slim.launch", help="launch file that should be used (default: lf_slim.launch")
     args = parser.parse_args()
     agent = ROSBaselineAgent(in_sim=args.sim, launch_file = args.launch_file)
+    logger.info("Created agent in solution2 main")
     wrap_direct(agent)
     logger.info("solution2 end of main")
+    # TODO handle signals (rospy.signal_shutdown(reason))

@@ -15,6 +15,19 @@ source catkin_ws/devel/setup.bash
 #  exit 1
 #fi
 
+
+# echo "starting roscore..."
+# stdbuf -o L roscore &
+# rospid=$!
+# 
+# sleep 2
+# 
+# if ! pgrep "roscore" > /dev/null; then
+#   echo "error while starting roscore"
+#   exit 1
+# fi
+# echo "Started roscore."
+
 echo "starting car interface"
 ./launch_car_interface.sh
 if [ $? -ne 0 ]; then
@@ -22,23 +35,11 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "starting roscore..."
-roscore &
-rospid=$!
-
-sleep 2
-
-if ! pgrep "roscore" > /dev/null; then
-  echo "error while starting roscore"
-  exit 1
-fi
-
-echo "Started roscore."
-
 echo "starting ros bridge"
 python2 solution2.py --sim
-if [ $? -ne 0 ]; then
-  echo "Error while running ros bridge, aborting ..."
+errc=$?
+if [ $errc -ne 0 ]; then
+  echo "Error code $errc while running ros bridge, aborting ..."
   exit 1
 fi
 
