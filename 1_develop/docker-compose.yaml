@@ -1,16 +1,29 @@
 version: '3'
+
 services:
-    lanefollow:
-        image: duckietown/dt-notebook:daffy
-        build:
-            context: .
-            dockerfile: DockerfileNB
-        working_dir: /duckietown
-        networks: &networks
+
+    ros_core:
+      image: osrf/ros:melodic-desktop-full-bionic
+      command: stdbuf -o L roscore
+      environment:
+        - "ROS_MASTER_URI=http://ros_core:11311"
+      networks: &networks
         - duckietown-docker-net
-          #depends_on:
-          #- "sim"
-        volumes:
+      expose:
+        - "11311"
+      ports:
+        - "11311:11311"
+
+    lanefollow:
+      image: duckietown/dt-notebook:daffy
+      build:
+          context: .
+          dockerfile: Dockerfile
+      depends_on:
+        - ros_core
+      working_dir: /duckietown
+      networks: *networks
+      volumes:
         - ./catkin_ws:/duckietown/catkin_ws
         - ./utils:/duckietown/utils
           #- ./custom:/duckietown/custom
@@ -18,29 +31,33 @@ services:
           #- ./simulation:/duckietown/simulation
         - /tmp/.X11-unix:/tmp/.X11-unix
         - fifos:/fifos
-        environment:
-        - "ROS_MASTER_URI=http://lanefollow:11311"
+      environment:
+        - "ROS_MASTER_URI=http://ros_core:11311"
         - "HOSTNAME=default"
         - "VEHICLE_NAME=default"
         - "DISPLAY=:99"
-        expose:
+        - "PYTHONUNBUFFERED=1"
+        - "PYTHONIOENCODING=UTF-8"
+        - "AIDONODE_DATA_IN=/fifos/agent-in"
+        - "AIDONODE_DATA_OUT=fifo:/fifos/agent-out"
+      expose:
         - "8888"
-        ports:
+      ports:
         - "8888:8888"
 
     novnc:
-        image: duckietown/docker-ros-vnc:daffy
-        networks: *networks
-        environment:
-        - "ROS_MASTER_URI=http://lanefollow:11311"
-        - "HOSTNAME=default"
-        - "VEHICLE_NAME=default"
-        expose:
-        - "5901"
-        - "6901"
-        ports:
-        - "5901:5901"
-        - "6901:6901"
+      image: duckietown/docker-ros-vnc:daffy
+      networks: *networks
+      environment:
+      - "ROS_MASTER_URI=http://ros_core:11311"
+      - "HOSTNAME=default"
+      - "VEHICLE_NAME=default"
+      expose:
+      - "5901"
+      - "6901"
+      ports:
+      - "5901:5901"
+      - "6901:6901"
 
 #    sim:
 #        image: duckietown/dt-sim:daffy
@@ -59,50 +76,49 @@ services:
 #        - "DISPLAY=:99"
 
     simulator:
-        #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
-        #image: courchesnea/dt-simbridge:test
-        image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
-        environment:
-          AIDONODE_DATA_IN: /fifos/simulator-in
-          AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
-          AIDONODE_CONFIG: |
-            env_constructor: Simulator
-            env_parameters:
-              max_steps: 500001 # we don't want the gym to reset itself
-              domain_rand: 0
-              camera_width: 640 
-              camera_height: 480
-              distortion: true
-          ROS_MASTER_URI: "http://lanefollow:11311"
-        volumes:
-          - fifos:/fifos
-        networks: *networks
+      #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+      #image: courchesnea/dt-simbridge:test
+      image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+      environment:
+        AIDONODE_DATA_IN: /fifos/simulator-in
+        AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
+        AIDONODE_CONFIG: |
+          env_constructor: Simulator
+          env_parameters:
+            max_steps: 500001 # we don't want the gym to reset itself
+            domain_rand: 0
+            camera_width: 640 
+            camera_height: 480
+            distortion: true
+      volumes:
+        - fifos:/fifos
+      networks: *networks
 
     middleware_manager:
-        #image: courchesnea/dt-middleware:test
-        build:
-          context: ../fifos_connector/
-          dockerfile: Dockerfile
-        environment:
-          middleware_parameters: |
-            episodes_per_scenario: 1
-            episode_length_s: 100.0
-            min_episode_length_s: 1.0 
-            seed: 42
-            physics_dt: 0.05
-            max_failures: 2
-            agent_in: /fifos/agent-in
-            agent_out: /fifos/agent-out
-            sim_in: /fifos/simulator-in
-            sim_out: /fifos/simulator-out
-            sm_in: None
-            sm_out: None
-            timeout_initialization: 15
-            timeout_regular: 45
-          ROS_MASTER_URI: "http://lanefollow:11311"
-        volumes:
-          - fifos:/fifos
-        networks: *networks
+      #image: courchesnea/dt-middleware:test
+      build:
+        context: ../fifos_connector/
+        dockerfile: Dockerfile
+      environment:
+        middleware_parameters: |
+          episodes_per_scenario: 1
+          episode_length_s: 100.0
+          min_episode_length_s: 1.0 
+          seed: 42
+          physics_dt: 0.05
+          max_failures: 2
+          agent_in: /fifos/agent-in
+          agent_out: /fifos/agent-out
+          sim_in: /fifos/simulator-in
+          sim_out: /fifos/simulator-out
+          sm_in: None
+          sm_out: None
+          timeout_initialization: 15
+          timeout_regular: 360
+          #ROS_MASTER_URI: "http://ros_master:11311"
+      volumes:
+        - fifos:/fifos
+      networks: *networks
 
 volumes:
   fifos:

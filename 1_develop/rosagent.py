@@ -39,7 +39,7 @@ class ROSAgent(object):
         print("PIn init_node")
         try:
             # rospy.init_node('ROSAgent', disable_signals=True)
-            rospy.init_node('ROSAgent')
+            rospy.init_node('ROSAgent',log_level=rospy.INFO)
             logger.info('node initialized')
             print("PNode initialized")
         except BaseException as e:
@@ -88,3 +88,7 @@ class ROSAgent(object):
         img_msg.data = np.array(cv2.imencode('.jpg', contig)[1]).tostring()
 
         self.cam_pub.publish(img_msg)
+
+    def print_test(self):
+        logger.info("This prints")
+        print("This also prints")

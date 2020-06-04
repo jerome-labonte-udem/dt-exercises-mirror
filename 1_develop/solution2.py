@@ -57,19 +57,25 @@ class ROSBaselineAgent(object):
 
     def on_received_seed(self, context, data):
         logger.info('Received seed from pipes')
+        print("Received seed")
+        self.agent.print_test()
         np.random.seed(data)
 
     def on_received_episode_start(self, context, data):
+        print("Starting episode")
         context.info('Starting episode %s.' % data)
 
     def on_received_observations(self, context, data):
         logger.info("received observation")
+        print(">Received observation")
         jpg_data = data['camera']['jpg_data']
         obs = jpg2rgb(jpg_data)
         self.agent._publish_img(obs)
         self.agent._publish_info()
 
     def on_received_get_commands(self, context, data):
+        print(">Received get_commands")
+        logger.info("Agent received GetCommand request")
         while not self.agent.updated:
             time.sleep(0.01)
 

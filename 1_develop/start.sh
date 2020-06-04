@@ -1,47 +1,59 @@
 #!/bin/bash
-echo "Startup script"
-
-rospack find duckietown_msgs
-if [ $? -ne 0 ]; then 
-  echo "Need to build environment first ..."
-  catkin build --workspace catkin_ws
-fi
-source catkin_ws/devel/setup.bash
-
-#echo "starting roscore"
-#roscore &
-#if [ $? -ne 0 ]; then
-#  echo "Unable to start roscore, aborting ..."
-#  exit 1
-#fi
 
 
-# echo "starting roscore..."
-# stdbuf -o L roscore &
-# rospid=$!
-# 
-# sleep 2
-# 
-# if ! pgrep "roscore" > /dev/null; then
-#   echo "error while starting roscore"
-#   exit 1
-# fi
-# echo "Started roscore."
+function log_pid() {
+  echo "[$BASHPID] $1"
+}
 
-echo "starting car interface"
-./launch_car_interface.sh
-if [ $? -ne 0 ]; then
-  echo "error while starting car interface"
-  exit 1
-fi
+function catkin_build() {
+  rospack find duckietown_msgs
+  if [ $? -ne 0 ]; then 
+    log_pid "Need to build environment first, building ..."
+    catkin build --workspace catkin_ws
+    log_pid "Done building workspace"
+  fi
+  log_pid "Sourcing catkin_ws/devel/setup.bash"
+  source catkin_ws/devel/setup.bash
+}
 
-echo "starting ros bridge"
-python2 solution2.py --sim
-errc=$?
-if [ $errc -ne 0 ]; then
-  echo "Error code $errc while running ros bridge, aborting ..."
-  exit 1
-fi
+function start_car_interface() {
+  log_pid "Starting car interface..."
+  ./launch_car_interface.sh
+  if [ $? -ne 0 ]; then
+    log_pid "error while starting car interface"
+    exit 1
+  fi
+  log_pid "Car interface started"
+}
 
-echo "Executed python2 solution2.py"
-#jupyter-notebook --allow-root --ip="*" --no-browser
+function start_notebook() {
+  log_pid "Starting notebook in second thread"
+  jupyter-notebook --allow-root --ip="*" --no-browser
+  if [ $? -ne 0 ]; then
+    log_pid "Received error while running jupyter notebook"
+    exit 1
+  fi
+  log_pid "Done running notebook" 
+}
+
+function start_ros_bridge() {
+  log_pid "starting ros bridge"
+  python2 solution2.py --sim
+  errc=$?
+  if [ $errc -ne 0 ]; then
+    log_pid "[$BASHPID] Error code $errc while running ros bridge, aborting ..."
+    exit 1
+  fi
+  log_pid "Done running ros bridge"
+}
+
+
+
+log_pid "Running startup script"
+catkin_build
+set -e # now catch errors and stop
+start_car_interface
+start_notebook &
+start_ros_bridge
+
+exit $?

@@ -83,17 +83,25 @@ def main():
     sim_ci = ComponentInterface(config.sim_in, config.sim_out,
                                 expect_protocol=protocol_simulator, nickname="simulator",
                                 timeout=config.timeout_regular)
-
-    # logfile = "/fifos3/simlog"
-    # ff = open(logfile,"wb")
-    # sim_ci.cc(ff)
-    # logger.info(f"opened {logfile} as cc")
+    logger.info("Pipes connected to simulator")
 
     logger.info("Opening the agent CI")
     agent_ci = ComponentInterface(config.agent_in, config.agent_out,
                                   expect_protocol=protocol_agent, nickname="agent",
                                   timeout=config.timeout_regular)
+    logger.info("Pipes connected to agent")
     agents = [agent_ci]
+
+
+    logfile = "/fifos/agentlog"
+    logfile2 = "/fifos/simlog"
+    ff = open(logfile,"wb")
+    ff2 = open(logfile,"wb")
+    agent_ci.cc(ff)
+    sim_ci.cc(ff2)
+    logger.info(f"opened {logfile} as agent cc")
+    logger.info(f"opened {logfile2} as sim cc")
+
 
     # sm_ci = ComponentInterface(config.sm_in, config.sm_out,
     #                            expect_protocol=protocol_scenario_maker, nickname="scenario_maker",
@@ -301,11 +309,11 @@ def run_episode(sim_ci: ComponentInterface,
 
     # clear simulation
     sim_ci.write_topic_and_expect_zero('clear')
+    logger.info("Sent clear request so sim")
     # set map data
     sim_ci.write_topic_and_expect_zero('set_map', SetMap(map_data=scenario.environment))
-    logger.info(f"Map has been set properly")
+    logger.info("Map has been set properly")
 
-    # Looks like we are missing a motion param in spawnrobot
 
     # spawn robot
     for robot_name, robot_conf in scenario.robots.items():
@@ -315,9 +323,11 @@ def run_episode(sim_ci: ComponentInterface,
 
     # start episode
     sim_ci.write_topic_and_expect_zero('episode_start', EpisodeStart(episode_name))
+    logger.info("Sent episode start to sim")
 
     for agent in agents:
         agent.write_topic_and_expect_zero('episode_start', EpisodeStart(episode_name))
+        logger.info("Sent episode start to an agent")
 
     current_sim_time = 0.0
 
@@ -345,6 +355,7 @@ def run_episode(sim_ci: ComponentInterface,
                 _recv: MsgReceived[RobotState] = \
                     sim_ci.write_topic_and_expect('get_robot_state', grs,
                                                   expect='robot_state')
+            logger.info("Received initial robot state from sim")
 
             with tt.measure(f'sim_compute_performance-{robot_name}'):
 
@@ -352,12 +363,15 @@ def run_episode(sim_ci: ComponentInterface,
                     sim_ci.write_topic_and_expect('get_robot_performance',
                                                   robot_name,
                                                   expect='robot_performance')
+            logger.info("received robot performance from sim")
 
             with tt.measure(f'sim_render-{robot_name}'):
                 gro = GetRobotObservations(robot_name=robot_name, t_effective=t_effective)
                 recv: MsgReceived[RobotObservations] = \
                     sim_ci.write_topic_and_expect('get_robot_observations', gro,
                                                   expect='robot_observations')
+
+            logger.info("Received robot observations from sim")
 
             with tt.measure(f'agent_compute-{robot_name}'):
                 try:
@@ -368,6 +382,7 @@ def run_episode(sim_ci: ComponentInterface,
                 except BaseException as e:
                     msg = 'Trouble with communication to the agent.'
                     raise dc.InvalidSubmission(msg) from e
+            logger.info("Received commands from agent")
 
             with tt.measure('set_robot_commands'):
                 commands = SetRobotCommands(robot_name=robot_name, commands=r.data, t_effective=t_effective)
