@@ -1,0 +1,6 @@
+set(duckiebot_visualizer_local_SETUP_PY_VERSION "1.0.0")
+set(duckiebot_visualizer_local_SETUP_PY_SCRIPTS "")
+set(duckiebot_visualizer_local_SETUP_PY_PACKAGES "")
+set(duckiebot_visualizer_local_SETUP_PY_PACKAGE_DIRS "")
+set(duckiebot_visualizer_local_SETUP_PY_MODULES "")
+set(duckiebot_visualizer_local_SETUP_PY_MODULE_DIRS "")

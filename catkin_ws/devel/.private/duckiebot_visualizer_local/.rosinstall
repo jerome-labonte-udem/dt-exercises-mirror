@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/setup.sh

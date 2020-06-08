@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/lane_filter/share/lane_filter/cmake/lane_filterConfig-version.cmake

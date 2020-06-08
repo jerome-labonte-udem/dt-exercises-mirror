@@ -1,0 +1,9 @@
+<package format="2">
+  <name>random_agent</name>
+  <version>1.0.0</version>
+  <description>
+  This package provides random agent capability.
+  </description>
+  <maintainer email="ivana@osrf.org">Ivana Bildbotz</maintainer>
+  <license>BSD</license>
+</package>

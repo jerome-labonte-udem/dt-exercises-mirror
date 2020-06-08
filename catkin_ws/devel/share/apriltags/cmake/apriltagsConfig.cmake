@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/apriltags/share/apriltags/cmake/apriltagsConfig.cmake

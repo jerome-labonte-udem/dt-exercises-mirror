@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/virtual_joystick
+
+Name: virtual_joystick
+Description: Description of virtual_joystick
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

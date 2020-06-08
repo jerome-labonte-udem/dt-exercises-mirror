@@ -1,0 +1,7 @@
+AC_LF_Submission/packages/pure_pursuit
+/duckietown/catkin_ws/devel/.private/pure_pursuit/cmake.lock /duckietown/catkin_ws/devel/./cmake.lock
+/duckietown/catkin_ws/devel/.private/pure_pursuit/share/pure_pursuit/cmake/pure_pursuitConfig.cmake /duckietown/catkin_ws/devel/share/pure_pursuit/cmake/pure_pursuitConfig.cmake
+/duckietown/catkin_ws/devel/.private/pure_pursuit/share/pure_pursuit/cmake/pure_pursuitConfig-version.cmake /duckietown/catkin_ws/devel/share/pure_pursuit/cmake/pure_pursuitConfig-version.cmake
+/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/pkgconfig/pure_pursuit.pc /duckietown/catkin_ws/devel/lib/pkgconfig/pure_pursuit.pc
+/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/python2.7/dist-packages/utils/__init__.py /duckietown/catkin_ws/devel/lib/python2.7/dist-packages/utils/__init__.py
+/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/python2.7/dist-packages/point_tracking/__init__.py /duckietown/catkin_ws/devel/lib/python2.7/dist-packages/point_tracking/__init__.py

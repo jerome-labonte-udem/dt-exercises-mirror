@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/explicit_coordinator/lib/pkgconfig/explicit_coordinator.pc

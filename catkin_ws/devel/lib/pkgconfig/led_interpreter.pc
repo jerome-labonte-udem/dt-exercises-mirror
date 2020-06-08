@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/led_interpreter/lib/pkgconfig/led_interpreter.pc

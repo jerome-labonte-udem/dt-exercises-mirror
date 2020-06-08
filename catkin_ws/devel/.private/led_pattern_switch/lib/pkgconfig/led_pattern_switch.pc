@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/led_pattern_switch
+
+Name: led_pattern_switch
+Description: Description of led_pattern_switch
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

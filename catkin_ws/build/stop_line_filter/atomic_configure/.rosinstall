@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /duckietown/catkin_ws/devel/.private/stop_line_filter/setup.sh

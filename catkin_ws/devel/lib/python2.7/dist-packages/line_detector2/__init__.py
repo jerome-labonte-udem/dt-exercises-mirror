@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/line_detector2/lib/python2.7/dist-packages/line_detector2/__init__.py

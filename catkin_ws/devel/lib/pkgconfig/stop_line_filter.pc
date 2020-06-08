@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/stop_line_filter/lib/pkgconfig/stop_line_filter.pc

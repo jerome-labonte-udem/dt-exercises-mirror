@@ -1,0 +1,20 @@
+<launch>
+	<arg name="pkg_name" value="led_detection"/>
+	<arg name="src_name" value="led_detector_node.py"/>
+	<arg name="node_name" value="led_detector_node"/>
+	<arg name="veh" doc="Name of vehicle. ex: megaman"/>
+	<arg name="config" default="baseline" doc="Specify a config."/>
+	<arg name="param_file_name" default="default" doc="Specify a param file. ex:megaman"/>
+	<arg name="continuous" default="True"/> <!-- manual trigger required if false [interactive mode] -->
+
+    <!-- Run detector node -->
+    <group ns="$(arg veh)">
+
+        <node  pkg="$(arg pkg_name)" type="$(arg src_name)" name="$(arg node_name)" output="screen" required="true">
+		    <rosparam command="load" file="$(find led_interpreter)/config/led_emitter_node/LED_protocol.yaml"/>
+		    <rosparam command="load" file="$(find led_detection)/config/LED_detector_node/$(arg param_file_name).yaml"/>
+		    <param name="continuous" type="bool" value="$(arg continuous)" />
+	</node>
+
+    </group>
+</launch>

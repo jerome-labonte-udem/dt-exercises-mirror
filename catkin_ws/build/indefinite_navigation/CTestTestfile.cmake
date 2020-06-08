@@ -1,0 +1,9 @@
+# CMake generated Testfile for 
+# Source directory: /duckietown/catkin_ws/src/dt-core/packages/indefinite_navigation
+# Build directory: /duckietown/catkin_ws/build/indefinite_navigation
+# 
+# This file includes the relevant testing commands required for 
+# testing this directory and lists subdirectories to be tested as well.
+add_test(_ctest_indefinite_navigation_rostest_tests_calibrate_turn.test "/duckietown/catkin_ws/build/indefinite_navigation/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/duckietown/catkin_ws/build/indefinite_navigation/test_results/indefinite_navigation/rostest-tests_calibrate_turn.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/duckietown/catkin_ws/src/dt-core/packages/indefinite_navigation --package=indefinite_navigation --results-filename tests_calibrate_turn.xml --results-base-dir \"/duckietown/catkin_ws/build/indefinite_navigation/test_results\" /duckietown/catkin_ws/src/dt-core/packages/indefinite_navigation/tests/calibrate_turn.test ")
+add_test(_ctest_indefinite_navigation_rostest_tests_calibrate_kinematics.test "/duckietown/catkin_ws/build/indefinite_navigation/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/duckietown/catkin_ws/build/indefinite_navigation/test_results/indefinite_navigation/rostest-tests_calibrate_kinematics.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/duckietown/catkin_ws/src/dt-core/packages/indefinite_navigation --package=indefinite_navigation --results-filename tests_calibrate_kinematics.xml --results-base-dir \"/duckietown/catkin_ws/build/indefinite_navigation/test_results\" /duckietown/catkin_ws/src/dt-core/packages/indefinite_navigation/tests/calibrate_kinematics.test ")
+subdirs("gtest")

@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/indefinite_navigation
+
+Name: indefinite_navigation
+Description: Description of indefinite_navigation
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

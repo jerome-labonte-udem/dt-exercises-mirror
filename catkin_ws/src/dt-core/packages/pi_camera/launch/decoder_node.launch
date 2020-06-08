@@ -1,0 +1,18 @@
+<launch>
+    <arg name="veh"/>
+    <arg name="param_file_name" default="default" doc="Specify a param file. ex:megaman"/>
+    <arg name="pkg_name" value="pi_camera"/>
+    <arg name="node_name" default="decoder_node"/>
+
+    <group ns="$(arg veh)">
+        <node  pkg="$(arg pkg_name)" type="$(arg node_name).py" name="$(arg node_name)" output="screen" required="true">
+            <rosparam command="load" file="$(find pi_camera)/config/$(arg node_name)/$(arg param_file_name).yaml"/>
+        </node>
+    </group>
+
+    <!-- Publication -->
+    <!-- "~image/raw": sensor_msgs/Image. Raw image by decoding a compressed image in jpeg format.-->
+    
+    <!-- Subscription -->
+    <!-- "~compressed_image": sensor_msgs/CompressedImage. Input compressed image in jpeg format.-->
+</launch>

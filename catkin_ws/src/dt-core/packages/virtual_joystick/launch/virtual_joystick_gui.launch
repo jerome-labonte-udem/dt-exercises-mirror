@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="veh" doc="name of the vehicle"/>
+    <arg name="pkg_name" value="virtual_joystick"/>
+    <arg name="node_name" default="virtual_joystick"/>
+
+    <group ns="$(arg veh)">
+        <remap from="$(arg node_name)/joy" to="joy" />
+        <remap from="$(arg node_name)/intersection_go" to="coordinator_node/intersection_go" />
+        <remap from="$(arg node_name)/emergency_stop" to="wheels_driver_node/emergency_stop" />
+        <node pkg="$(arg pkg_name)" type="$(arg node_name)_gui.py" name="$(arg node_name)" output="screen" args="$(arg veh)" />
+    </group>
+</launch>

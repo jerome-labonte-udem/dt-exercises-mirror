@@ -1,0 +1,55 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_68636/fast"
+/usr/bin/make -f CMakeFiles/cmTC_68636.dir/build.make CMakeFiles/cmTC_68636.dir/build
+make[1]: Entering directory '/duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_68636.dir/CheckSymbolExists.c.o
+/usr/bin/cc   -std=gnu99 -fPIC -Wall -Wno-unused-parameter -Wno-unused-function -I. -O4 -fno-strict-overflow    -o CMakeFiles/cmTC_68636.dir/CheckSymbolExists.c.o   -c /duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_68636
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_68636.dir/link.txt --verbose=1
+/usr/bin/cc -std=gnu99 -fPIC -Wall -Wno-unused-parameter -Wno-unused-function -I. -O4 -fno-strict-overflow     -rdynamic CMakeFiles/cmTC_68636.dir/CheckSymbolExists.c.o  -o cmTC_68636 
+CMakeFiles/cmTC_68636.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text.startup+0x3): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_68636.dir/build.make:97: recipe for target 'cmTC_68636' failed
+make[1]: *** [cmTC_68636] Error 1
+make[1]: Leaving directory '/duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_68636/fast' failed
+make: *** [cmTC_68636/fast] Error 2
+
+File /duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ffc81/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ffc81.dir/build.make CMakeFiles/cmTC_ffc81.dir/build
+make[1]: Entering directory '/duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ffc81.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -std=gnu99 -fPIC -Wall -Wno-unused-parameter -Wno-unused-function -I. -O4 -fno-strict-overflow -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_ffc81.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ffc81
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ffc81.dir/link.txt --verbose=1
+/usr/bin/cc -std=gnu99 -fPIC -Wall -Wno-unused-parameter -Wno-unused-function -I. -O4 -fno-strict-overflow -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_ffc81.dir/CheckFunctionExists.c.o  -o cmTC_ffc81 -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ffc81.dir/build.make:97: recipe for target 'cmTC_ffc81' failed
+make[1]: *** [cmTC_ffc81] Error 1
+make[1]: Leaving directory '/duckietown/catkin_ws/build/apriltags2/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ffc81/fast' failed
+make: *** [cmTC_ffc81/fast] Error 2
+
+

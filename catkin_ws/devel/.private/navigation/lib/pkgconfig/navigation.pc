@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/navigation
+
+Name: navigation
+Description: Description of navigation
+Version: 1.0.0
+Cflags: -I/duckietown/catkin_ws/devel/.private/navigation/include
+Libs: -L${prefix}/lib 
+Requires: message_runtime

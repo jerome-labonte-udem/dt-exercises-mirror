@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/vehicle_detection/lib/python2.7/dist-packages/vehicle_detection/__init__.py

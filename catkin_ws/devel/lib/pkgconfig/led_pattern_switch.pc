@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/led_pattern_switch/lib/pkgconfig/led_pattern_switch.pc

@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/anti_instagram
+
+Name: anti_instagram
+Description: Description of anti_instagram
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

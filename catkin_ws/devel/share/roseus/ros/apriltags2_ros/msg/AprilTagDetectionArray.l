@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/apriltags2_ros/share/roseus/ros/apriltags2_ros/msg/AprilTagDetectionArray.l

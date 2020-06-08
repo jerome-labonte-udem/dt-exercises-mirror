@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /duckietown/catkin_ws/devel/.private/easy_algo/setup.sh

@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/line_detector
+
+Name: line_detector
+Description: Description of line_detector
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

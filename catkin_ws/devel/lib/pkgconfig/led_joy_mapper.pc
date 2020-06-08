@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/led_joy_mapper/lib/pkgconfig/led_joy_mapper.pc

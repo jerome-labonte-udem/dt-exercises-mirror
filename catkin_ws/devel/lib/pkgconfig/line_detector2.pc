@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/line_detector2/lib/pkgconfig/line_detector2.pc

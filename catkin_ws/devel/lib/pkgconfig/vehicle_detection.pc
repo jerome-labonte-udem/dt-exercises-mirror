@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/vehicle_detection/lib/pkgconfig/vehicle_detection.pc

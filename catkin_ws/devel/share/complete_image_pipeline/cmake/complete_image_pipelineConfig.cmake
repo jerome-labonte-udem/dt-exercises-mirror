@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/complete_image_pipeline/share/complete_image_pipeline/cmake/complete_image_pipelineConfig.cmake
