@@ -6,14 +6,16 @@ function log_pid() {
 }
 
 function catkin_build() {
+  log_pid "Sourcing catkin_ws/devel/setup.bash"
+  source catkin_ws/devel/setup.bash
   rospack find duckietown_msgs
   if [ $? -ne 0 ]; then 
     log_pid "Need to build environment first, building ..."
     catkin build --workspace catkin_ws
     log_pid "Done building workspace"
+    log_pid "re-sourcing catkin_ws/devel/setup.bash"
+    source catkin_ws/devel/setup.bash
   fi
-  log_pid "Sourcing catkin_ws/devel/setup.bash"
-  source catkin_ws/devel/setup.bash
 }
 
 function start_car_interface() {

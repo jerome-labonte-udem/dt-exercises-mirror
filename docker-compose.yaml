@@ -84,7 +84,7 @@ services:
     middleware_manager:
       #image: courchesnea/dt-middleware:test
       build:
-        context: fifos_connector/
+        context: setup/fifos_connector/
         dockerfile: Dockerfile
       environment:
         middleware_parameters: |

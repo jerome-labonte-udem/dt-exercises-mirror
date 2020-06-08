@@ -57,7 +57,7 @@ RUN mkdir duckietown/dt-core/
 COPY catkin_ws/src/dt-core/dependencies-py.txt duckietown/dt-core
 RUN python -m pip install -r duckietown/dt-core/dependencies-py.txt
 
-COPY start.sh duckietown
+COPY setup/start.sh duckietown
 RUN chmod +x duckietown/start.sh
 
 COPY solution.py duckietown/solution.py
