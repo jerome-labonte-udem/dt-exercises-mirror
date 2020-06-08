@@ -39,8 +39,8 @@ services:
         - "HOSTNAME=default"
         - "VEHICLE_NAME=default"
         - "DISPLAY=:99"
-        - "PYTHONUNBUFFERED=1"
-        - "PYTHONIOENCODING=UTF-8"
+          #- "PYTHONUNBUFFERED=1"
+          #- "PYTHONIOENCODING=UTF-8"
         - "AIDONODE_DATA_IN=/fifos/agent-in"
         - "AIDONODE_DATA_OUT=fifo:/fifos/agent-out"
       expose:
@@ -63,22 +63,6 @@ services:
       - "5901:5901"
       - "6901:6901"
 
-#    sim:
-#        image: duckietown/dt-sim:daffy
-#        build:
-#            context: .
-#            dockerfile: DockerfileSim
-#        networks:
-#        - duckietown-docker-net
-#        volumes:
-#        - ./simulation:/duckietown/simulation
-#        - ./utils:/duckietown/utils        
-#        environment:
-#        - "ROS_MASTER_URI=http://sim:11311"
-#        - "HOSTNAME=default"
-#        - "VEHICLE_NAME=default"
-#        - "DISPLAY=:99"
-
     simulator:
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
       #image: courchesnea/dt-simbridge:test
@@ -90,10 +74,8 @@ services:
           env_constructor: Simulator
           env_parameters:
             max_steps: 500001 # we don't want the gym to reset itself
-            domain_rand: 0
             camera_width: 640 
             camera_height: 480
-            distortion: true
       volumes:
         - fifos:/fifos
       networks: *networks

@@ -93,25 +93,21 @@ def main():
     logger.info("Pipes connected to agent")
     agents = [agent_ci]
 
+    # We enable CC of the pipes for debugging
+    if logger.level < logging.DEBUG:
+        logfile = "/fifos/agentlog"
+        logfile2 = "/fifos/simlog"
+        ff = open(logfile,"wb")
+        ff2 = open(logfile,"wb")
+        agent_ci.cc(ff)
+        sim_ci.cc(ff2)
+        logger.info(f"opened {logfile} as agent cc")
+        logger.info(f"opened {logfile2} as sim cc")
 
-    logfile = "/fifos/agentlog"
-    logfile2 = "/fifos/simlog"
-    ff = open(logfile,"wb")
-    ff2 = open(logfile,"wb")
-    agent_ci.cc(ff)
-    sim_ci.cc(ff2)
-    logger.info(f"opened {logfile} as agent cc")
-    logger.info(f"opened {logfile2} as sim cc")
-
-
-    # sm_ci = ComponentInterface(config.sm_in, config.sm_out,
-    #                            expect_protocol=protocol_scenario_maker, nickname="scenario_maker",
-    #                            timeout=config.timeout_regular)
 
     # then check compatibility
     # so that everything fails gracefully in case of error
 
-    # sm_ci._get_node_protocol(timeout=config.timeout_initialization)
     logger.info("Checking sim protocol compatibility...")
     sim_ci._get_node_protocol(timeout=config.timeout_initialization)
     logger.info("Sim protocol compatible, checking agent protocol compatibility...")
@@ -121,14 +117,8 @@ def main():
     check_compatibility_between_agent_and_sim(agent_ci, sim_ci)
     logger.info("Compatibility verified.")
 
-    # sim_ci.close()
-    # agent_ci.close()
-    # exit()
 
     attempt_i = 0
-    # per_episode = {}
-    # stats = {}
-    # quit_loop = False
     ep = 0
 
     try:
@@ -156,10 +146,7 @@ def main():
         scenario1 = Scenario("scenario1", environment=yaml_string, robots={"agent1": robot1})
         unique_episode = EpisodeSpec("episode1", scenario1)
 
-        # episodes = get_episodes(sm_ci, episodes_per_scenario=config.episodes_per_scenario,
-        #                        seed=config.seed)
         episodes = [unique_episode]
-        # while episodes:
         # Since we dont have a scenario maker, we will loop the episode (for now)
         while episodes:
 
@@ -465,30 +452,6 @@ def check_compatibility_between_agent_and_sim(agent_ci: ComponentInterface, sim_
 class EpisodeSpec:
     episode_name: str
     scenario: Scenario
-
-
-# def get_episodes(sm_ci: ComponentInterface, episodes_per_scenario: int, seed: int) -> List[EpisodeSpec]:
-#     sm_ci.write_topic_and_expect_zero('seed', seed)
-#
-#     def iterate_scenarios() -> Iterator[Scenario]:
-#         while True:
-#             recv = sm_ci.write_topic_and_expect('next_scenario')
-#             if recv.topic == 'finished':
-#                 sm_ci.close()
-#                 break
-#             else:
-#                 yield recv.data
-#
-#     episodes = []
-#     for scenario in iterate_scenarios():
-#         scenario_name = scenario.scenario_name
-#         logger.info(f'Received scenario {scenario}')
-#         for i in range(episodes_per_scenario):
-#             episode_name = f'{scenario_name}-{i}'
-#             es = EpisodeSpec(episode_name=episode_name, scenario=scenario)
-#             episodes.append(es)
-#     return episodes
-
 
 def env_as_yaml(name: str) -> dict:
     environment = os.environ.copy()

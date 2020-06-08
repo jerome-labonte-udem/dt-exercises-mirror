@@ -18,10 +18,11 @@ class ROSAgent(object):
         self.ik_action_sub = rospy.Subscriber('/{}/wheels_driver_node/wheels_cmd'.format(
             self.vehicle), WheelsCmdStamped, self._ik_action_cb)
 
-        
         # Place holder for the action
         self.action = np.array([0.0, 0.0])
         self.updated = True
+        # This is set such that we send zero commands when we have not yet received commands
+        # from ros, prevents timeouts for local development
         self.started = False
 
         # Publishes onto the corrected image topic
@@ -37,7 +38,6 @@ class ROSAgent(object):
         # Initializes the node
         logger.info('Calling init_node')
         try:
-            # rospy.init_node('ROSAgent', disable_signals=True)
             rospy.init_node('ROSAgent',log_level=rospy.INFO)
             logger.info('node initialized')
         except BaseException as e:
@@ -45,7 +45,7 @@ class ROSAgent(object):
             raise
 
         # 15Hz ROS Cycle - TODO: What is this number?
-        self.r = rospy.Rate(15)
+        # self.r = rospy.Rate(15)
 
         logger.info('ROSAgent::__init__ complete.')
 

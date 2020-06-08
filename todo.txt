@@ -1,0 +1,19 @@
+V remove (?) timeout, what should happen before publishing anything
+* slow refresh rate on cam
+* catkin should not build every time
+* simulator should handle log level param
+* sample pose should work
+V Make everything same level
+V Make only 1 solution.py
+* Map, init_pose and stuff in .env ?
+V set log level in .env
+  * make sure we see vnc and jupyter urls
+V rm "dont forget to start launch_car_interface.."
+* Ros core should also be able to switch log level
+* we should output a "READY"
+* Add comments
+* what is the use of mounting ./utils ?
+* We should improve the UX for dts challenges submit / eval
+  -> We should not need local launch file
+* We should clean the repo for better UX, more stuff into ./setup
+  * fifos_connector in another repo might be a good idea

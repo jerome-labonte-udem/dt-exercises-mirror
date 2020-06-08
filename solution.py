@@ -20,6 +20,8 @@ class ROSBaselineAgent(object):
 
         vehicle_name = os.getenv('VEHICLE_NAME')
 
+        # The in_sim switch is used for local development
+        # in that case, we do not start a launch file
         if not in_sim:
             # logger.info('Configuring logging')
             uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -98,6 +100,7 @@ def jpg2rgb(image_data):
 
 if __name__ == '__main__':
 
+    # The following can be set in the environment file
     LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
     logger.setLevel(LOGLEVEL)
     logger.warn("Logger set to level: "+str(logger.level))
