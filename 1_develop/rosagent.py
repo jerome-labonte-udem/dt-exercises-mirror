@@ -22,6 +22,7 @@ class ROSAgent(object):
         # Place holder for the action
         self.action = np.array([0.0, 0.0])
         self.updated = True
+        self.started = False
 
         # Publishes onto the corrected image topic
         # since image out of simulator is currently rectified
@@ -33,28 +34,18 @@ class ROSAgent(object):
         self.cam_info_pub = rospy.Publisher('/{}/camera_node/camera_info'.format(
             self.vehicle), CameraInfo, queue_size=1)
 
-    def init_node(self):
-        # Initializes the node
-        logger.info("In init_node")
-        print("PIn init_node")
         try:
             # rospy.init_node('ROSAgent', disable_signals=True)
             rospy.init_node('ROSAgent',log_level=rospy.INFO)
             logger.info('node initialized')
-            print("PNode initialized")
         except BaseException as e:
             logger.info('exception in init_node: %s' % e)
             print("PException in init_node")
             raise
 
-        logger.info("AIDO_DATA_OUT: "+os.getenv("AIDONODE_DATA_OUT"))
 
         # 15Hz ROS Cycle - TODO: What is this number?
         self.r = rospy.Rate(15)
-
-        # This gets run (looged to /root/.ros/log)
-        logger.info('ROSAgent::__init__ complete.')
-        print("PROSAGENT::__INIT__COMPLETE")
 
     def _ik_action_cb(self, msg):
         """
@@ -65,6 +56,7 @@ class ROSAgent(object):
         vr = msg.vel_right
         self.action = np.array([vl, vr])
         self.updated = True
+        self.started = True
 
     def _publish_info(self):
         """
@@ -89,6 +81,3 @@ class ROSAgent(object):
 
         self.cam_pub.publish(img_msg)
 
-    def print_test(self):
-        logger.info("This prints")
-        print("This also prints")

@@ -7,20 +7,19 @@ import time
 import argparse
 import numpy as np
 import roslaunch
-import imp
-#rosagent = imp.load_source("rosagent", "rosagent.py")
 from rosagent import ROSAgent
 
 from zuper_nodes_python2 import logger, wrap_direct
 
 class ROSBaselineAgent(object):
     def __init__(self, in_sim, launch_file):
-        logger.info('started __init__() for ROSBaselineAgent')
         # Now, initialize the ROS stuff here:
 
         vehicle_name = os.getenv('VEHICLE_NAME')
 
-        roslaunch_path = os.path.join(os.getcwd(), launch_file)
+
+        logger.info('started __init__() for ROSBaselineAgent')
+        # roslaunch_path = os.path.join(os.getcwd(), launch_file)
 
         #if (in_sim):
         #    roslaunch_path = (os.path.join(os.getcwd(),"empty.launch"),["--wait","veh:{}".format(vehicle_name)])
@@ -45,42 +44,33 @@ class ROSBaselineAgent(object):
         # Start the ROSAgent, which handles publishing images and subscribing to action
 
         logger.info('starting ROSAgent()')
-        print("PStarting Rosagent")
         self.agent = ROSAgent()
         logger.info('started ROSAgent()')
-        print("PStarted Rosagent")
-        self.agent.init_node()
-        logger.info('node initialized')
 
-        logger.info('completed __init__()')
-        print("PCompleted __init__()")
 
     def on_received_seed(self, context, data):
         logger.info('Received seed from pipes')
-        print("Received seed")
-        self.agent.print_test()
         np.random.seed(data)
 
     def on_received_episode_start(self, context, data):
-        print("Starting episode")
+        logger.info("Starting episode")
         context.info('Starting episode %s.' % data)
 
     def on_received_observations(self, context, data):
         logger.info("received observation")
-        print(">Received observation")
         jpg_data = data['camera']['jpg_data']
         obs = jpg2rgb(jpg_data)
         self.agent._publish_img(obs)
         self.agent._publish_info()
 
     def on_received_get_commands(self, context, data):
-        print(">Received get_commands")
         logger.info("Agent received GetCommand request")
         while not self.agent.updated:
             time.sleep(0.01)
 
         pwm_left, pwm_right = self.agent.action
-        self.agent.updated = False
+        if self.agent.started:  # before starting, we send empty commnands to keep connection
+            self.agent.updated = False
 
         rgb = {'r': 0.5, 'g': 0.5, 'b': 0.5}
         commands = {
@@ -116,7 +106,14 @@ def jpg2rgb(image_data):
 
 
 if __name__ == '__main__':
+
+    LOGLEVEL = os.environ.get('LOGLEVEL', 'INFO').upper()
+    logger.setLevel(LOGLEVEL)
+    logger.warn("Logger set to level: "+str(logger.level))
+    if logger.level > 20:
+        logger.warn("Logging is set to {}, info msg will no be shown".format(LOGLEVEL))
     logger.info("Started solution2.py")
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-s","--sim", action="store_true", help="Add this option to start the car interface")
     parser.add_argument("--launch_file",default="lf_slim.launch", help="launch file that should be used (default: lf_slim.launch")
@@ -125,4 +122,3 @@ if __name__ == '__main__':
     logger.info("Created agent in solution2 main")
     wrap_direct(agent)
     logger.info("solution2 end of main")
-    # TODO handle signals (rospy.signal_shutdown(reason))

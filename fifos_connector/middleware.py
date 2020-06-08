@@ -49,7 +49,8 @@ from zuper_typing.subcheck import can_be_used_as2
 
 logging.basicConfig()
 logger = logging.getLogger('launcher')
-logger.setLevel(logging.DEBUG)
+LOGLEVEL = os.environ.get('LOGLEVEL', 'DEBUG').upper()
+logger.setLevel(LOGLEVEL)
 
 
 @dataclass
@@ -171,7 +172,7 @@ def main():
 
             ep += 1
             episode_name = f'episode_{ep}'
-            logger.info('Starting episode 1')
+            logger.info(f'Starting {episode_name}')
 
             # dn_final = os.path.join(log_dir, episode_name)
 
@@ -375,8 +376,10 @@ def run_episode(sim_ci: ComponentInterface,
 
             with tt.measure(f'agent_compute-{robot_name}'):
                 try:
+                    logger.info("Sending observation to agent")
                     agent.write_topic_and_expect_zero('observations', recv.data.observations)
                     gc = GetCommands(at_time=time.time())
+                    logger.info("Querying commands to agent")
                     r: MsgReceived = agent.write_topic_and_expect('get_commands',gc , expect='commands')
 
                 except BaseException as e:
@@ -390,13 +393,14 @@ def run_episode(sim_ci: ComponentInterface,
 
         for robot_name in not_playable_robots:
             with tt.measure(f'sim_compute_robot_state-{robot_name}'):
+                logger.info("get robot state")
                 rs = GetRobotState(robot_name=robot_name, t_effective=t_effective)
                 _recv: MsgReceived[RobotState] = \
                     sim_ci.write_topic_and_expect('get_robot_state', rs,
                                                   expect='robot_state')
 
         with tt.measure('sim_compute_sim_state'):
-
+            logger.info("Computing sim state")
             recv: MsgReceived[SimulationState] = \
                 sim_ci.write_topic_and_expect('get_sim_state', expect='sim_state')
 
@@ -406,6 +410,7 @@ def run_episode(sim_ci: ComponentInterface,
                 break
 
         with tt.measure('sim_physics'):
+            logger.info("calling sim_step")
             current_sim_time += physics_dt
             sim_ci.write_topic_and_expect_zero('step', Step(current_sim_time))
 

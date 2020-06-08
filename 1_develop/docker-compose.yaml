@@ -9,6 +9,8 @@ services:
         - "ROS_MASTER_URI=http://ros_core:11311"
       networks: &networks
         - duckietown-docker-net
+      env_file: &env_file
+        - parameters.env
       expose:
         - "11311"
       ports:
@@ -23,6 +25,7 @@ services:
         - ros_core
       working_dir: /duckietown
       networks: *networks
+      env_file: *env_file
       volumes:
         - ./catkin_ws:/duckietown/catkin_ws
         - ./utils:/duckietown/utils
@@ -48,6 +51,7 @@ services:
     novnc:
       image: duckietown/docker-ros-vnc:daffy
       networks: *networks
+      env_file: *env_file
       environment:
       - "ROS_MASTER_URI=http://ros_core:11311"
       - "HOSTNAME=default"
@@ -93,6 +97,7 @@ services:
       volumes:
         - fifos:/fifos
       networks: *networks
+      env_file: *env_file
 
     middleware_manager:
       #image: courchesnea/dt-middleware:test
@@ -119,6 +124,7 @@ services:
       volumes:
         - fifos:/fifos
       networks: *networks
+      env_file: *env_file
 
 volumes:
   fifos:
