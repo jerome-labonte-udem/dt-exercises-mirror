@@ -10,8 +10,8 @@ FROM duckietown/challenge-aido_lf-template-ros:${BASE_TAG}
 RUN rm -r /workspace; mkdir /workspace
 WORKDIR /workspace
 
-COPY requirements.* ./
-RUN pip install -r requirements.txt
+COPY setup/requirementssub.* ./
+RUN pip install -r requirementssub.txt
 
 # let's copy all our solution files to our workspace
 # if you have more file use the COPY command to move them to the workspace

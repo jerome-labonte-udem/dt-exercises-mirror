@@ -64,9 +64,12 @@ services:
       - "6901:6901"
 
     simulator:
-      #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
       #image: courchesnea/dt-simbridge:test
-      image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+      #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+      image: courchesnea/challenge-aido_lf-simulator-gym:fifos-aido4
+      # build:
+      #     context: setup/challenge-aido_LF-simulator-gym/
+      #     dockerfile: Dockerfile
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
         AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
@@ -82,10 +85,10 @@ services:
       env_file: *env_file
 
     middleware_manager:
-      #image: courchesnea/dt-middleware:test
-      build:
-        context: setup/fifos_connector/
-        dockerfile: Dockerfile
+      image: courchesnea/fifos-connector:daffy-aido4
+      # build:
+      #   context: setup/fifos_connector/
+      #   dockerfile: Dockerfile
       environment:
         middleware_parameters: |
           episodes_per_scenario: 1
