@@ -1,0 +1,78 @@
+description:
+    This is a rewriting of `line_detector_node` using the [EasyNode](#easy_node) framework.
+
+parameters:
+    verbose:
+        desc: |
+            Whether the node is verbose or not. If set to `True`,
+            the node will write timing statistics to the log.
+        type: bool
+        default: true
+    img_size:
+        type: any
+        desc:
+    top_cutoff:
+        type: int
+        desc: |
+            This parameter decides how much of the image we should cut off.
+            This is a performance improvement.
+    line_detector:
+        type: str
+        desc: This is the instance of `line_detector` to use.
+
+subscriptions:
+    image:
+        desc: |
+            This is the compressed image to read. Note that it takes
+            a long time to simply decode the image JPG.
+        topic: ~image
+        type: sensor_msgs/CompressedImage
+        queue_size: 1
+        process: threaded
+    transform:
+        desc: >
+            The anti-instagram transform to apply.  See [](#anti_instagram).
+        topic: ~transform
+        type: duckietown_msgs/AntiInstagramTransform
+        queue_size: 1
+        process: synchronous
+    switch:
+        desc: |
+            This is a switch that allows to control the activity of this node.
+            If the message is true, the node becomes active. If false, it
+            switches off. The node starts as active.
+        topic: ~switch
+        type: duckietown_msgs/BoolStamped
+        queue_size: 1
+        process: synchronous
+
+publishers:
+    edge:
+        desc:
+        type: sensor_msgs/Image
+        queue_size: 1
+        topic: ~edge
+    color_segment:
+        desc:
+        type: sensor_msgs/Image
+        queue_size: 1
+        topic: ~colorSegment
+    segment_list:
+        desc:
+        type: duckietown_msgs/SegmentList
+        queue_size: 1
+        topic: ~segment_list
+    image_with_lines:
+        desc:
+        type: sensor_msgs/Image
+        queue_size: 1
+        topic: ~image_with_lines
+
+
+contracts: {}
+    # subscriptions:
+    #     image:
+    #         min_frequency: 5
+    # processing:
+    #     image:
+    #         max_latency: 0.200

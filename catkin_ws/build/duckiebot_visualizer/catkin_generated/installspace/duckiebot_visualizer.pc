@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/install
+
+Name: duckiebot_visualizer
+Description: Description of duckiebot_visualizer
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

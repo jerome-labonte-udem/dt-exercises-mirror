@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/install
+
+Name: car_interface
+Description: Description of car_interface
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

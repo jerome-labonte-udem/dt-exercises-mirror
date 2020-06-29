@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/complete_image_pipeline/lib/pkgconfig/complete_image_pipeline.pc

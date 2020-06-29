@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/install
+
+Name: dagu_car
+Description: Description of dagu_car
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

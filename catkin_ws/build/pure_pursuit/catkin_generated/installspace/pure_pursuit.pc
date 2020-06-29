@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/install
+
+Name: pure_pursuit
+Description: Description of pure_pursuit
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/apriltags/lib/pkgconfig/apriltags.pc

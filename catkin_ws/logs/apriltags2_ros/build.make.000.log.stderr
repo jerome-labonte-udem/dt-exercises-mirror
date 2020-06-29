@@ -1,0 +1,63 @@
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/common_functions.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/continuous_detector.h:47,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/continuous_detector.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/apriltags2_ros_single_image_client_node.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/single_image_detector.h:47,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/single_image_detector.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/continuous_detector.h:47,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/apriltags2_ros_continuous_node.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~
+In file included from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/apriltag.h:42:0,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/include/apriltags2_ros/common_functions.h:67,
+                 from /duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2_ros/src/apriltags2_ros_single_image_server_node.cpp:32:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h: In function ‘int matd_is_vector_len(const matd_t*, int)’:
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:39: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                              ~~~~~~~~~^~~~~~
+/duckietown/catkin_ws/src/dt-core/packages/apriltags2_ros/apriltags2/include/common/matd.h:280:60: warning: comparison between signed and unsigned integer expressions [-Wsign-compare]
+     return (a->ncols == 1 && a->nrows == len) || (a->ncols == len && a->nrows == 1);
+                                                   ~~~~~~~~~^~~~~~

@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/pkgconfig/pure_pursuit.pc

@@ -1,0 +1,5 @@
+Linked: (/duckietown/catkin_ws/devel/.private/pure_pursuit/share/pure_pursuit/cmake/pure_pursuitConfig.cmake, /duckietown/catkin_ws/devel/share/pure_pursuit/cmake/pure_pursuitConfig.cmake)
+Linked: (/duckietown/catkin_ws/devel/.private/pure_pursuit/share/pure_pursuit/cmake/pure_pursuitConfig-version.cmake, /duckietown/catkin_ws/devel/share/pure_pursuit/cmake/pure_pursuitConfig-version.cmake)
+Linked: (/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/pkgconfig/pure_pursuit.pc, /duckietown/catkin_ws/devel/lib/pkgconfig/pure_pursuit.pc)
+Linked: (/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/python2.7/dist-packages/utils/__init__.py, /duckietown/catkin_ws/devel/lib/python2.7/dist-packages/utils/__init__.py)
+Linked: (/duckietown/catkin_ws/devel/.private/pure_pursuit/lib/python2.7/dist-packages/point_tracking/__init__.py, /duckietown/catkin_ws/devel/lib/python2.7/dist-packages/point_tracking/__init__.py)

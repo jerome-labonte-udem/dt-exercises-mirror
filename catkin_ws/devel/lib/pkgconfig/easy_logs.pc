@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/easy_logs/lib/pkgconfig/easy_logs.pc

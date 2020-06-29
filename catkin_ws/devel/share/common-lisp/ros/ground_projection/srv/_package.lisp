@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/ground_projection/share/common-lisp/ros/ground_projection/srv/_package.lisp

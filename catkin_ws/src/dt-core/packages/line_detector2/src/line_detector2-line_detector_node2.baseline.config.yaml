@@ -1,0 +1,9 @@
+
+description: |
+    Baseline, low-res configuration for the 
+    
+values:
+    img_size: [120,160]
+    top_cutoff: 40
+    line_detector: baseline
+    

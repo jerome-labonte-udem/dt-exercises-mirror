@@ -1,0 +1,1 @@
+set(ORDERED_PATHS "/duckietown/catkin_ws/devel/.private/apriltags/lib;/opt/ros/melodic/lib")

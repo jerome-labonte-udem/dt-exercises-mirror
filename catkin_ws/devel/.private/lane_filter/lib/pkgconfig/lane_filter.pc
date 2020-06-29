@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/lane_filter
+
+Name: lane_filter
+Description: Description of lane_filter
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

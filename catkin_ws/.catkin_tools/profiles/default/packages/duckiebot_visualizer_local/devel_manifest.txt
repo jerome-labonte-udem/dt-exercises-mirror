@@ -1,0 +1,5 @@
+AC_LF_Submission/packages/duckiebot_visualizer_local
+/duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/cmake.lock /duckietown/catkin_ws/devel/./cmake.lock
+/duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/share/duckiebot_visualizer_local/cmake/duckiebot_visualizer_localConfig-version.cmake /duckietown/catkin_ws/devel/share/duckiebot_visualizer_local/cmake/duckiebot_visualizer_localConfig-version.cmake
+/duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/share/duckiebot_visualizer_local/cmake/duckiebot_visualizer_localConfig.cmake /duckietown/catkin_ws/devel/share/duckiebot_visualizer_local/cmake/duckiebot_visualizer_localConfig.cmake
+/duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/lib/pkgconfig/duckiebot_visualizer_local.pc /duckietown/catkin_ws/devel/lib/pkgconfig/duckiebot_visualizer_local.pc

@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/stop_line_filter/share/stop_line_filter/cmake/stop_line_filterConfig.cmake

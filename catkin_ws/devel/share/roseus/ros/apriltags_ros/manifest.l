@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/apriltags_ros/share/roseus/ros/apriltags_ros/manifest.l

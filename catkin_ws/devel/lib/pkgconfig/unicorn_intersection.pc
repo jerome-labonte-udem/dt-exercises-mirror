@@ -1,0 +1,1 @@
+/duckietown/catkin_ws/devel/.private/unicorn_intersection/lib/pkgconfig/unicorn_intersection.pc

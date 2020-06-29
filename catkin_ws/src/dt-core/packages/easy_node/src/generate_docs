@@ -1,0 +1,10 @@
+#!/usr/bin/env python
+# @create-shortcut-for-this
+
+from easy_node.node_description.doc_generation import generate_easy_node_docs
+import duckietown_utils as dtu
+
+from duckietown_utils import col_logging  # @UnusedImport
+
+if __name__ == '__main__':
+    dtu.wrap_script_entry_point(generate_easy_node_docs)

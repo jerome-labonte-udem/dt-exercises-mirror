@@ -1,0 +1,8 @@
+prefix=/duckietown/catkin_ws/devel/.private/easy_logs
+
+Name: easy_logs
+Description: Description of easy_logs
+Version: 1.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
