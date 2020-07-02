@@ -10,7 +10,7 @@ services:
       networks: &networks
         - duckietown-docker-net
       env_file: &env_file
-        - parameters.env
+        - setup/parameters.env
       expose:
         - "11311"
       ports:
@@ -20,7 +20,7 @@ services:
       image: duckietown/dt-notebook:daffy
       build:
           context: .
-          dockerfile: DockerfileNB
+          dockerfile: setup/DockerfileNB
       depends_on:
         - ros_core
       working_dir: /duckietown
@@ -66,10 +66,10 @@ services:
     simulator:
       #image: courchesnea/dt-simbridge:test
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
-      image: courchesnea/challenge-aido_lf-simulator-gym:fifos-aido4
-      # build:
-      #     context: setup/challenge-aido_LF-simulator-gym/
-      #     dockerfile: Dockerfile
+      # image: courchesnea/challenge-aido_lf-simulator-gym:fifos-aido4
+      build:
+          context: setup/challenge-aido_LF-simulator-gym/
+          dockerfile: Dockerfile
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
         AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
@@ -77,18 +77,20 @@ services:
           env_constructor: Simulator
           env_parameters:
             max_steps: 500001 # we don't want the gym to reset itself
-            camera_width: 640 
-            camera_height: 480
+            #camera_width: 640 
+            #camera_height: 480
+            camera_width: 320
+            camera_height: 240
       volumes:
         - fifos:/fifos
       networks: *networks
       env_file: *env_file
 
     middleware_manager:
-      image: courchesnea/fifos-connector:daffy-aido4
-      # build:
-      #   context: setup/fifos_connector/
-      #   dockerfile: Dockerfile
+      # image: courchesnea/fifos-connector:daffy-aido4
+      build:
+        context: setup/fifos-connector/
+        dockerfile: Dockerfile
       environment:
         middleware_parameters: |
           episodes_per_scenario: 1
