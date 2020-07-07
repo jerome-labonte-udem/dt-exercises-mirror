@@ -39,8 +39,6 @@ services:
         - "HOSTNAME=default"
         - "VEHICLE_NAME=default"
         - "DISPLAY=:99"
-          #- "PYTHONUNBUFFERED=1"
-          #- "PYTHONIOENCODING=UTF-8"
         - "AIDONODE_DATA_IN=/fifos/agent-in"
         - "AIDONODE_DATA_OUT=fifo:/fifos/agent-out"
       expose:
@@ -66,6 +64,7 @@ services:
     simulator:
       #image: courchesnea/dt-simbridge:test
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
+      #TODO change this to duckietown/...:mooc-exercises
       image: courchesnea/challenge-aido_lf-simulator-gym:fifos-aido4
       #build:
       #    context: setup/challenge-aido_LF-simulator-gym/
@@ -87,10 +86,10 @@ services:
       env_file: *env_file
 
     middleware_manager:
-      image: courchesnea/fifos-connector:daffy-aido4
-      #build:
-      #  context: setup/fifos-connector/
-      #  dockerfile: Dockerfile
+      #image: courchesnea/fifos-connector:daffy-aido4
+      build:
+        context: setup/fifos-connector/
+        dockerfile: Dockerfile
       environment:
         middleware_parameters: |
           episodes_per_scenario: 1
