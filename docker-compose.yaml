@@ -4,7 +4,9 @@ services:
 
     ros_core:
       image: osrf/ros:melodic-desktop-full-bionic
-      command: stdbuf -o L roscore
+      # Use the first command to see roscore log in console
+      # command: stdbuf -o L roscore
+      command: roscore
       environment:
         - "ROS_MASTER_URI=http://ros_core:11311"
       networks: &networks
