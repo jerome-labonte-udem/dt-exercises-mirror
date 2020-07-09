@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/apriltags2_ros/include/apriltags2_ros/AnalyzeSingleImage.h

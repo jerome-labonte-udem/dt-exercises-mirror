@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/duckietown_msgs
-
-Name: duckietown_msgs
-Description: Description of duckietown_msgs
-Version: 1.0.0
-Cflags: -I/duckietown/catkin_ws/devel/.private/duckietown_msgs/include
-Libs: -L${prefix}/lib 
-Requires: geometry_msgs roscpp rospy sensor_msgs std_msgs message_runtime visualization_msgs

@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/easy_logs/lib/python2.7/dist-packages/easy_logs/__init__.py

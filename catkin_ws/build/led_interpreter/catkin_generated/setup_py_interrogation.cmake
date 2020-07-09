@@ -1,6 +1,0 @@
-set(led_interpreter_SETUP_PY_VERSION "1.0.0")
-set(led_interpreter_SETUP_PY_SCRIPTS "")
-set(led_interpreter_SETUP_PY_PACKAGES "led_interpreter")
-set(led_interpreter_SETUP_PY_PACKAGE_DIRS "include/led_interpreter")
-set(led_interpreter_SETUP_PY_MODULES "")
-set(led_interpreter_SETUP_PY_MODULE_DIRS "")

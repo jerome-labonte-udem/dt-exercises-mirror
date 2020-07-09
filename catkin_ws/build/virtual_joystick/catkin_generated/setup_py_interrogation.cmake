@@ -1,6 +1,0 @@
-set(virtual_joystick_SETUP_PY_VERSION "1.0.0")
-set(virtual_joystick_SETUP_PY_SCRIPTS "")
-set(virtual_joystick_SETUP_PY_PACKAGES "virtual_joystick")
-set(virtual_joystick_SETUP_PY_PACKAGE_DIRS "virtual_joystick")
-set(virtual_joystick_SETUP_PY_MODULES "")
-set(virtual_joystick_SETUP_PY_MODULE_DIRS "")

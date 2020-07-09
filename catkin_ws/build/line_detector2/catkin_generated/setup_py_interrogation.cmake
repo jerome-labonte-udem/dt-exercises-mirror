@@ -1,6 +1,0 @@
-set(line_detector2_SETUP_PY_VERSION "1.0.0")
-set(line_detector2_SETUP_PY_SCRIPTS "")
-set(line_detector2_SETUP_PY_PACKAGES "line_detector2;line_detector2_tests")
-set(line_detector2_SETUP_PY_PACKAGE_DIRS "include/line_detector2;include/line_detector2_tests")
-set(line_detector2_SETUP_PY_MODULES "")
-set(line_detector2_SETUP_PY_MODULE_DIRS "")

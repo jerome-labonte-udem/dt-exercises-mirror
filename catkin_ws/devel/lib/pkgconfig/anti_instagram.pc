@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/anti_instagram/lib/pkgconfig/anti_instagram.pc

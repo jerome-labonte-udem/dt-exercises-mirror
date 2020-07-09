@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/car_interface
-
-Name: car_interface
-Description: Description of car_interface
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

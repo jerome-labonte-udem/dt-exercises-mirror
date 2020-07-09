@@ -1,3 +1,0 @@
-# LIST YOUR APT PACKAGES HERE
-ros-kinetic-cv-bridge
-ros-kinetic-rospy

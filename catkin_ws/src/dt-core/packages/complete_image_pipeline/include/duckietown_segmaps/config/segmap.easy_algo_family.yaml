@@ -1,4 +1,0 @@
-description: |
-    These are maps of lines and segments
-    
-interface: duckietown_segmaps.SegmentsMap

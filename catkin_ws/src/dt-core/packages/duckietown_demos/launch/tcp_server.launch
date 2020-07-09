@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<launch>
-
-	<include file="$(find tcp_communication)/launch/tcp_communication_server.launch">
-	
-	</include>
-
-</launch>

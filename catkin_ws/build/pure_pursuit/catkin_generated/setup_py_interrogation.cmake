@@ -1,6 +1,0 @@
-set(pure_pursuit_SETUP_PY_VERSION "1.0.0")
-set(pure_pursuit_SETUP_PY_SCRIPTS "")
-set(pure_pursuit_SETUP_PY_PACKAGES "point_tracking;utils")
-set(pure_pursuit_SETUP_PY_PACKAGE_DIRS "include/point_tracking;include/utils")
-set(pure_pursuit_SETUP_PY_MODULES "")
-set(pure_pursuit_SETUP_PY_MODULE_DIRS "")

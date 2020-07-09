@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/duckietown_msgs/share/duckietown_msgs/cmake/duckietown_msgs-msg-paths.cmake

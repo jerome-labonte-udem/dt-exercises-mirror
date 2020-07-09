@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/install
-
-Name: line_detector2
-Description: Description of line_detector2
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

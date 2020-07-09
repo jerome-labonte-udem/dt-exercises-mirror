@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/explicit_coordinator
-
-Name: explicit_coordinator
-Description: Description of explicit_coordinator
-Version: 0.0.1
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

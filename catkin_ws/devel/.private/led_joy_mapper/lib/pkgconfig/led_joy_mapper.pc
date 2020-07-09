@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/led_joy_mapper
-
-Name: led_joy_mapper
-Description: Description of led_joy_mapper
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

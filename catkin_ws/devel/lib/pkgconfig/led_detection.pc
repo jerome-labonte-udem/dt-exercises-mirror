@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/led_detection/lib/pkgconfig/led_detection.pc

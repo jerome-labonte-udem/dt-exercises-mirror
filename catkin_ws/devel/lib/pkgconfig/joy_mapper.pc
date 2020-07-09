@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/joy_mapper/lib/pkgconfig/joy_mapper.pc

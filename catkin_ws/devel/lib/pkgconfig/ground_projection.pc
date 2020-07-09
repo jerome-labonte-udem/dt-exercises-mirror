@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/ground_projection/lib/pkgconfig/ground_projection.pc

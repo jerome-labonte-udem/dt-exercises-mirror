@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/navigation/share/gennodejs/ros/navigation/srv/_index.js

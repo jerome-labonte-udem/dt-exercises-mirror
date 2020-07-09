@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/joy_mapper
-
-Name: joy_mapper
-Description: Description of joy_mapper
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

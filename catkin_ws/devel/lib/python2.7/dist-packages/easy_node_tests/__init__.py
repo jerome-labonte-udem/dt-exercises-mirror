@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/easy_node/lib/python2.7/dist-packages/easy_node_tests/__init__.py

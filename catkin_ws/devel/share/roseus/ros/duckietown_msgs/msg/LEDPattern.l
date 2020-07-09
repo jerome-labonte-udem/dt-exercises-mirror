@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/duckietown_msgs/share/roseus/ros/duckietown_msgs/msg/LEDPattern.l

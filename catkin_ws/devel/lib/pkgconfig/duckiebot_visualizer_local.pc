@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/duckiebot_visualizer_local/lib/pkgconfig/duckiebot_visualizer_local.pc

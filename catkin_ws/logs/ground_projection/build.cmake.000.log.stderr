@@ -1,4 +1,0 @@
-CMake Warning at /duckietown/catkin_ws/src/dt-core/packages/ground_projection/CMakeLists.txt:28 (message):
-  ROS distribution Melodic Morendia is not supported.  Use at your own risk!
-
-

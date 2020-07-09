@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/ground_projection
-
-Name: ground_projection
-Description: Description of ground_projection
-Version: 1.0.0
-Cflags: -I/duckietown/catkin_ws/devel/.private/ground_projection/include
-Libs: -L${prefix}/lib 
-Requires: image_transport roscpp rospy duckietown_msgs sensor_msgs std_msgs geometry_msgs message_runtime cv_bridge image_geometry

@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/duckietown_protocols/lib/pkgconfig/duckietown_protocols.pc

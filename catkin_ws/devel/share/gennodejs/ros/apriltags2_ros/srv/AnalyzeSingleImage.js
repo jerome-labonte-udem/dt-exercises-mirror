@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/apriltags2_ros/share/gennodejs/ros/apriltags2_ros/srv/AnalyzeSingleImage.js

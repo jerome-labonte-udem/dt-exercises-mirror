@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/led_interpreter
-
-Name: led_interpreter
-Description: Description of led_interpreter
-Version: 1.0.0
-Cflags: -I/duckietown/catkin_ws/src/dt-core/packages/led_interpreter/include
-Libs: -L${prefix}/lib -lled_interpreter
-Requires: duckietown_msgs roscpp rospy

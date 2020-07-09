@@ -1,6 +1,0 @@
-set(pi_camera_SETUP_PY_VERSION "1.0.0")
-set(pi_camera_SETUP_PY_SCRIPTS "")
-set(pi_camera_SETUP_PY_PACKAGES "pi_camera")
-set(pi_camera_SETUP_PY_PACKAGE_DIRS "include/pi_camera")
-set(pi_camera_SETUP_PY_MODULES "")
-set(pi_camera_SETUP_PY_MODULE_DIRS "")

@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/duckiebot_visualizer
-
-Name: duckiebot_visualizer
-Description: Description of duckiebot_visualizer
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

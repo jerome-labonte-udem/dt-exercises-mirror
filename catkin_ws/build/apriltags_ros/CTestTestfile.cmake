@@ -1,9 +1,0 @@
-# CMake generated Testfile for 
-# Source directory: /duckietown/catkin_ws/src/dt-core/packages/apriltags_ros/apriltags_ros
-# Build directory: /duckietown/catkin_ws/build/apriltags_ros
-# 
-# This file includes the relevant testing commands required for 
-# testing this directory and lists subdirectories to be tested as well.
-add_test(_ctest_apriltags_ros_rostest_tests_apriltags_postprocessing_tester_node.test "/duckietown/catkin_ws/build/apriltags_ros/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/duckietown/catkin_ws/build/apriltags_ros/test_results/apriltags_ros/rostest-tests_apriltags_postprocessing_tester_node.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/duckietown/catkin_ws/src/dt-core/packages/apriltags_ros/apriltags_ros --package=apriltags_ros --results-filename tests_apriltags_postprocessing_tester_node.xml --results-base-dir \"/duckietown/catkin_ws/build/apriltags_ros/test_results\" /duckietown/catkin_ws/src/dt-core/packages/apriltags_ros/apriltags_ros/tests/apriltags_postprocessing_tester_node.test ")
-add_test(_ctest_apriltags_ros_rostest_tests_apriltags_integration_tester.test "/duckietown/catkin_ws/build/apriltags_ros/catkin_generated/env_cached.sh" "/usr/bin/python2" "/opt/ros/melodic/share/catkin/cmake/test/run_tests.py" "/duckietown/catkin_ws/build/apriltags_ros/test_results/apriltags_ros/rostest-tests_apriltags_integration_tester.xml" "--return-code" "/usr/bin/python2 /opt/ros/melodic/share/rostest/cmake/../../../bin/rostest --pkgdir=/duckietown/catkin_ws/src/dt-core/packages/apriltags_ros/apriltags_ros --package=apriltags_ros --results-filename tests_apriltags_integration_tester.xml --results-base-dir \"/duckietown/catkin_ws/build/apriltags_ros/test_results\" /duckietown/catkin_ws/src/dt-core/packages/apriltags_ros/apriltags_ros/tests/apriltags_integration_tester.test ")
-subdirs("gtest")

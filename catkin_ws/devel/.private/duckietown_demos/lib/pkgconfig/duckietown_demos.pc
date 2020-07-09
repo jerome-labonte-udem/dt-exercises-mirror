@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/duckietown_demos
-
-Name: duckietown_demos
-Description: Description of duckietown_demos
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

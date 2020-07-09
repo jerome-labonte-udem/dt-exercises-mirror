@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/easy_node/lib/pkgconfig/easy_node.pc

@@ -1,1 +1,0 @@
-/duckietown/catkin_ws/devel/.private/pi_camera/lib/python2.7/dist-packages/pi_camera/__init__.py

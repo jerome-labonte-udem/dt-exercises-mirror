@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/devel/.private/dagu_car
-
-Name: dagu_car
-Description: Description of dagu_car
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

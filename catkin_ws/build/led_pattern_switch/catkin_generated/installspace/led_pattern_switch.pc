@@ -1,8 +1,0 @@
-prefix=/duckietown/catkin_ws/install
-
-Name: led_pattern_switch
-Description: Description of led_pattern_switch
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
