@@ -1,2 +1,0 @@
-random-ros-agent/packages/random_agent
-/duckietown/catkin_ws/devel/.private/random_agent/cmake.lock /duckietown/catkin_ws/devel/./cmake.lock

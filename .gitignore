@@ -1,4 +1,6 @@
 __pycache__/
 *.pyc
 catkin_ws/logs/
-*.log
+catkin_ws/build/
+catkin_ws/devel/
+catkin_ws/.catkin_tools/
