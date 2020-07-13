@@ -30,6 +30,8 @@ services:
       env_file: *env_file
       volumes:
         - ./catkin_ws:/duckietown/catkin_ws
+        - ./setup/notebooks:/duckietown/notebooks
+        - ./setup/utils:/duckietown/utils
           #- ./utils:/duckietown/utils
           #- ./custom:/duckietown/custom
           #- ./sim_ws:/duckietown/sim_ws
