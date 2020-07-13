@@ -67,7 +67,7 @@ services:
       #image: courchesnea/dt-simbridge:test
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
       #TODO change this to duckietown/...:mooc-exercises
-      image: courchesnea/challenge-aido_lf-simulator-gym:fifos-aido4
+      image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
       #build:
       #    context: setup/challenge-aido_LF-simulator-gym/
       #    dockerfile: Dockerfile
@@ -78,10 +78,10 @@ services:
           env_constructor: Simulator
           env_parameters:
             max_steps: 500001 # we don't want the gym to reset itself
-            #camera_width: 640 
-            #camera_height: 480
-            camera_width: 320
-            camera_height: 240
+            camera_width: 640 
+            camera_height: 480
+            #camera_width: 320
+            #camera_height: 240
       volumes:
         - fifos:/fifos
       networks: *networks

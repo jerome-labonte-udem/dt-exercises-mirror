@@ -15,10 +15,10 @@ RUN pip install -r requirementssub.txt
 
 # let's copy all our solution files to our workspace
 # if you have more file use the COPY command to move them to the workspace
-COPY solution.py ./
+COPY setup/solution.py ./
 
 # For ROS Agent - Additional Files
-COPY rosagent.py ./
+COPY setup/rosagent.py ./
 COPY lf_slim.launch ./
 
 ## Uncomment these to build your own catkin_ws

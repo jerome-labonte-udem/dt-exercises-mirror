@@ -60,8 +60,8 @@ RUN python -m pip install -r duckietown/dt-core/dependencies-py.txt
 COPY setup/start.sh duckietown
 RUN chmod +x duckietown/start.sh
 
-COPY solution.py duckietown/solution.py
-COPY rosagent.py duckietown/rosagent.py
+COPY setup/solution.py duckietown/solution.py
+COPY setup/rosagent.py duckietown/rosagent.py
 
 WORKDIR /duckietown
 #CMD  rm -f /tmp/.X99-lock &&  ./run_display.bash &&  jupyter-notebook --allow-root --ip="*" --no-browser  && solution2.py

@@ -11,7 +11,7 @@ build_options =  \
 	--build-arg  AIDO_REGISTRY=$(AIDO_REGISTRY) \
 	 --build-arg  PIP_INDEX_URL=$(PIP_INDEX_URL)
 
-test:
+start:
 	docker-compose down --volumes
 	docker-compose build
 	docker-compose up
