@@ -69,10 +69,12 @@ services:
       #image: courchesnea/dt-simbridge:test
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
       #TODO change this to duckietown/...:mooc-exercises
-      image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
+      #image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
+      image: courchesnea/challenge-aido_lf-simulator-gym:devel
       #build:
       #    context: setup/challenge-aido_LF-simulator-gym/
       #    dockerfile: Dockerfile
+      env_file: *env_file
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
         AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
