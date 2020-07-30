@@ -1,0 +1,9 @@
+# Exercise configuration file
+
+exercise:
+  name: test1
+  version: 0.0.1
+  packages_path: /packages/mooc/src/
+  docker_cmd_exe: roslaunch mooc mooc.launch
+  image_tag: mooc
+  

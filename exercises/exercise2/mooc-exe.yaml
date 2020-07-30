@@ -1,0 +1,9 @@
+# Exercise configuration file
+
+exercise:
+  name: test2
+  version: 0.0.1
+  packages_path: /packages/lane_control/scripts/
+  docker_cmd_exe: roslaunch mooc mooc.launch
+  image_tag: mooc
+  
