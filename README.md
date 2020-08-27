@@ -1,5 +1,7 @@
 # mooc-exercises
 
+NOTE: clone using `git clone --recursive ...`, otherwise the submodules will not be imported 
+
 ## Local development workflow with the simulator
 
 ### Quick start
