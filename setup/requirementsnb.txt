@@ -27,5 +27,5 @@ duckietown-world-daffy==5.1.1
 -e git://github.com/duckietown/duckietown-challenges.git@v4#egg=duckietown-challenges
 
 # Class exercises
-torch==1.0.0
+#torch==1.0.0
 pillow

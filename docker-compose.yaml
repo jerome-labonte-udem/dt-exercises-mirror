@@ -66,14 +66,8 @@ services:
       - "6901:6901"
 
     simulator:
-      #image: courchesnea/dt-simbridge:test
       #image: duckietown/challenge-aido_lf-simulator-gym:daffy-aido4
-      #TODO change this to duckietown/...:mooc-exercises
-      #image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
-      image: courchesnea/challenge-aido_lf-simulator-gym:devel
-      #build:
-      #    context: setup/challenge-aido_LF-simulator-gym/
-      #    dockerfile: Dockerfile
+      image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
       env_file: *env_file
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
@@ -112,7 +106,6 @@ services:
           sm_out: None
           timeout_initialization: 15
           timeout_regular: 360
-          #ROS_MASTER_URI: "http://ros_master:11311"
       volumes:
         - fifos:/fifos
       networks: *networks
