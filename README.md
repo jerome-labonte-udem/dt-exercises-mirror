@@ -101,3 +101,4 @@ would become
 - [ ] It might be a better experience to have noVNC and notebook/agent container in the same container. We should also make use of the dashboard for everything that we can
 - [ ] We should reuse as many docker layers as possible. base images have been changed recently and making sure we reuse the new base images when possible would save time and space.
 - [ ] Move as much stuff as we can into setup and out of root of the repo to make it easier to see what is actually useful to student.
+- [ ] Remove all the outputs from the containers (mostly simulator) such that the jupyter and novnc links stays visible at the bottom (alternatively, automatically open them in the browser)
