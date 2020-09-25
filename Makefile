@@ -42,6 +42,7 @@ submit: update-reqs
 
 
 
+#### for running the fifo version
 
 docker_compose_fifos_options=\
 	--env-file docker_compose_fifos_options.env \
@@ -53,14 +54,9 @@ docker_compose_fifos_options.env:
 	echo > $@
 	echo AIDO_REGISTRY=$(AIDO_REGISTRY) >> $@
 	echo PIP_INDEX_URL=$(PIP_INDEX_URL) >> $@
-	echo CUR_BRANCH=$(branch) >> $@
 
 docker-compose-fifos: docker_compose_fifos_options.env
 	# remove all volumes
 	docker-compose $(docker_compose_fifos_options)  down -v
-
-	$(MAKE) -C setup/fifos-connector build push
-
-	# build and pull
 	docker-compose $(docker_compose_fifos_options) build --pull
 	docker-compose $(docker_compose_fifos_options)  up  --abort-on-container-exit
