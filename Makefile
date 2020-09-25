@@ -11,11 +11,6 @@ build_options =  \
 	--build-arg  AIDO_REGISTRY=$(AIDO_REGISTRY) \
 	 --build-arg  PIP_INDEX_URL=$(PIP_INDEX_URL)
 
-start:
-	docker-compose down --volumes
-	docker-compose build
-	docker-compose up
-
 clean:
 	docker-compose down --volumes --remove-orphans
 
@@ -55,7 +50,7 @@ docker_compose_fifos_options.env:
 	echo AIDO_REGISTRY=$(AIDO_REGISTRY) >> $@
 	echo PIP_INDEX_URL=$(PIP_INDEX_URL) >> $@
 
-docker-compose-fifos: docker_compose_fifos_options.env
+docker-compose-fifos start: docker_compose_fifos_options.env
 	# remove all volumes
 	docker-compose $(docker_compose_fifos_options)  down -v
 	docker-compose $(docker_compose_fifos_options) build --pull

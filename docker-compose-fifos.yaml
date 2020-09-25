@@ -7,32 +7,35 @@
 version: '3'
 services:
   ros_core:
-    image: ros:noetic-ros-core
-    command: roscore
-    environment:
-      ROS_MASTER_URI: "http://ros_core:11311"
-    networks: &networks
-    - duckietown-docker-net
-    env_file: &env_file
-    - setup/parameters.env
-    expose:
-    - "11311"
-    ports:
-    - "11311:11311"
+      image: ros:noetic-ros-core
+      command: roscore
+      environment:
+        ROS_MASTER_URI: "http://ros_core:11311"
+      networks: &networks
+      - duckietown-docker-net
+      env_file: &env_file
+      - setup/parameters.env
+        #expose:
+        #- "11311"
+      ports:
+      - "11311:11311"
 
   ros_template:
       image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:daffy-amd64
+      # command: |
+      #   bash -c "roslaunch --wait template.launch && python3 solution.py"
       environment:
         AIDONODE_DATA_IN: /fifos/agent-in
         AIDONODE_DATA_OUT: fifo:/fifos/agent-out
         ROS_MASTER_URI: "http://ros_core:11311"
+        ROS_HOSTNAME: ""
         HOSTNAME: "default"
         VEHICLE_NAME: "default"
       volumes: &fifos
         - fifos:/fifos
       networks: *networks
-      links:
-        - ros_core
+        #      links:
+        #        - ros_core
       depends_on:
         - ros_core
         - middleware_manager
@@ -43,13 +46,13 @@ services:
       networks: *networks
       env_file: *env_file
       environment:
-      - "ROS_MASTER_URI=http://ros_core:11311"
-      - "HOSTNAME=default"
-      - "VEHICLE_NAME=default"
+        ROS_MASTER_URI: "http://ros_core:11311"
+        HOSTNAME: default
+        VEHICLE_NAME: default
       ports:
       - "8087:8087"
       depends_on:
-        - ros_core
+      - ros_core
 
   simulator:
       image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-simulator-gym:daffy
