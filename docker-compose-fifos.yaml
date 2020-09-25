@@ -38,21 +38,16 @@ services:
         - middleware_manager
 
   novnc:
-      image: duckietown/docker-ros-vnc:daffy
+      image: duckietown/dt-gui-tools:daffy-amd64
+      command: dt-launcher-vnc
       networks: *networks
       env_file: *env_file
       environment:
-        ROS_MASTER_URI: "http://ros_core:11311"
-        HOSTNAME: "default"
-        VEHICLE_NAME: "default"
-      expose:
-      - "5901"
-      - "6901"
+      - "ROS_MASTER_URI=http://ros_core:11311"
+      - "HOSTNAME=default"
+      - "VEHICLE_NAME=default"
       ports:
-      - "5901:5901"
-      - "6901:6901"
-      links:
-        - ros_core
+      - "8087:8087"
       depends_on:
         - ros_core
 
