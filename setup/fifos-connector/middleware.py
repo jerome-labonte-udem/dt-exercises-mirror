@@ -8,12 +8,8 @@ on the challenge server.
 
 for questions, contact @courchesnea
 """
-from typing import *
 
-import geometry
 import json
-# import duckietown_challenges as dc
-import duckietown_challenges as dc
 import logging
 import os
 # import shutil
@@ -24,14 +20,14 @@ from dataclasses import dataclass
 from threading import Thread
 from typing import cast, Dict, List  # Iterator
 
-# import numpy as np
-
+# import duckietown_challenges as dc
+import duckietown_challenges as dc
+import geometry
 import yaml
-
-from aido_schemas import (EpisodeStart, protocol_agent, protocol_simulator, RobotObservations,
-                          RobotPerformance, RobotState, Scenario, ScenarioRobotSpec, RobotConfiguration, SetMap,
-                          SetRobotCommands, SimulationState, SpawnRobot,
-                          Step, GetRobotState, GetRobotObservations, GetCommands)
+from aido_schemas import (EpisodeStart, GetCommands, GetRobotObservations, GetRobotState, protocol_agent,
+                          protocol_simulator, RobotConfiguration, RobotObservations, RobotPerformance,
+                          RobotState, Scenario, ScenarioRobotSpec, SetMap, SetRobotCommands, SimulationState,
+                          SpawnRobot, Step)
 # from aido_schemas import (protocol_scenario_maker, protocol_simulator_duckiebot1)
 from aido_schemas.utils import TimeTracker
 # from aido_schemas.utils_drawing import read_and_draw
@@ -46,6 +42,9 @@ from zuper_ipce import ipce_from_object, object_from_ipce
 from zuper_nodes.structures import RemoteNodeAborted
 from zuper_nodes_wrapper.wrapper_outside import ComponentInterface, MsgReceived
 from zuper_typing.subcheck import can_be_used_as2
+
+# import numpy as np
+
 
 logging.basicConfig()
 logger = logging.getLogger('launcher')
@@ -97,13 +96,12 @@ def main():
     if logger.level < logging.DEBUG:
         logfile = "/fifos/agentlog"
         logfile2 = "/fifos/simlog"
-        ff = open(logfile,"wb")
-        ff2 = open(logfile,"wb")
+        ff = open(logfile, "wb")
+        ff2 = open(logfile, "wb")
         agent_ci.cc(ff)
         sim_ci.cc(ff2)
         logger.info(f"opened {logfile} as agent cc")
         logger.info(f"opened {logfile2} as sim cc")
-
 
     # then check compatibility
     # so that everything fails gracefully in case of error
@@ -116,7 +114,6 @@ def main():
 
     check_compatibility_between_agent_and_sim(agent_ci, sim_ci)
     logger.info("Compatibility verified.")
-
 
     attempt_i = 0
     ep = 0
@@ -133,15 +130,20 @@ def main():
 
         # TODO we should have a proper handling of invalid map name
         map_name = os.environ.get('MAP_NAME', 'loop_empty')
+
         yaml_string: str = _get_map_yaml(map_name)
         yaml_data = yaml.load(yaml_string, Loader=yaml.SafeLoader)
+        logger.info(f"Using map = {map_name} yaml = {yaml_data}")
+
         placed_obj = construct_map(yaml_data)
 
+        logger.info('Sampling a good starting pose')
         pose = sample_good_starting_pose(placed_obj, only_straight=True)
         vel = geometry.se2_from_linear_angular([0, 0], 0)
         logger.info(f"Got good starting pose at: {pose}")
         robot1_config = RobotConfiguration(pose=pose, velocity=vel)
-        robot1 = ScenarioRobotSpec(description="Development agent", playable=True, configuration=robot1_config, motion=None)
+        robot1 = ScenarioRobotSpec(description="Development agent", playable=True,
+                                   configuration=robot1_config, motion=None)
         scenario1 = Scenario("scenario1", environment=yaml_string, robots={"agent1": robot1})
         unique_episode = EpisodeSpec("episode1", scenario1)
 
@@ -199,8 +201,8 @@ def main():
                 logger.error(msg)
                 raise
             # finally:
-                # fw.close()
-                # os.rename(fn_tmp, fn)
+            # fw.close()
+            # os.rename(fn_tmp, fn)
 
             # output = os.path.join(dn, 'visualization')
             # logger.info('Now creating visualization and analyzing statistics.')
@@ -233,7 +235,8 @@ def main():
 
                 # os.rename(dn, dn_final)
             else:
-                logger.error('episode too short with %1.f s < %.1f s' % (length_s, config.min_episode_length_s))
+                logger.error(
+                    'episode too short with %1.f s < %.1f s' % (length_s, config.min_episode_length_s))
                 nfailures += 1
             attempt_i += 1
     except dc.InvalidSubmission:
@@ -301,11 +304,11 @@ def run_episode(sim_ci: ComponentInterface,
     sim_ci.write_topic_and_expect_zero('set_map', SetMap(map_data=scenario.environment))
     logger.info("Map has been set properly")
 
-
     # spawn robot
     for robot_name, robot_conf in scenario.robots.items():
         sim_ci.write_topic_and_expect_zero('spawn_robot',
-                                           SpawnRobot(robot_name=robot_name, configuration=robot_conf.configuration,
+                                           SpawnRobot(robot_name=robot_name,
+                                                      configuration=robot_conf.configuration,
                                                       playable=robot_conf.playable, motion=None))
 
     # start episode
@@ -362,7 +365,7 @@ def run_episode(sim_ci: ComponentInterface,
                     agent.write_topic_and_expect_zero('observations', recv.data.observations)
                     gc = GetCommands(at_time=time.time())
                     logger.debug("Querying commands to agent")
-                    r: MsgReceived = agent.write_topic_and_expect('get_commands',gc , expect='commands')
+                    r: MsgReceived = agent.write_topic_and_expect('get_commands', gc, expect='commands')
 
                 except BaseException as e:
                     msg = 'Trouble with communication to the agent.'
@@ -371,7 +374,6 @@ def run_episode(sim_ci: ComponentInterface,
             with tt.measure('set_robot_commands'):
                 commands = SetRobotCommands(robot_name=robot_name, commands=r.data, t_effective=t_effective)
                 sim_ci.write_topic_and_expect_zero('set_robot_commands', commands)
-
 
         for robot_name in not_playable_robots:
             with tt.measure(f'sim_compute_robot_state-{robot_name}'):
@@ -447,6 +449,7 @@ def check_compatibility_between_agent_and_sim(agent_ci: ComponentInterface, sim_
 class EpisodeSpec:
     episode_name: str
     scenario: Scenario
+
 
 def env_as_yaml(name: str) -> dict:
     environment = os.environ.copy()

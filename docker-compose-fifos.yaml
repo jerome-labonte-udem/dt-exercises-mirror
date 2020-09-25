@@ -1,10 +1,16 @@
+# Notes
+#
+# Use explicit "links" for connections to images.
+#
+# Use "depends_on" so that everything will stop if a container exits.
+
 version: '3'
 services:
   ros_core:
     image: ros:noetic-ros-core
     command: roscore
     environment:
-    - "ROS_MASTER_URI=http://ros_core:11311"
+      ROS_MASTER_URI: "http://ros_core:11311"
     networks: &networks
     - duckietown-docker-net
     env_file: &env_file
@@ -15,36 +21,43 @@ services:
     - "11311:11311"
 
   ros_template:
-      image: duckietown/challenge-aido_lf-template-ros:daffy-ente-mooc-amd64
+      image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:daffy-amd64
       environment:
-        AIDONODE_DATA_IN: /fifos/agent-in    
+        AIDONODE_DATA_IN: /fifos/agent-in
         AIDONODE_DATA_OUT: fifo:/fifos/agent-out
-      environment:
-        - "ROS_MASTER_URI=http://ros_core:11311"
-        - "HOSTNAME=default"
-        - "VEHICLE_NAME=default"
-      volumes:
+        ROS_MASTER_URI: "http://ros_core:11311"
+        HOSTNAME: "default"
+        VEHICLE_NAME: "default"
+      volumes: &fifos
         - fifos:/fifos
       networks: *networks
-
+      links:
+        - ros_core
+      depends_on:
+        - ros_core
+        - middleware_manager
 
   novnc:
       image: duckietown/docker-ros-vnc:daffy
       networks: *networks
       env_file: *env_file
       environment:
-      - "ROS_MASTER_URI=http://ros_core:11311"
-      - "HOSTNAME=default"
-      - "VEHICLE_NAME=default"
+        ROS_MASTER_URI: "http://ros_core:11311"
+        HOSTNAME: "default"
+        VEHICLE_NAME: "default"
       expose:
       - "5901"
       - "6901"
       ports:
       - "5901:5901"
       - "6901:6901"
+      links:
+        - ros_core
+      depends_on:
+        - ros_core
 
   simulator:
-      image: courchesnea/challenge-aido_lf-simulator-gym:mooc-exercises
+      image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-simulator-gym:daffy
       env_file: *env_file
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
@@ -53,24 +66,22 @@ services:
           env_constructor: Simulator
           env_parameters:
             max_steps: 500001 # we don't want the gym to reset itself
-            camera_width: 640 
+            camera_width: 640
             camera_height: 480
             #camera_width: 320
             #camera_height: 240
-      volumes:
-        - fifos:/fifos
+      volumes: *fifos
       networks: *networks
-      env_file: *env_file
+      depends_on:
+        - middleware_manager
 
   middleware_manager:
-      build:
-        context: setup/fifos-connector/
-        dockerfile: Dockerfile
+      image: ${AIDO_REGISTRY}/duckietown/fifos-connector:${CUR_BRANCH}
       environment:
         middleware_parameters: |
           episodes_per_scenario: 1
           episode_length_s: 100.0
-          min_episode_length_s: 1.0 
+          min_episode_length_s: 1.0
           seed: 42
           physics_dt: 0.05
           max_failures: 2
@@ -82,8 +93,7 @@ services:
           sm_out: None
           timeout_initialization: 15
           timeout_regular: 360
-      volumes:
-        - fifos:/fifos
+      volumes: *fifos
       networks: *networks
       env_file: *env_file
 
