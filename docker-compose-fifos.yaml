@@ -76,7 +76,7 @@ services:
         - middleware_manager
 
   middleware_manager:
-      image: ${AIDO_REGISTRY}/duckietown/fifos-connector:daffy
+      image: ${AIDO_REGISTRY}/duckietown/mooc-fifos-connector:daffy
       environment:
         middleware_parameters: |
           episodes_per_scenario: 1
