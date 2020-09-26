@@ -20,10 +20,32 @@ services:
       ports:
       - "11311:11311"
 
+  simulator:
+      image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-simulator-gym:daffy
+      env_file: *env_file
+      # logging:
+      #   driver: "none"
+      environment:
+        AIDONODE_DATA_IN: /fifos/simulator-in
+        AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
+        AIDONODE_CONFIG: |
+          env_constructor: Simulator
+          env_parameters:
+            max_steps: 500001 # we don't want the gym to reset itself
+            camera_width: 640
+            camera_height: 480
+            #camera_width: 320
+            #camera_height: 240
+      volumes: &fifos
+        - fifos:/fifos
+      networks: *networks
+      depends_on:
+        - middleware_manager
+
   ros_template:
       image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:daffy-amd64
       command: |
-        bash -c "roslaunch --wait template.launch && python3 solution.py"
+        bash -c "roslaunch --wait duckietown_demos lane_following.launch & python3 solution.py"
       environment:
         AIDONODE_DATA_IN: /fifos/agent-in
         AIDONODE_DATA_OUT: fifo:/fifos/agent-out
@@ -31,8 +53,9 @@ services:
         ROS_HOSTNAME: ""
         HOSTNAME: "default"
         VEHICLE_NAME: "default"
-      volumes: &fifos
+      volumes:
         - fifos:/fifos
+        - ./setup/assets:/data/config
       networks: *networks
         #      links:
         #        - ros_core
@@ -53,25 +76,6 @@ services:
       - "8087:8087"
       depends_on:
       - ros_core
-
-  simulator:
-      image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-simulator-gym:daffy
-      env_file: *env_file
-      environment:
-        AIDONODE_DATA_IN: /fifos/simulator-in
-        AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
-        AIDONODE_CONFIG: |
-          env_constructor: Simulator
-          env_parameters:
-            max_steps: 500001 # we don't want the gym to reset itself
-            camera_width: 640
-            camera_height: 480
-            #camera_width: 320
-            #camera_height: 240
-      volumes: *fifos
-      networks: *networks
-      depends_on:
-        - middleware_manager
 
   middleware_manager:
       image: ${AIDO_REGISTRY}/duckietown/mooc-fifos-connector:daffy
@@ -101,6 +105,17 @@ services:
         ROS_MASTER_URI: "http://ros_core:11311"
         VEHICLE_NAME: default
       networks: *networks
+
+  # dt-core:
+  #     image: duckietown/dt-core:daffy-amd64
+  #     command: |
+  #       bash -c "dt-launcher-lf"
+  #     environment:
+  #       ROS_MASTER_URI: "http://ros_core:11311"
+  #       VEHICLE_NAME: default
+  #     volumes:
+  #       - ./setup/assets:/data/config
+  #     networks: *networks
 
 volumes:
   fifos:
