@@ -45,7 +45,10 @@ services:
   ros_template:
       image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:daffy-amd64
       command: |
-        bash -c "roslaunch --wait duckietown_demos lane_following.launch & python3 solution.py"
+        bash -c "\
+        catkin build --workspace /code/overlay_ws &&\
+        source /code/overlay_ws/devel/setup.bash &&\
+        roslaunch --wait duckietown_demos lane_following.launch & python3 solution.py"
       environment:
         AIDONODE_DATA_IN: /fifos/agent-in
         AIDONODE_DATA_OUT: fifo:/fifos/agent-out
@@ -56,6 +59,7 @@ services:
       volumes:
         - fifos:/fifos
         - ./setup/assets:/data/config
+        - ./overlay_ws:/code/overlay_ws
       networks: *networks
         #      links:
         #        - ros_core
