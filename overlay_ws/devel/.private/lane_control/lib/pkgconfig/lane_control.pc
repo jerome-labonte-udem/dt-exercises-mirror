@@ -1,8 +1,0 @@
-prefix=/code/overlay_ws/devel/.private/lane_control
-
-Name: lane_control
-Description: Description of lane_control
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

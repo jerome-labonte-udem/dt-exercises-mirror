@@ -1,6 +1,0 @@
-devel_space: /code/overlay_ws/devel
-install: false
-install_space: /code/overlay_ws/install
-profile: default
-source_space: /code/overlay_ws/src
-workspace: /code/overlay_ws
