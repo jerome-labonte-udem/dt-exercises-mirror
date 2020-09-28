@@ -1,4 +1,0 @@
-Symlinking /code/overlay_ws/devel/share/lane_control/cmake/lane_controlConfig.cmake
-Symlinking /code/overlay_ws/devel/share/lane_control/cmake/lane_controlConfig-version.cmake
-Symlinking /code/overlay_ws/devel/lib/python3/dist-packages/lane_controller/__init__.py
-Symlinking /code/overlay_ws/devel/lib/pkgconfig/lane_control.pc
