@@ -11,17 +11,13 @@ build_options =  \
 	--build-arg  AIDO_REGISTRY=$(AIDO_REGISTRY) \
 	 --build-arg  PIP_INDEX_URL=$(PIP_INDEX_URL)
 
-start:
-	docker-compose down --volumes
-	docker-compose build
-	docker-compose up
-
 clean:
 	docker-compose down --volumes --remove-orphans
 
 update-reqs:
 	pur --index-url $(PIP_INDEX_URL) -r requirements.txt -f -m '*' -o requirements.resolved
 	aido-update-reqs requirements.resolved
+
 
 build: update-reqs
 	docker build --pull -t $(tag) .
@@ -37,3 +33,25 @@ submit-bea: update-reqs
 
 submit: update-reqs
 	dts challenges submit
+
+
+
+
+#### for running the fifo version
+
+docker_compose_fifos_options=\
+	--env-file docker_compose_fifos_options.env \
+	-f docker-compose-fifos.yaml
+
+.PHONY: docker_compose_fifos_options.env
+
+docker_compose_fifos_options.env:
+	echo > $@
+	echo AIDO_REGISTRY=$(AIDO_REGISTRY) >> $@
+	echo PIP_INDEX_URL=$(PIP_INDEX_URL) >> $@
+
+docker-compose-fifos start: docker_compose_fifos_options.env
+	# remove all volumes
+	docker-compose $(docker_compose_fifos_options)  down -v
+	docker-compose $(docker_compose_fifos_options) build --pull
+	docker-compose $(docker_compose_fifos_options)  up  --abort-on-container-exit
