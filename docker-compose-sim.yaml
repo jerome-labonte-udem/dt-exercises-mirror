@@ -1,9 +1,3 @@
-# Notes
-#
-# Use explicit "links" for connections to images.
-#
-# Use "depends_on" so that everything will stop if a container exits.
-
 version: '3'
 services:
   ros_core:
@@ -61,8 +55,6 @@ services:
         - ./setup/assets:/data/config
         - ./overlay_ws:/code/overlay_ws
       networks: *networks
-        #      links:
-        #        - ros_core
       depends_on:
         - ros_core
         - middleware_manager

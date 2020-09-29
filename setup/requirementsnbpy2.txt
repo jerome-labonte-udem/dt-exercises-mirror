@@ -1,6 +1,0 @@
-sklearn
-pygeometry
-reprep
-cbor2
-zuper-nodes-python2
-

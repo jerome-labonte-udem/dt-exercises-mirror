@@ -247,9 +247,6 @@ class LaneControllerNode(DTROS):
 
             else:
                 v, omega = self.controller.compute_control_action(d_err, phi_err, dt, wheels_cmd_exec, self.stop_line_distance)
-            #tmp test
-            v = -1
-            omega = 1
 
             # For feedforward action (i.e. during intersection navigation)
             omega += self.params['~omega_ff']

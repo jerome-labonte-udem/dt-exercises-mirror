@@ -41,7 +41,7 @@ submit: update-reqs
 
 docker_compose_fifos_options=\
 	--env-file docker_compose_fifos_options.env \
-	-f docker-compose-fifos.yaml
+	-f docker-compose-sim.yaml
 
 .PHONY: docker_compose_fifos_options.env
 
