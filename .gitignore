@@ -4,3 +4,5 @@ catkin_ws/logs/
 catkin_ws/build/
 catkin_ws/devel/
 catkin_ws/.catkin_tools/
+docker_compose_fifos_options.env
+setup/fifos-connector/requirements.resolved
