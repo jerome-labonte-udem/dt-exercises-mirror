@@ -22,19 +22,38 @@ services:
       environment:
         AIDONODE_DATA_IN: /fifos/simulator-in
         AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
+        # language=yaml
         AIDONODE_CONFIG: |
           env_constructor: Simulator
           env_parameters:
             max_steps: 500001 # we don't want the gym to reset itself
             camera_width: 640
             camera_height: 480
+            distortion: true
             #camera_width: 320
             #camera_height: 240
+          debug_profile: false # set profiling information
+          debug_profile_summary: true # show speedup
+          camera_dt: 0.06 # 15 fps simulated camera
+          render_dt: 0.06 # we are not going to do any superres
+          minimum_physics_dt: 0.06
+          blur_time: 0.05 # this does not affect performance in any way
       volumes: &fifos
         - fifos:/fifos
       networks: *networks
       depends_on:
         - middleware_manager
+
+#  template_random:
+#      image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-random:daffy
+#      environment:
+#        AIDONODE_DATA_IN: /fifos/agent-in
+#        AIDONODE_DATA_OUT: fifo:/fifos/agent-out
+#      volumes: *fifos
+#      networks: *networks
+#      depends_on:
+#        - ros_core
+#        - middleware_manager
 
   ros_template:
       image: ${AIDO_REGISTRY}/duckietown/challenge-aido_lf-template-ros:daffy-amd64
@@ -81,7 +100,7 @@ services:
           episode_length_s: 100.0
           min_episode_length_s: 1.0
           seed: 42
-          physics_dt: 0.05
+          physics_dt: 0.06
           max_failures: 2
           agent_in: /fifos/agent-in
           agent_out: /fifos/agent-out

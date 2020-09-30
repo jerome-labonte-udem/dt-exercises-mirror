@@ -52,6 +52,6 @@ docker_compose_fifos_options.env:
 
 docker-compose-fifos start: docker_compose_fifos_options.env
 	# remove all volumes
-	docker-compose $(docker_compose_fifos_options)  down -v
+	docker-compose $(docker_compose_fifos_options) down -v
 	docker-compose $(docker_compose_fifos_options) build --pull
-	docker-compose $(docker_compose_fifos_options)  up  --abort-on-container-exit
+	docker-compose $(docker_compose_fifos_options) up   --abort-on-container-exit
