@@ -1,9 +1,0 @@
-[submodule "catkin_ws/src/dt-core"]
-	path = catkin_ws/src/dt-core
-	url = git@github.com:duckietown/dt-core.git
-[submodule "catkin_ws/src/dt-ros-commons"]
-	path = catkin_ws/src/dt-ros-commons
-	url = git@github.com:duckietown/dt-ros-commons.git
-[submodule "catkin_ws/src/dt-car-interface"]
-	path = catkin_ws/src/dt-car-interface
-	url = git@github.com:duckietown/dt-car-interface.git

@@ -1,0 +1,8 @@
+AIDONODE_DATA_IN: /fifos/simulator-in
+AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
+AIDONODE_CONFIG: |
+  env_constructor: Simulator
+  env_parameters:
+    max_steps: 500001
+    camera_width: 640
+    camera_height: 480
