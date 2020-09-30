@@ -1,9 +1,0 @@
-<launch>
-  <!-- <include file="$(find mooc)/launch/indefinite_navigation.launch"/> -->
-
-  <!-- <include file="$(find image_subscriber)/launch/image_subscriber.launch"/> -->
-
-  <group ns="$(arg veh)">
-    <node pkg="mooc" type="mooc.py" name="mooc_node" output="screen"/>
-  </group>
-</launch>
