@@ -14,7 +14,7 @@ services:
       networks: &networks
       - duckietown-docker-net
       env_file: &env_file
-      - setup/parameters.env
+      - exercises/template_ros/assets/setup/parameters.env
         #expose:
         #- "11311"
       ports:
@@ -35,20 +35,16 @@ services:
       image: duckietown/challenge-aido_lf-template-ros:daffy-amd64
       command: |
         bash -c "\
-        catkin build --workspace /code/overlay_ws &&\
-        source /code/overlay_ws/devel/setup.bash &&\
         roslaunch --wait duckietown_demos lane_following.launch & python3 solution.py"
       environment:
         AIDONODE_DATA_IN: /fifos/agent-in
         AIDONODE_DATA_OUT: fifo:/fifos/agent-out
         ROS_MASTER_URI: "http://ros_core:11311"
-        ROS_HOSTNAME: ""
         HOSTNAME: "default"
         VEHICLE_NAME: "default"
       volumes:
         - fifos:/fifos
-        - ./setup/assets:/data/config
-        - ./overlay_ws:/code/overlay_ws
+        - ./exercises/template_ros/assets:/data/config
       networks: *networks
         #      links:
         #        - ros_core
