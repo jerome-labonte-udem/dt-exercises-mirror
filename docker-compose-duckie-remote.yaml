@@ -28,6 +28,7 @@ services:
       ROS_MASTER_URI: "http://udem02.local:11311"
     volumes:
         - fifos:/fifos
+        - /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket
     network_mode: host
 
 
