@@ -6,3 +6,6 @@ AIDONODE_CONFIG: |
     max_steps: 500001
     camera_width: 640
     camera_height: 480
+    domain_rand: False
+    distortion: True
+
