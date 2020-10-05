@@ -8,4 +8,4 @@ AIDONODE_CONFIG: |
     camera_width: 640
     camera_height: 480
     domain_rand: False
-    distortion: False
+    distortion: True
