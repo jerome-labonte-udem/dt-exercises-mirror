@@ -1,0 +1,6 @@
+# Exercise configuration file
+
+exercise:
+  name: ros_template
+
+  
