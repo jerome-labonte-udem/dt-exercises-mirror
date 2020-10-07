@@ -2,7 +2,6 @@ AIDONODE_DATA_IN: /fifos/simulator-in
 AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
 AIDONODE_CONFIG: |
   env_constructor: Simulator
-  terminate_on_ool: False
   blur_time: 0.01
   render_dt: 0.033
   env_parameters:
