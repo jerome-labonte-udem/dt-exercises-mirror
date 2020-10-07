@@ -12,6 +12,7 @@ class PurePursuitLaneController:
 
     def __init__(self, parameters):
 
+        self.parameters = parameters
 
     def update_parameters(self, parameters):
         """Updates parameters of LaneController object.

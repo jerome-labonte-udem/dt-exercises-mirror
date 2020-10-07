@@ -5,7 +5,7 @@ import rospy
 from duckietown.dtros import DTROS, NodeType, TopicType, DTParam, ParamType
 from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading
 
-from lane_controller.controller import LaneController
+from lane_controller.controller import PurePursuitLaneController
 
 
 class LaneControllerNode(DTROS):
@@ -32,6 +32,8 @@ class LaneControllerNode(DTROS):
 
         # Add the node parameters to the parameters dictionary
         self.params = dict()
+        self.pp_controller = PurePursuitLaneController(self.params)
+
         # Construct publishers
         self.pub_car_cmd = rospy.Publisher("~car_cmd",
                                            Twist2DStamped,
@@ -41,16 +43,13 @@ class LaneControllerNode(DTROS):
         # Construct subscribers
         self.sub_lane_reading = rospy.Subscriber("~lane_pose",
                                                  LanePose,
-                                                 self.cbAllPoses,
-                                                 "lane_filter",
+                                                 self.cbLanePoses,
                                                  queue_size=1)
 
         self.log("Initialized!")
 
     def cbLanePoses(self, input_pose_msg):
-        """Callback receiving pose messages from multiple topics.
-
-        If the source of the message corresponds with the current wanted pose source, it computes a control command.
+        """Callback receiving pose messages
 
         Args:
             input_pose_msg (:obj:`LanePose`): Message containing information about the current lane pose.
@@ -64,6 +63,7 @@ class LaneControllerNode(DTROS):
         car_control_msg.v = 0.5
         car_control_msg.omega = 0
 
+        self.publishCmd(car_control_msg)
 
 
     def publishCmd(self, car_cmd_msg):
