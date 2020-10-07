@@ -9,4 +9,4 @@ RUN mkdir /code/exercise_ws
 COPY exercise_ws/src /code/exercise_ws/src
 COPY launchers /code
 
-ENTRYPOINT ["bash", "run.sh", "--start"]
+CMD ["bash", "/code/run.sh", "--start"]
