@@ -9,6 +9,4 @@ RUN mkdir /code/exercise_ws
 COPY exercise_ws /code/exercise_ws
 COPY launchers /code
 
-RUN /bin/bash -c "roscore &"
-
 CMD ["bash", "/code/submit.sh"]

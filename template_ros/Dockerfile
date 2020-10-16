@@ -6,9 +6,7 @@ RUN pip list
 
 RUN mkdir /code/exercise_ws
 
-COPY exercise_ws/src /code/exercise_ws/src
+COPY exercise_ws /code/exercise_ws
 COPY launchers /code
-
-RUN /bin/bash -c "roscore &"
 
 CMD ["bash", "/code/submit.sh"]
