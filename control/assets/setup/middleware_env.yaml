@@ -12,4 +12,4 @@ middleware_parameters: |
   sm_in: None
   sm_out: None
   timeout_initialization: 15
-  timeout_regular: 360
+  timeout_regular: 1800
