@@ -13,3 +13,4 @@ middleware_parameters: |
   sm_out: None
   timeout_initialization: 15
   timeout_regular: 360
+  port: 8090
