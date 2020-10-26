@@ -1,4 +1,4 @@
-FROM duckietown/challenge-aido_lf-template-ros:daffy-amd64
+FROM duckietown/challenge-aido_lf-baseline-duckietown:daffy-amd64
 
 COPY requirements.* ./
 RUN pip install --use-feature=2020-resolver -r requirements.resolved
