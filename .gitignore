@@ -10,3 +10,7 @@ overlay_ws/devel/
 overlay_ws/.catkin_tools/
 docker_compose_fifos_options.env
 setup/fifos-connector/requirements.resolved
+control/exercise_ws/.catkin_tools/
+control/exercise_ws/build/
+control/exercise_ws/devel/
+control/exercise_ws/logs/
