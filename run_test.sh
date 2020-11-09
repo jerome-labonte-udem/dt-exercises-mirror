@@ -6,9 +6,9 @@
 
 cd control
 echo "Starting workflow, please wait"
-dts exercises test --sim >/dev/null &
+dts exercises test --sim --staging >/dev/null &
 PROCESSID=$!
-sleep 12
+sleep 20
 
 C1=`docker ps | grep duckietown/challenge-aido_lf-baseline-duckietown | wc -l`
 C2=`docker ps | grep duckietown/dt-gui-tools | wc -l`
@@ -21,7 +21,7 @@ echo "Stopping workflow"
 kill $PROCESSID
 
 echo "Removing containers ..."
-dts exercises test --sim --stop >/dev/null
+dts exercises test --sim --staging --stop >/dev/null
 
 if [ $((C1+C2+C3+C4+C5)) -eq 5 ]; then
   echo "Test passed !"
