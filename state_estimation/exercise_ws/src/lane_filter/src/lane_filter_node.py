@@ -30,6 +30,7 @@ class LaneFilterNode(DTROS):
         ~change_params (:obj:`String`): A topic to temporarily changes filter parameters for a finite time only
         ~switch (:obj:``BoolStamped): A topic to turn on and off the node. WARNING : to be replaced with a service call to the provided mother node switch service
         ~fsm_mode (:obj:`FSMState`): A topic to change the state of the node. WARNING : currently not implemented
+        ~(left/right)_wheel_encoder_node/tick (:obj: `WheelEncoderStamped`): Information from the wheel encoders
 
     Publishers:
         ~lane_pose (:obj:`LanePose`): The computed lane pose estimate
