@@ -1,6 +1,0 @@
-devel_space: /code/exercise_ws/devel
-install: false
-install_space: /code/exercise_ws/install
-profile: default
-source_space: /code/exercise_ws/src
-workspace: /code/exercise_ws

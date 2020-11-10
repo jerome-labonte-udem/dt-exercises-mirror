@@ -1,8 +1,0 @@
-prefix=/code/exercise_ws/install
-
-Name: lane_filter
-Description: Description of lane_filter
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
