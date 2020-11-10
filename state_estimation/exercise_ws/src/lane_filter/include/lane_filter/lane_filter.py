@@ -1,50 +1,25 @@
 
 from collections import OrderedDict
-
-from scipy.stats import multivariate_normal, entropy
-
-# from duckietown_utils.parameters import Configurable
-
+from scipy.stats import multivariate_normal
 import numpy as np
-
-# from .lane_filter_interface import LaneFilterInterface
-
-#from .visualization import plot_phi_d_diagram_bgr
-
 from scipy.ndimage.filters import gaussian_filter
 from math import floor, sqrt
-import copy
 
 
-class LaneFilterHistogram():
+
+class LaneFilterHistogramKF():
     """ Generates an estimate of the lane pose.
 
-
-    Creates and maintain a histogram grid filter to estimate the lane pose. 
-    Lane pose is defined as the tuple (`d`, `phi`) : lateral deviation and angulare deviation from the center of the lane.
-
-    Predict step : Uses the estimated linear and angular velocities to predict the change in the lane pose.
-    Update Step : The filter receives a segment list. For each segment, it extracts the corresponding lane pose "votes", 
-    and adds it to the corresponding part of the histogram.
-
-    Best estimate correspond to the slot of the histogram with the highest voted value.
+    TODO: Fill in the details
 
     Args:
         configuration (:obj:`List`): A list of the parameters for the filter
 
     """
 
-    LOST = 'lost'
-    GOOD = 'good'
-    STRUGGLING = 'struggling'
-
-    POSSIBLE_STATUSES = [LOST, GOOD, STRUGGLING]
-
-    ESTIMATE_DATATYPE = np.dtype([('phi', 'float64'),
-                                  ('d', 'float64')])
-
     def __init__(self, **kwargs):
         param_names = [
+            # TODO all the parameters in the default.yaml should be listed here.
             'mean_d_0',
             'mean_phi_0',
             'sigma_d_0',
@@ -71,104 +46,19 @@ class LaneFilterHistogram():
             assert p_name in kwargs
             setattr(self, p_name, kwargs[p_name])
 
-        self.d, self.phi = np.mgrid[self.d_min:self.d_max:self.delta_d,
-                                    self.phi_min:self.phi_max:self.delta_phi]
-
-        self.d_pcolor, self.phi_pcolor = np.mgrid[self.d_min:(self.d_max + self.delta_d):self.delta_d,
-                                                  self.phi_min:(self.phi_max + self.delta_phi):self.delta_phi]
-
-        self.belief = np.empty(self.d.shape)
-
         self.mean_0 = [self.mean_d_0, self.mean_phi_0]
         self.cov_0 = [[self.sigma_d_0, 0], [0, self.sigma_phi_0]]
-        self.cov_mask = [self.sigma_d_mask, self.sigma_phi_mask]
 
-        # Additional variables
-        self.red_to_white = False
-        self.use_yellow = True
-        self.range_est_min = 0
-        self.filtered_segments = []
+        self.belief = {'mean': self.mean_0, 'covariance': self.cov_0}
 
-        self.initialize()
+        self.encoder_resolution = 0
+        self.wheel_radius = 0.0
+        self.initialized = False
 
-
-
-    def initialize(self):
-        pos = np.empty(self.d.shape + (2,))
-        pos[:, :, 0] = self.d
-        pos[:, :, 1] = self.phi
-        RV = multivariate_normal(self.mean_0, self.cov_0)
-
-        self.belief = RV.pdf(pos)
-
-    def getStatus(self):
-        return self.GOOD
-
-    def get_entropy(self):
-        belief = self.belief
-        s = entropy(belief.flatten())
-        return s
-
-    def predict(self, dt, v, w):
-        delta_t = dt
-        d_t = self.d + v * delta_t * np.sin(self.phi)
-        phi_t = self.phi + w * delta_t
-
-        p_belief = np.zeros(self.belief.shape)
-
-        # there has got to be a better/cleaner way to do this - just applying the process model to translate each cell value
-        for i in range(self.belief.shape[0]):
-            for j in range(self.belief.shape[1]):
-                if self.belief[i, j] > 0:
-                    if d_t[i, j] > self.d_max or d_t[i, j] < self.d_min or phi_t[i, j] < self.phi_min or phi_t[i, j] > self.phi_max:
-                        continue
-
-                    i_new = int(
-                        floor((d_t[i, j] - self.d_min) / self.delta_d))
-                    j_new = int(
-                        floor((phi_t[i, j] - self.phi_min) / self.delta_phi))
-
-                    p_belief[i_new, j_new] += self.belief[i, j]
-
-        s_belief = np.zeros(self.belief.shape)
-        gaussian_filter(p_belief, self.cov_mask,
-                        output=s_belief, mode='constant')
-
-        if np.sum(s_belief) == 0:
+    def predict(self, dt, left_encoder_delta, right_encoder_delta):
+        #TODO update self.belief based on right and left encoder data + kinematics
+        if not self.intialized:
             return
-        self.belief = s_belief / np.sum(s_belief)
-
-    # prepare the segments for the creation of the belief arrays
-    def prepareSegments(self, segments):
-        segmentsArray = []
-        self.filtered_segments = []
-        for segment in segments:
-            # Optional transform from RED to WHITE
-            if self.red_to_white and segment.color == segment.RED:
-                segment.color = segment.WHITE
-
-            # Optional filtering out YELLOW
-            if not self.use_yellow and segment.color == segment.YELLOW:
-                continue
-
-            # we don't care about RED ones for now
-            if segment.color != segment.WHITE and segment.color != segment.YELLOW:
-                continue
-            # filter out any segments that are behind us
-            if segment.points[0].x < 0 or segment.points[1].x < 0:
-                continue
-
-            self.filtered_segments.append(segment)
-            # only consider points in a certain range from the Duckiebot for the position estimation
-            point_range = self.getSegmentDistance(segment)
-            if point_range < self.range_est and point_range > self.range_est_min:
-                segmentsArray.append(segment)
-                # print functions to help understand the functionality of the code
-                # print 'Adding segment to segmentsRangeArray[0] (Range: %s < 0.3)' % (point_range)
-                # print 'Printout of last segment added: %s' % self.getSegmentDistance(segmentsRangeArray[0][-1])
-                # print 'Length of segmentsRangeArray[0] up to now: %s' % len(segmentsRangeArray[0])
-
-        return segmentsArray
 
     def update(self, segments):
         # prepare the segments for each belief array
@@ -178,17 +68,21 @@ class LaneFilterHistogram():
         measurement_likelihood = self.generate_measurement_likelihood(
             segmentsArray)
 
-        if measurement_likelihood is not None:
-            self.belief = np.multiply(self.belief, measurement_likelihood)
-            if np.sum(self.belief) == 0:
-                self.belief = measurement_likelihood
-            else:
-                self.belief = self.belief / np.sum(self.belief)
+        # TODO: Parameterize the measurement likelihood as a Gaussian
+
+        # TODO: Apply the update equations for the Kalman Filter to self.belief
+
+
+    def getEstimate(self):
+        return self.belief
 
     def generate_measurement_likelihood(self, segments):
 
+        grid = np.mgrid[self.d_min:self.d_max:self.delta_d,
+                                    self.phi_min:self.phi_max:self.delta_phi]
+
         # initialize measurement likelihood to all zeros
-        measurement_likelihood = np.zeros(self.d.shape)
+        measurement_likelihood = np.zeros(grid[0].shape)
 
         for segment in segments:
             d_i, phi_i, l_i, weight = self.generateVote(segment)
@@ -203,27 +97,14 @@ class LaneFilterHistogram():
 
         if np.linalg.norm(measurement_likelihood) == 0:
             return None
+
+        # lastly normalize so that we have a valid probability density function
         measurement_likelihood = measurement_likelihood / \
             np.sum(measurement_likelihood)
         return measurement_likelihood
 
-    def getEstimate(self):
-        maxids = np.unravel_index(
-            self.belief.argmax(), self.belief.shape)
-        d_max = self.d_min + (maxids[0] + 0.5) * self.delta_d
-        phi_max = self.phi_min + (maxids[1] + 0.5) * self.delta_phi
 
-        return [d_max, phi_max]
 
-    def get_estimate(self):
-        d, phi = self.getEstimate()
-        res = OrderedDict()
-        res['d'] = d
-        res['phi'] = phi
-        return res
-
-    def getMax(self):
-        return self.belief.max()
 
 
     # generate a vote for one segment
@@ -281,6 +162,23 @@ class LaneFilterHistogram():
         y_c = (segment.points[0].y + segment.points[1].y) / 2
         return sqrt(x_c**2 + y_c**2)
 
-#    def get_plot_phi_d(self, ground_truth=None):  # @UnusedVariable
-#        d, phi = self.getEstimate()
-#        return plot_phi_d_diagram_bgr(self, self.belief, phi=phi, d=d)
+    # prepare the segments for the creation of the belief arrays
+    def prepareSegments(self, segments):
+        segmentsArray = []
+        self.filtered_segments = []
+        for segment in segments:
+
+            # we don't care about RED ones for now
+            if segment.color != segment.WHITE and segment.color != segment.YELLOW:
+                continue
+            # filter out any segments that are behind us
+            if segment.points[0].x < 0 or segment.points[1].x < 0:
+                continue
+
+            self.filtered_segments.append(segment)
+            # only consider points in a certain range from the Duckiebot for the position estimation
+            point_range = self.getSegmentDistance(segment)
+            if point_range < self.range_est:
+                segmentsArray.append(segment)
+
+        return segmentsArray

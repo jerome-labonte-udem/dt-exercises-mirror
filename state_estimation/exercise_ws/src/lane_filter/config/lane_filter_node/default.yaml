@@ -1,9 +1,9 @@
 # default parameters for lane_filter/lane_filter_node
 
-#propagation
-use_propagation: True
 debug : True
-lane_filter_histogram_configuration:
+predict_frequency: 30.0 # in Hz
+lane_filter_histogram_kf_configuration:
+  # ADD PARAMETERS HERE
   mean_d_0: 0
   mean_phi_0: 0
   sigma_d_0: 0.1
