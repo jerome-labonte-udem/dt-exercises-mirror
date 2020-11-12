@@ -1,3 +1,2 @@
-aido-protocols-daffy-aido4
-aido-analyze-daffy-aido4
-aido-agents-daffy-aido4
+aido-protocols-daffy
+
