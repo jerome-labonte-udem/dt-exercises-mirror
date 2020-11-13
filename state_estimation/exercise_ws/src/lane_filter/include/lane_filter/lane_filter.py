@@ -78,6 +78,9 @@ class LaneFilterHistogramKF():
 
     def generate_measurement_likelihood(self, segments):
 
+        if len(segments) == 0:
+            return None
+
         grid = np.mgrid[self.d_min:self.d_max:self.delta_d,
                                     self.phi_min:self.phi_max:self.delta_phi]
 
@@ -99,6 +102,7 @@ class LaneFilterHistogramKF():
             return None
 
         # lastly normalize so that we have a valid probability density function
+
         measurement_likelihood = measurement_likelihood / \
             np.sum(measurement_likelihood)
         return measurement_likelihood

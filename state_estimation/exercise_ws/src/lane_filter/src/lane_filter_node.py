@@ -185,10 +185,11 @@ class LaneFilterNode(DTROS):
 
             # Create belief image and publish it
             ml = self.filter.generate_measurement_likelihood(segment_list_msg.segments)
-            ml_img = self.bridge.cv2_to_imgmsg(
-                np.array(255 * ml).astype("uint8"), "mono8")
-            ml_img.header.stamp = segment_list_msg.header.stamp
-            self.pub_ml_img.publish(ml_img)
+            if ml is not None:
+                ml_img = self.bridge.cv2_to_imgmsg(
+                    np.array(255 * ml).astype("uint8"), "mono8")
+                ml_img.header.stamp = segment_list_msg.header.stamp
+                self.pub_ml_img.publish(ml_img)
 
 
     def cbMode(self, msg):
