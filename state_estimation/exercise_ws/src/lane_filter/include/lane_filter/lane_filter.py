@@ -57,7 +57,7 @@ class LaneFilterHistogramKF():
 
     def predict(self, dt, left_encoder_delta, right_encoder_delta):
         #TODO update self.belief based on right and left encoder data + kinematics
-        if not self.intialized:
+        if not self.initialized:
             return
 
     def update(self, segments):

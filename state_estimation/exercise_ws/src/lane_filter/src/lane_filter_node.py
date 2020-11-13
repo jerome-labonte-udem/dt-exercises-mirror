@@ -52,6 +52,8 @@ class LaneFilterNode(DTROS):
         # Create the filter
         self.filter = LaneFilterHistogramKF(**self._filter)
         self.t_last_update = rospy.get_time()
+        self.last_update_stamp = self.t_last_update
+
         self.filter.wheel_radius = rospy.get_param(f"/{veh}/kinematics_node/radius")
 
         # Subscribers
@@ -133,6 +135,9 @@ class LaneFilterNode(DTROS):
             segment_list_msg (:obj:`SegmentList`): message containing list of processed segments
 
         """
+
+        self.last_update_stamp = segment_list_msg.header.stamp
+
         # Get actual timestamp for latency measurement
         timestamp_before_processing = rospy.Time.now()
 
@@ -148,7 +153,7 @@ class LaneFilterNode(DTROS):
 
         # build lane pose message to send
         lanePose = LanePose()
-        lanePose.header.stamp = segment_list_msg.header.stamp
+        lanePose.header.stamp = self.last_update_stamp
         lanePose.d = belief['mean'][0]
         lanePose.phi = belief['mean'][1]
         lanePose.d_phi_covariance = [belief['covariance'][0][0],
