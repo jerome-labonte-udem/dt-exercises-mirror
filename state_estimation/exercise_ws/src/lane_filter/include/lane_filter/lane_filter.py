@@ -56,7 +56,7 @@ class LaneFilterHistogramKF():
         self.initialized = False
 
         self.wheel_distance = 12.4 # TODO put in config
-        self.ticks_per_revolution = 20.0 # todo put in config
+
     def predict(self, dt, left_encoder_delta, right_encoder_delta):
         # TODO update self.belief based on right and left encoder data + kinematics
         A = np.array([[1, 0],
@@ -69,17 +69,22 @@ class LaneFilterHistogramKF():
         if not self.initialized:
             return
 
-        dist_right = right_encoder_delta/self.ticks_per_revolution * self.wheel_radius * 2 * np.pi
-        dist_left = left_encoder_delta/self.ticks_per_revolution * self.wheel_radius * 2 * np.pi
+        print("right_encoder_delta", right_encoder_delta)
+        print("letf_encoder_delta", left_encoder_delta)
+
+        dist_right = right_encoder_delta/self.encoder_resolution * self.wheel_radius * 2 * np.pi
+        dist_left = left_encoder_delta/self.encoder_resolution * self.wheel_radius * 2 * np.pi
         delta_alpha = (dist_right - dist_left) / (self.wheel_distance)
         delta_d = np.sin(delta_alpha) * (dist_left + dist_right) / 2
         u_t = [delta_d, delta_alpha]
 
+        print("u_t", u_t)
         mu_prev = self.belief["mean"]  # [mu_d, mu_phi]
         cov_prev = self.belief["covariance"]  #  [[cov(mu, mu), cov(mu, phi)], [cov(phi, mu), cov(mu, mu)])
         predicted_mu = A @ mu_prev + B @ u_t
         predicted_cov = A @ cov_prev + A.T + Q
         self.belief["mean"] = predicted_mu
+        print(f"mu_prev: {mu_prev}, predicted_mu: {predicted_mu}")
         self.belief["covariance"] = predicted_cov
 
     def update(self, segments):
@@ -89,33 +94,33 @@ class LaneFilterHistogramKF():
 
         measurement_likelihood = self.generate_measurement_likelihood(
             segmentsArray)
+        if measurement_likelihood is not None:
+            # TODO: Parameterize the measurement likelihood as a Gaussian
+            cov_prev = self.belief["covariance"]
 
-        # TODO: Parameterize the measurement likelihood as a Gaussian
-        cov_prev = self.belief["covariance"]
+            H = np.array([[1, 0],
+                  [0, 1]])
+            argmax_idx = np.argmax(measurement_likelihood)
+            argmax_row = argmax_idx // measurement_likelihood.shape[1]
+            argmax_col = argmax_idx // measurement_likelihood.shape[1]
 
-        H = np.array([[1, 0],
-              [0, 1]])
-        argmax_idx = np.argmax(measurement_likelihood)
-        argmax_row = argmax_idx // measurement_likelihood.shape[1]
-        argmax_col = argmax_idx // measurement_likelihood.shape[1]
+            max_d = self.d_min + argmax_row * self.delta_d
+            max_phi = self.phi_min + argmax_col * self.delta_phi
 
-        max_d = self.d_min + argmax_row * self.delta_d
-        max_phi = self.phi_min + argmax_col * self.delta_phi
+            noise = 1 - np.max(measurement_likelihood)  # The higher the confidence, the lower the noise
 
-        noise = 1 - np.max(measurement_likelihood)  # The higher the confidence, the lower the noise
+            z = [max_d, max_phi]
+            R = np.array([[noise, 0],
+                          [0, noise]])
 
-        z = [max_d, max_phi]
-        R = np.array([[noise, 0],
-                      [0, noise]])
+            residual_mu = z - H @ self.belief["mean"]
+            residual_cov = H @ cov_prev @ H.T + R
 
-        residual_mu = z - H @ self.belief["mean"]
-        residual_cov = H @ cov_prev @ H.T + R
+            # TODO: Apply the update equations for the Kalman Filter to self.belief
+            K = cov_prev @ H.T @ np.linalg.inv(residual_cov)
 
-        # TODO: Apply the update equations for the Kalman Filter to self.belief
-        K = cov_prev @ H.T @ np.linalg.inv(residual_cov)
-
-        self.belief["mean"] += K @ residual_mu
-        self.belief["covariance"] = cov_prev - K @ H @ cov_prev
+            self.belief["mean"] += K @ residual_mu
+            self.belief["covariance"] = cov_prev - K @ H @ cov_prev
 
     def getEstimate(self):
         return self.belief
