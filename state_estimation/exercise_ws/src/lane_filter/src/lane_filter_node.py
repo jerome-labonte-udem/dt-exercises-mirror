@@ -102,7 +102,7 @@ class LaneFilterNode(DTROS):
         if not self.filter.initialized:
             self.filter.encoder_resolution = left_encoder_msg.resolution
             self.filter.initialized = True
-        self.left_encoder_ticks_delta = left_encoder_msg.data - self.right_encoder_ticks
+        self.left_encoder_ticks_delta = left_encoder_msg.data - self.left_encoder_ticks
 
     def cbProcessRightEncoder(self, right_encoder_msg):
         if not self.filter.initialized:
