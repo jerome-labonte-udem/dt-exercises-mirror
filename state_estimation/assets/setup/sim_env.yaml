@@ -4,6 +4,7 @@ AIDONODE_CONFIG: |
   env_constructor: Simulator
   blur_time: 0.01
   render_dt: 0.033
+  delay: 0.15
   env_parameters:
     max_steps: 500001
     camera_width: 640
