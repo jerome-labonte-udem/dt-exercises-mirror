@@ -4,8 +4,8 @@ from scipy.stats import multivariate_normal
 import numpy as np
 from scipy.ndimage.filters import gaussian_filter
 from math import floor, sqrt
-
-
+import rospy # TODO remove once optimal noise is found
+import os
 
 class LaneFilterHistogramKF():
     """ Generates an estimate of the lane pose.
@@ -40,6 +40,8 @@ class LaneFilterHistogramKF():
             'range_min',
             'range_est',
             'range_max',
+            'encoder_variance_d',
+            'encoder_variance_phi'
         ]
 
         for p_name in param_names:
@@ -53,38 +55,45 @@ class LaneFilterHistogramKF():
 
         self.encoder_resolution = 0
         self.wheel_radius = 0.0
+        self.baseline = 0.0
         self.initialized = False
 
-        self.wheel_distance = 12.4 # TODO put in config
-
     def predict(self, dt, left_encoder_delta, right_encoder_delta):
-        # TODO update self.belief based on right and left encoder data + kinematics
-        A = np.array([[1, 0],
-              [0, 1]])
-        B = np.array([[1, 0],
-              [0, 1]])
-        Q = np.array([[0.3, 0],
-              [0, 0.3]])  # TODO play with noise from encoders
+        veh = os.getenv("VEHICLE_NAME")
 
+        self.encoder_variance_d = rospy.get_param(f"/{veh}/lane_filter_node/lane_filter_histogram_kf_configuration/encoder_variance_d")
+        self.encoder_variance_phi = rospy.get_param(f"/{veh}/lane_filter_node/lane_filter_histogram_kf_configuration/encoder_variance_phi")
+
+        # TODO update self.belief based on right and left encoder data + kinematics
         if not self.initialized:
             return
+        Q = np.array([[self.encoder_variance_d, 0],
+                      [0, self.encoder_variance_phi]])
+        # Get distance traveled by both wheels since last prediction
+        dist_right = right_encoder_delta / self.encoder_resolution * self.wheel_radius * 2 * np.pi
+        dist_left = left_encoder_delta / self.encoder_resolution * self.wheel_radius * 2 * np.pi
 
-        print("right_encoder_delta", right_encoder_delta)
-        print("letf_encoder_delta", left_encoder_delta)
+        # Get change in phi from traveled distance and wheels distance
+        # This assumes that the angular velocity was constant, so but wheels traced arcs around a same point.
+        delta_phi = (dist_right - dist_left) / self.baseline
 
-        dist_right = right_encoder_delta/self.encoder_resolution * self.wheel_radius * 2 * np.pi
-        dist_left = left_encoder_delta/self.encoder_resolution * self.wheel_radius * 2 * np.pi
-        delta_alpha = (dist_right - dist_left) / (self.wheel_distance)
-        delta_d = np.sin(delta_alpha) * (dist_left + dist_right) / 2
-        u_t = [delta_d, delta_alpha]
+        # This approximates the change in d using the previous phi. It assumes a straight line in the direction
+        # phi and a traveled distance equal to the average traveled by each wheels. This is close to reality
+        # for short distance
+        mu_phi = self.belief["mean"][1]
+        delta_d = np.sin(mu_phi) * (dist_left + dist_right) / 2  # TODO review this approximation if needed
 
-        print("u_t", u_t)
         mu_prev = self.belief["mean"]  # [mu_d, mu_phi]
-        cov_prev = self.belief["covariance"]  #  [[cov(mu, mu), cov(mu, phi)], [cov(phi, mu), cov(mu, mu)])
-        predicted_mu = A @ mu_prev + B @ u_t
-        predicted_cov = A @ cov_prev + A.T + Q
+        cov_prev = self.belief["covariance"]  # [[cov(mu, mu), cov(mu, phi)], [cov(phi, mu), cov(mu, mu)])
+        delta_mu = np.array([delta_d, delta_phi])
+        #print("mean before predict", mu_prev)
+        #print("cov before predict", cov_prev)
+        # Update the previous belief by adding the computed deltas
+        predicted_mu = mu_prev + delta_mu
+        predicted_cov = cov_prev + Q
+        #print("predicted mean", predicted_mu)
+        #print("predicted cov", predicted_cov)
         self.belief["mean"] = predicted_mu
-        print(f"mu_prev: {mu_prev}, predicted_mu: {predicted_mu}")
         self.belief["covariance"] = predicted_cov
 
     def update(self, segments):
@@ -99,20 +108,25 @@ class LaneFilterHistogramKF():
             cov_prev = self.belief["covariance"]
 
             H = np.array([[1, 0],
-                  [0, 1]])
+                          [0, 1]])
+            # We keep the cell with the most vote as the mean
             argmax_idx = np.argmax(measurement_likelihood)
             argmax_row = argmax_idx // measurement_likelihood.shape[1]
-            argmax_col = argmax_idx // measurement_likelihood.shape[1]
-
+            argmax_col = argmax_idx % measurement_likelihood.shape[1]
             max_d = self.d_min + argmax_row * self.delta_d
             max_phi = self.phi_min + argmax_col * self.delta_phi
 
-            noise = 1 - np.max(measurement_likelihood)  # The higher the confidence, the lower the noise
+            # We assume that if many segment agree on d or phi, then there's less variance
 
-            z = [max_d, max_phi]
-            R = np.array([[noise, 0],
-                          [0, noise]])
-
+            conf_d = np.sum(measurement_likelihood[argmax_row, :])
+            conf_phi = np.sum(measurement_likelihood[:, argmax_col])
+            noise_d = max(0.02, 0.5 * (1 - conf_d))  # The higher the confidence, the lower the noise
+            noise_phi = max(0.05, (1 - conf_phi))
+            z = np.array([max_d, max_phi])
+            #print("measurement estimate", z)
+            R = np.array([[noise_d, 0],
+                          [0, noise_phi]])
+            #print("measurement noise", R)
             residual_mu = z - H @ self.belief["mean"]
             residual_cov = H @ cov_prev @ H.T + R
 
@@ -121,6 +135,8 @@ class LaneFilterHistogramKF():
 
             self.belief["mean"] += K @ residual_mu
             self.belief["covariance"] = cov_prev - K @ H @ cov_prev
+            #print("mean after update", self.belief["mean"])
+            #print("cov after update", self.belief["covariance"])
 
     def getEstimate(self):
         return self.belief
@@ -131,7 +147,7 @@ class LaneFilterHistogramKF():
             return None
 
         grid = np.mgrid[self.d_min:self.d_max:self.delta_d,
-                                    self.phi_min:self.phi_max:self.delta_phi]
+               self.phi_min:self.phi_max:self.delta_phi]
 
         # initialize measurement likelihood to all zeros
         measurement_likelihood = np.zeros(grid[0].shape)
@@ -153,7 +169,7 @@ class LaneFilterHistogramKF():
         # lastly normalize so that we have a valid probability density function
 
         measurement_likelihood = measurement_likelihood / \
-            np.sum(measurement_likelihood)
+                                 np.sum(measurement_likelihood)
         return measurement_likelihood
 
 

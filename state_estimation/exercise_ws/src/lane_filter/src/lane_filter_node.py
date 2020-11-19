@@ -55,6 +55,7 @@ class LaneFilterNode(DTROS):
         self.last_update_stamp = self.t_last_update
 
         self.filter.wheel_radius = rospy.get_param(f"/{veh}/kinematics_node/radius")
+        self.filter.baseline = rospy.get_param(f"/{veh}/kinematics_node/baseline")
 
         # Subscribers
         self.sub_segment_list = rospy.Subscriber("~segment_list",
@@ -150,7 +151,6 @@ class LaneFilterNode(DTROS):
     def publishEstimate(self, segment_list_msg=None):
 
         belief = self.filter.getEstimate()
-
         # build lane pose message to send
         lanePose = LanePose()
         lanePose.header.stamp = self.last_update_stamp
