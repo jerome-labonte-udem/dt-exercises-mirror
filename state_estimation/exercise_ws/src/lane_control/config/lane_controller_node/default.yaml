@@ -1,0 +1,8 @@
+#lane_control/lane_controller_node
+
+## ADD CONFIGS HERE
+look_ahead: 0.25
+v_max: 0.65
+v_min: 0.10
+k: 2.5
+use_k: true
