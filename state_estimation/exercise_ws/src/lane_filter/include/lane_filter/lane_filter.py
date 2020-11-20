@@ -53,6 +53,7 @@ class LaneFilterHistogramKF():
 
         self.encoder_resolution = 0
         self.wheel_radius = 0.0
+        self.baseline = 0.0
         self.initialized = False
 
     def predict(self, dt, left_encoder_delta, right_encoder_delta):

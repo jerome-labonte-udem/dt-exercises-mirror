@@ -55,6 +55,7 @@ class LaneFilterNode(DTROS):
         self.last_update_stamp = self.t_last_update
 
         self.filter.wheel_radius = rospy.get_param(f"/{veh}/kinematics_node/radius")
+        self.filter.baseline = rospy.get_param(f"/{veh}/kinematics_node/baseline")
 
         # Subscribers
         self.sub_segment_list = rospy.Subscriber("~segment_list",
