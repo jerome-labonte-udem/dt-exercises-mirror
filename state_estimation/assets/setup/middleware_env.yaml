@@ -14,3 +14,4 @@ middleware_parameters: |
   timeout_initialization: 15
   timeout_regular: 360
   port: 8090
+MAP_NAME: loop_empty
