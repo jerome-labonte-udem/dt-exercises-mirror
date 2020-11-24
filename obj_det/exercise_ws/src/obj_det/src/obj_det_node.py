@@ -3,11 +3,13 @@ import numpy as np
 import rospy
 
 from duckietown.dtros import DTROS, NodeType, TopicType, DTParam, ParamType
-from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading
+from sensor_msgs.msg import CompressedImage, Image
+from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading, AntiInstagramThresholds, SegmentList, Segment
 from obj_det_msg.msg import ObjDetList, ObjDet
 from image_processing.anti_instagram import AntiInstagram
 import cv2
 from model.model_sol import Wrapper
+from cv_bridge import CvBridge
 
 class ObjectDetectionNode(DTROS):
 
@@ -21,14 +23,14 @@ class ObjectDetectionNode(DTROS):
 
 
         # Construct publishers
-        self.pub_obj_dets = rospy.Publisher("~obj_dets",
+        self.pub_obj_dets = rospy.Publisher("/agent/obj_det_node/obj_dets",
                                            SegmentList,
                                            queue_size=1,
                                            dt_topic_type=TopicType.PERCEPTION)
 
         # Construct subscribers
         self.sub_image = rospy.Subscriber(
-            "~image/compressed",
+            "/agent/camera_node/image/compressed",
             CompressedImage,
             self.image_cb,
             buff_size=10000000,
@@ -36,7 +38,7 @@ class ObjectDetectionNode(DTROS):
         )
         
         self.sub_thresholds = rospy.Subscriber(
-            "~thresholds",
+            "/agent/anti_instagram_node/thresholds",
             AntiInstagramThresholds,
             self.thresholds_cb,
             queue_size=1
@@ -47,16 +49,21 @@ class ObjectDetectionNode(DTROS):
         self.ai = AntiInstagram()
         self.bridge = CvBridge()
         
+        print("INIT WARPPER")
+        
         self.model_wrapper = Wrapper()
 
         self.log("Initialized!")
+        print("AHHAHAHAHHAH IM Initialized YOU CANT STOP ME!")
     
     def thresholds_cb(self, thresh_msg):
+        print("RECEIVED THRESH")
         self.anti_instagram_thresholds["lower"] = thresh_msg.low
         self.anti_instagram_thresholds["higher"] = thresh_msg.high
         self.ai_thresholds_received = True
 
     def image_cb(self, image_msg):
+        print("IMAGE NOW!")
         # Decode from compressed image with OpenCV
         try:
             image = self.bridge.compressed_imgmsg_to_cv2(image_msg)
@@ -72,24 +79,29 @@ class ObjectDetectionNode(DTROS):
                 image
             )
             
-        image = cv2.resize(image, (224,224))    # TODO change BGR to RGB
-        bboxes = self.model_wrapper.predict(image)[0]
+        image = cv2.resize(image, (224,224))
+        bboxes, classes, scores = self.model_wrapper.predict(image)
         
         msg = SegmentList()
-        msg.header = self.image_msg.header
-        msg.segments.extend(bboxes)
+        msg.header = image_msg.header
+        msg.segments.extend(self.det2seg(bboxes[0], classes[0]))
         
         
         self.pub_obj_dets.publish(msg)
     
-    def det2seg(self, bboxes):
+    def det2seg(self, bboxes, classes):
+        print(bboxes)
+        print(classes)
+        
         obj_det_list = []
-        for x1, y1, x2, y2 in bboxes:
-            det = ObjDet()
-            det.x_min = x1
-            det.y_min = y1
-            det.x_max = x2
-            det.y_max = y2
+        for i in range(len(bboxes)):
+            x1, y1, x2, y2 = bboxes[i]
+            det = Segment() # novnc doesn't see our custom messages, so we're hacking our way through by using segments.
+            det.pixels_normalized[0].x = x1
+            det.pixels_normalized[0].y = y1
+            det.pixels_normalized[1].x = x2
+            det.pixels_normalized[1].y = y2
+            det.color = classes[i]
         return obj_det_list
 
 
@@ -97,5 +109,6 @@ class ObjectDetectionNode(DTROS):
 if __name__ == "__main__":
     # Initialize the node
     lane_controller_node = ObjectDetectionNode(node_name='obj_det_node')
+    print("GOING TO SPIN NOW")
     # Keep it spinning
     rospy.spin()
