@@ -49,21 +49,17 @@ class ObjectDetectionNode(DTROS):
         self.ai = AntiInstagram()
         self.bridge = CvBridge()
         
-        print("INIT WARPPER")
         
         self.model_wrapper = Wrapper()
 
         self.log("Initialized!")
-        print("AHHAHAHAHHAH IM Initialized YOU CANT STOP ME!")
     
     def thresholds_cb(self, thresh_msg):
-        print("RECEIVED THRESH")
         self.anti_instagram_thresholds["lower"] = thresh_msg.low
         self.anti_instagram_thresholds["higher"] = thresh_msg.high
         self.ai_thresholds_received = True
 
     def image_cb(self, image_msg):
-        print("IMAGE NOW!")
         # Decode from compressed image with OpenCV
         try:
             image = self.bridge.compressed_imgmsg_to_cv2(image_msg)
@@ -122,6 +118,5 @@ class ObjectDetectionNode(DTROS):
 if __name__ == "__main__":
     # Initialize the node
     lane_controller_node = ObjectDetectionNode(node_name='obj_det_node')
-    print("GOING TO SPIN NOW")
     # Keep it spinning
     rospy.spin()
