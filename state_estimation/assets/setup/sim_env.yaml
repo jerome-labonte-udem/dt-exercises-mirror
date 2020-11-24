@@ -10,4 +10,3 @@ AIDONODE_CONFIG: |
     camera_height: 480
     domain_rand: False
     distortion: True
-    map_name: loop_empty
