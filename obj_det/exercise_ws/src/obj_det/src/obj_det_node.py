@@ -60,6 +60,9 @@ class ObjectDetectionNode(DTROS):
         self.ai_thresholds_received = True
 
     def image_cb(self, image_msg):
+        # TODO to get better hz, you might want to only call your wrapper's predict function only once ever 4-5 images?
+        # This way, you're not calling the model again for two practically identical images
+        
         # Decode from compressed image with OpenCV
         try:
             image = self.bridge.compressed_imgmsg_to_cv2(image_msg)
