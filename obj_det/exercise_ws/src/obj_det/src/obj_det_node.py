@@ -78,29 +78,42 @@ class ObjectDetectionNode(DTROS):
                 self.anti_instagram_thresholds["higher"],
                 image
             )
-            
+        
+        orig_y, orig_x = image.shape[0], image.shape[1]
+        scale_y, scale_x = orig_y/224, orig_x/224
+        
         image = cv2.resize(image, (224,224))
         bboxes, classes, scores = self.model_wrapper.predict(image)
         
         msg = SegmentList()
         msg.header = image_msg.header
-        msg.segments.extend(self.det2seg(bboxes[0], classes[0]))
+        msg.segments.extend(self.det2seg(bboxes[0], classes[0], scale_x, scale_y))
         
         
         self.pub_obj_dets.publish(msg)
     
-    def det2seg(self, bboxes, classes):
+    def det2seg(self, bboxes, classes, scale_x, scale_y):
         print(bboxes)
         print(classes)
+        # TODO filter the predictions: this environment here is a bit different, and your model might output a bit
+        # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which obviously makes
+        # no sense. You should remove these. 
         
         obj_det_list = []
         for i in range(len(bboxes)):
             x1, y1, x2, y2 = bboxes[i]
+            
+            x_min = int(np.round(x1 * scale_x))
+            y_min = int(np.round(y1 * scale_y))
+            x_max = x_min + int(np.round(x2 * scale_x))
+            y_max = y_min + int(np.round(y2 * scale_y))
+            
+            
             det = Segment() # novnc doesn't see our custom messages, so we're hacking our way through by using segments.
-            det.pixels_normalized[0].x = x1
-            det.pixels_normalized[0].y = y1
-            det.pixels_normalized[1].x = x2
-            det.pixels_normalized[1].y = y2
+            det.pixels_normalized[0].x = x_min
+            det.pixels_normalized[0].y = y_min
+            det.pixels_normalized[1].x = x_max
+            det.pixels_normalized[1].y = y_max
             det.color = classes[i]
         return obj_det_list
 
