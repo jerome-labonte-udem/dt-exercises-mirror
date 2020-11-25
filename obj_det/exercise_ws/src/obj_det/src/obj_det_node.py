@@ -4,7 +4,7 @@ import rospy
 
 from duckietown.dtros import DTROS, NodeType, TopicType, DTParam, ParamType
 from sensor_msgs.msg import CompressedImage, Image
-from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading, AntiInstagramThresholds, SegmentList, Segment
+from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading, AntiInstagramThresholds
 from obj_det_msg.msg import ObjDetList, ObjDet
 from image_processing.anti_instagram import AntiInstagram
 import cv2
@@ -23,8 +23,8 @@ class ObjectDetectionNode(DTROS):
 
 
         # Construct publishers
-        self.pub_obj_dets = rospy.Publisher("/agent/obj_det_node/obj_dets",
-                                           SegmentList,
+        self.pub_obj_dets = rospy.Publisher("/agent/obj_det_node/obj_det",
+                                           BoolStamped,
                                            queue_size=1,
                                            dt_topic_type=TopicType.PERCEPTION)
 
@@ -79,43 +79,40 @@ class ObjectDetectionNode(DTROS):
                 image
             )
         
-        orig_y, orig_x = image.shape[0], image.shape[1]
-        scale_y, scale_x = orig_y/224, orig_x/224
-        
         image = cv2.resize(image, (224,224))
         bboxes, classes, scores = self.model_wrapper.predict(image)
         
-        msg = SegmentList()
+        msg = BoolStamped()
         msg.header = image_msg.header
-        msg.segments.extend(self.det2seg(bboxes[0], classes[0], scale_x, scale_y))
-        
+        msg.data = self.det2bool(bboxes[0], classes[0]) # [0] because our batch size given to the wrapper is 1
         
         self.pub_obj_dets.publish(msg)
     
-    def det2seg(self, bboxes, classes, scale_x, scale_y):
+    def det2bool(self, bboxes, classes):
+        # TODO remove these debugging prints
         print(bboxes)
         print(classes)
+        
+        # This is a dummy solution, remove this next line
+        return len(bboxes) > 1
+    
+        
         # TODO filter the predictions: the environment here is a bit different versus the data collection environment, and your model might output a bit
         # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which makes
         # no sense. You should remove these. 
         
+        # TODO also filter detections which are outside of the road, or too far away from the bot. Only return True when there's a pedestrian (aka a duckie)
+        # in front of the bot, which you know the bot will have to avoid
+        
+        
         obj_det_list = []
         for i in range(len(bboxes)):
             x1, y1, x2, y2 = bboxes[i]
+            label = classes[i]
             
-            x_min = int(np.round(x1 * scale_x))
-            y_min = int(np.round(y1 * scale_y))
-            x_max = x_min + int(np.round(x2 * scale_x))
-            y_max = y_min + int(np.round(y2 * scale_y))
-            
-            
-            det = Segment() # novnc doesn't see our custom messages, so we're hacking our way through by using segments.
-            det.pixels_normalized[0].x = x_min
-            det.pixels_normalized[0].y = y_min
-            det.pixels_normalized[1].x = x_max
-            det.pixels_normalized[1].y = y_max
-            det.color = classes[i]
-        return obj_det_list
+            # TODO if label isn't a duckie, skip
+            # if detection is a pedestrian in front of us:
+            #   return True
 
 
 
