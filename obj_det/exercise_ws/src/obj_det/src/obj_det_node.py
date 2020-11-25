@@ -102,7 +102,8 @@ class ObjectDetectionNode(DTROS):
         # no sense. You should remove these. 
         
         # TODO also filter detections which are outside of the road, or too far away from the bot. Only return True when there's a pedestrian (aka a duckie)
-        # in front of the bot, which you know the bot will have to avoid
+        # in front of the bot, which you know the bot will have to avoid. A good heuristic would be "if centroid of bounding box is in the center of the image, 
+        # assume duckie is in the road" and "if bouding box's area is more than X pixels, assume duckie is close to us"
         
         
         obj_det_list = []
@@ -111,7 +112,7 @@ class ObjectDetectionNode(DTROS):
             label = classes[i]
             
             # TODO if label isn't a duckie, skip
-            # if detection is a pedestrian in front of us:
+            # TODO if detection is a pedestrian in front of us:
             #   return True
 
 
