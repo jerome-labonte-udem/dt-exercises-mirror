@@ -61,7 +61,8 @@ class ObjectDetectionNode(DTROS):
 
     def image_cb(self, image_msg):
         # TODO to get better hz, you might want to only call your wrapper's predict function only once ever 4-5 images?
-        # This way, you're not calling the model again for two practically identical images
+        # This way, you're not calling the model again for two practically identical images. Experiment to find a good number of skipped
+        # images.
         
         # Decode from compressed image with OpenCV
         try:
@@ -94,8 +95,8 @@ class ObjectDetectionNode(DTROS):
     def det2seg(self, bboxes, classes, scale_x, scale_y):
         print(bboxes)
         print(classes)
-        # TODO filter the predictions: this environment here is a bit different, and your model might output a bit
-        # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which obviously makes
+        # TODO filter the predictions: the environment here is a bit different versus the data collection environment, and your model might output a bit
+        # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which makes
         # no sense. You should remove these. 
         
         obj_det_list = []
