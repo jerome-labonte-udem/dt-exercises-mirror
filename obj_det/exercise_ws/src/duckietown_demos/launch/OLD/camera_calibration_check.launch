@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<launch>
+	<!-- start basic args -->
+	<arg name="veh" default="$(env VEHICLE_NAME)"/>
+	<arg name="config" default="baseline" />
+	<arg name="param_file_name" default="default" />
+
+
+	<!-- decoder_node -->
+	<remap from="decoder_node/compressed_image" to="camera_node/image/compressed"/>
+	<remap from="decoder_node/image/raw" to="camera_node/image/raw"/>
+	<include file="$(find image_processing)/launch/image_decoding.launch">
+		<arg name="veh" value="$(arg veh)"/>
+		<arg name="param_file_name" value="$(arg param_file_name)"/>
+	</include>
+
+	<!-- Raw camera_info_reader node -->
+	<remap from="raw_cam_info_reader_node/camera_info" to="camera_node/raw_camera_info"/>
+	<remap from="raw_cam_info_reader_node/compressed_image" to="camera_node/image/raw"/>
+	<include file="$(find image_processing)/launch/cam_info_reader_node.launch">
+		<arg name="veh" value="$(arg veh)"/>
+		<arg name="param_file_name" value="$(arg param_file_name)"/>
+		<arg name="node_name" value="raw_cam_info_reader_node" />
+		<arg name="image_type" value="raw" />
+	</include>
+
+	<!-- Rectification -->
+	<remap from="image_raw" to="camera_node/image/raw"/>
+	<remap from="camera_info" to="camera_node/raw_camera_info"/>
+	<remap from="image_rect_color" to="camera_node/image/rect" />
+	<include file="$(find image_processing)/launch/image_rectification.launch">
+		<arg name="veh" value="$(arg veh)"/>
+	</include>
+
+	<!-- End Camera -->
+
+</launch>

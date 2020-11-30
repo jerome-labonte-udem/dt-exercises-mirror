@@ -1,0 +1,36 @@
+<launch>
+	<arg name="veh" default="$(env VEHICLE_NAME)"/>
+	<!-- start basic args -->
+	<include file="$(find duckietown_demos)/launch/master.launch">
+		<arg name="veh" value="$(arg veh)"/>
+		<arg name="visualization" value="true" />
+		<arg name="navigation" value="false"/>
+		<arg name="unicorn_intersection" value="true"/>
+		<arg name="apriltags" value="true" />
+
+		<arg name="/camera/raw" value="true"/>
+		<arg name="/camera/raw/rect" value="true"/>
+
+		<arg name="param_file_name" value="default" />
+		<arg name="line_detector_param_file_name" value="default" />
+		<arg name="anti_instagram" value="true" />
+
+		<arg name="obstacle_avoidance_and_detection" value="false"/> <!-- WAY TOO SLOW NOW SIMON :( -->
+
+
+
+		<arg name="coordination" value="true"/>
+		<arg name="/coordination/implicit_coordination" value="false"/>
+		<arg name="/coordination/explicit_coordination" value="true"/>
+		<arg name="LED" value="true"/>
+		<arg name="/LED/detector" value="true"/>
+		<arg name="intersectionType" value="trafficLight"/>
+		<!-- Charging control enabled for Megacity -->
+		<arg name="charging_control" value="false"/>
+		<arg name="maintenance_control" value="false"/>
+
+    <arg name="tcp_communication" value="false"/>
+		<arg name="auto_calibration" value="false"/>
+
+	</include>
+</launch>
