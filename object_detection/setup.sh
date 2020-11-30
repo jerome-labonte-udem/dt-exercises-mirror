@@ -5,7 +5,7 @@ source venv/bin/activate
 rm -rf temp || true
 rm -rf $DATA_COLLECTION_DIR/gym_duckietown || true
 rm -rf ./requirements.txt || true
-git clone git@github.com:Velythyl/gym-duckietown.git -b object_detection temp && cp temp/requirements.txt ./requirements.txt && cp -r ./temp/src/gym_duckietown $DATA_COLLECTION_DIR/gym_duckietown && rm -rf temp
+git clone https://github.com/Velythyl/gym-duckietown.git -b object_detection temp && cp temp/requirements.txt ./requirements.txt && cp -r ./temp/src/gym_duckietown $DATA_COLLECTION_DIR/gym_duckietown && rm -rf temp
 pip install -r requirements.txt
 mkdir -p $DATASET_DIR
 cd dataset
