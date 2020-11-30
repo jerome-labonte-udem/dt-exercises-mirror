@@ -6,11 +6,13 @@ from agent import PurePursuitPolicy
 from utils import launch_env, seed
 from utils import launch_env, seed, makedirs, display_seg_mask, display_img_seg_mask
 
+DATASET_DIR="../../dataset"
+
 npz_index = 0
 def save_npz(img, boxes, classes):
     global npz_index
-    with makedirs("./data_collection/dataset"):
-        np.savez(f"./data_collection/dataset/{npz_index}.npz", *(img, boxes, classes))
+    with makedirs(DATASET_DIR):
+        np.savez(f"{DATASET_DIR}/{npz_index}.npz", *(img, boxes, classes))
         npz_index += 1
 
 def clean_segmented_image(seg_img):

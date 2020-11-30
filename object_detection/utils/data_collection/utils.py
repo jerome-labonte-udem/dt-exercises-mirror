@@ -20,7 +20,6 @@ def seed(seed):
     random.seed(seed)
 
 def launch_env(map_name="udem_spooky"):
-    import gym_duckietown
     from gym_duckietown.envs import DuckietownEnv
     env = DuckietownEnv(
         domain_rand=False,

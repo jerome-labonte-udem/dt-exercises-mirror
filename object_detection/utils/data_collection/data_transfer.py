@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import json
 import os
 import cv2
@@ -5,21 +8,23 @@ import numpy as np
 
 from utils import makedirs
 
-with open("./duckietown_obj_det_dataset/annotation/final_anns.json") as anns:
+DATASET_PATH="../../dataset"
+
+with open(f"{DATASET_PATH}/real_data/annotation/final_anns.json") as anns:
     annotations = json.load(anns)
 
 npz_index = 0
-while os.path.exists(f"./dataset/{npz_index}.npz"): # disgusting, but it works
+while os.path.exists(f"{DATASET_PATH}/{npz_index}.npz"): # disgusting, but it works
     npz_index += 1
 
 def save_npz(img, boxes, classes):
     global npz_index
-    with makedirs("./dataset"):
-        np.savez(f"./dataset/{npz_index}.npz", *(img, boxes, classes))
+    with makedirs(f"{DATASET_PATH}"):
+        np.savez(f"{DATASET_PATH}/{npz_index}.npz", *(img, boxes, classes))
         npz_index += 1
 
-for filename in os.listdir("./duckietown_obj_det_dataset/frames"):
-    img = cv2.imread(f"./duckietown_obj_det_dataset/frames/{filename}")
+for filename in os.listdir(f"{DATASET_PATH}/real_data/frames"):
+    img = cv2.imread(f"{DATASET_PATH}/real_data/frames/{filename}")
 
     orig_y, orig_x = img.shape[0], img.shape[1]
     scale_y, scale_x = 224/orig_y, 224/orig_x
