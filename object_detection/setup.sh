@@ -1,7 +1,5 @@
 DATA_COLLECTION_DIR=./utils/data_collection
 DATASET_DIR=./dataset
-virtualenv venv
-source venv/bin/activate
 rm -rf temp || true
 rm -rf $DATA_COLLECTION_DIR/gym_duckietown || true
 rm -rf ./requirements.txt || true
