@@ -8,7 +8,7 @@ from sensor_msgs.msg import CompressedImage, Image
 from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading, AntiInstagramThresholds
 from image_processing.anti_instagram import AntiInstagram
 import cv2
-from object_detection.model_sol import Wrapper
+from object_detection.model import Wrapper
 from cv_bridge import CvBridge
 
 class ObjectDetectionNode(DTROS):
