@@ -2,7 +2,7 @@ AIDONODE_DATA_IN: /fifos/simulator-in
 AIDONODE_DATA_OUT: fifo:/fifos/simulator-out
 AIDONODE_CONFIG: |
   env_constructor: Simulator
-  blur_time: 0.01
+  blur_time: 0.05
   render_dt: 0.033
   env_parameters:
     max_steps: 500001
@@ -10,4 +10,3 @@ AIDONODE_CONFIG: |
     camera_height: 480
     domain_rand: False
     distortion: True
-    map_name: loop_empty

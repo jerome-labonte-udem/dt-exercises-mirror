@@ -48,15 +48,18 @@ class LaneFilterHistogramKF():
             assert p_name in kwargs
             setattr(self, p_name, kwargs[p_name])
 
-        self.mean_0 = [self.mean_d_0, self.mean_phi_0]
-        self.cov_0 = [[self.sigma_d_0, 0], [0, self.sigma_phi_0]]
 
-        self.belief = {'mean': self.mean_0, 'covariance': self.cov_0}
 
         self.encoder_resolution = 0
         self.wheel_radius = 0.0
         self.baseline = 0.0
         self.initialized = False
+        self.reset()
+
+    def reset(self):
+        self.mean_0 = [self.mean_d_0, self.mean_phi_0]
+        self.cov_0 = [[self.sigma_d_0, 0], [0, self.sigma_phi_0]]
+        self.belief = {'mean': self.mean_0, 'covariance': self.cov_0}
 
     def predict(self, dt, left_encoder_delta, right_encoder_delta):
         veh = os.getenv("VEHICLE_NAME")

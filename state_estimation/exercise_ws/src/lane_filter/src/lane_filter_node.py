@@ -73,6 +73,11 @@ class LaneFilterNode(DTROS):
                                                  self.cbProcessRightEncoder,
                                                  queue_size=1)
 
+        self.sub_episode_start = rospy.Subscriber(f"episode_start",
+                                                  BoolStamped,
+                                                  self.cbEpisodeStart,
+                                                  queue_size=1)
+
 
         # Publishers
         self.pub_lane_pose = rospy.Publisher("~lane_pose",
@@ -98,6 +103,11 @@ class LaneFilterNode(DTROS):
         rospy.Timer(rospy.Duration(1/self._predict_freq), self.cbPredict)
 
         self.bridge = CvBridge()
+
+    def cbEpisodeStart(self, msg):
+        rospy.loginfo("Lane Filter Resetting")
+        if msg.data:
+            self.filter.reset()
 
     def cbProcessLeftEncoder(self, left_encoder_msg):
         if not self.filter.initialized:
