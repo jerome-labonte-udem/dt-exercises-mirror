@@ -1,12 +1,13 @@
-middleware_parameters: |
+experiment_manager_parameters: |
   episodes_per_scenario: 1
   episode_length_s: 100.0
   min_episode_length_s: 1.0
   seed: 42
   physics_dt: 0.05
   max_failures: 2
-  agent_in: /fifos/agent-in
-  agent_out: /fifos/agent-out
+  fifo_dir: /fifos
+  agent_in: /fifos/ego0-in
+  agent_out: /fifos/ego0-out
   sim_in: /fifos/simulator-in
   sim_out: /fifos/simulator-out
   sm_in: None
@@ -14,4 +15,6 @@ middleware_parameters: |
   timeout_initialization: 15
   timeout_regular: 360
   port: 8090
-MAP_NAME: loop_obstacles
+  scenarios:
+  - /scenarios
+MAP_NAME: loop_empty
