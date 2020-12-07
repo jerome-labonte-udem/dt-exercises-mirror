@@ -10,11 +10,11 @@ from utils import makedirs
 
 DATASET_PATH="../../dataset"
 
-with open(f"{DATASET_PATH}/real_data/annotation/final_anns.json") as anns:
+with open(f"{DATASET_PATH}/real_data/duckietown object detection dataset/annotation/final_anns.json") as anns:
     annotations = json.load(anns)
 
 npz_index = 0
-while os.path.exists(f"{DATASET_PATH}/{npz_index}.npz"): # disgusting, but it works
+while os.path.exists(f"{DATASET_PATH}/{npz_index}.npz"):
     npz_index += 1
 
 def save_npz(img, boxes, classes):
@@ -23,8 +23,8 @@ def save_npz(img, boxes, classes):
         np.savez(f"{DATASET_PATH}/{npz_index}.npz", *(img, boxes, classes))
         npz_index += 1
 
-for filename in os.listdir(f"{DATASET_PATH}/real_data/frames"):
-    img = cv2.imread(f"{DATASET_PATH}/real_data/frames/{filename}")
+for filename in os.listdir(f"{DATASET_PATH}/real_data/duckietown object detection dataset/frames"):
+    img = cv2.imread(f"{DATASET_PATH}/real_data/duckietown object detection dataset/frames/{filename}")
 
     orig_y, orig_x = img.shape[0], img.shape[1]
     scale_y, scale_x = 224/orig_y, 224/orig_x
