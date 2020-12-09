@@ -21,7 +21,7 @@ class ObjectDetectionNode(DTROS):
             node_type=NodeType.PERCEPTION
         )
 
-
+        self.initialized = False
 
         # Construct publishers
         self.pub_obj_dets = rospy.Publisher(
@@ -102,13 +102,10 @@ class ObjectDetectionNode(DTROS):
         print(classes)
         
         # This is a dummy solution, remove this next line
-        return len(bboxes) > 1
-    
         
         # TODO filter the predictions: the environment here is a bit different versus the data collection environment, and your model might output a bit
         # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which makes
-        # no sense. You should remove these. 
-        
+        # no sense. You should remove these.
         # TODO also filter detections which are outside of the road, or too far away from the bot. Only return True when there's a pedestrian (aka a duckie)
         # in front of the bot, which you know the bot will have to avoid. A good heuristic would be "if centroid of bounding box is in the center of the image, 
         # assume duckie is in the road" and "if bouding box's area is more than X pixels, assume duckie is close to us"
@@ -120,8 +117,19 @@ class ObjectDetectionNode(DTROS):
             label = classes[i]
             
             # TODO if label isn't a duckie, skip
+            if label != 1:
+                continue
             # TODO if detection is a pedestrian in front of us:
-            #   return True
+            else:
+                print("found duckie !")
+                center_x = x1 + (x2 - x1)/2
+                center_y = y1 + (y2 - y1)/2
+                if 56 < center_x < 168 and 56 < center_y < 168:
+                    print("it's centered !")
+                if (x2-x1) * (y2-y1) > 300:
+                    print("it's a big one !!")
+                    return True
+        return False
 
 
 
