@@ -5,6 +5,6 @@
 # conventions + format
 protocol: aido2_db18_agent-z2
 # any user label - displayed in "challenges list"
-user-label: real-exercise-3
+user-label: sim-exercise-3
 # any JSON payload
 user-payload: {}
