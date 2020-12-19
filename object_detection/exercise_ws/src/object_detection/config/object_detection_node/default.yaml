@@ -1,2 +1,2 @@
 # path to model is by default relative to the package
-model_file: "/include/object_detection/weights/model_real_e1.pt"
+model_file: "/include/object_detection/weights/model_sim_e1.pt"
