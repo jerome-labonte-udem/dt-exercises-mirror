@@ -5,15 +5,15 @@ import os
 import numpy as np
 import torch
 import torchvision
-import transforms as T
-from engine import evaluate, train_one_epoch
 from PIL import Image
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
+import transforms as T
 import utils
+from engine import evaluate, train_one_epoch
 
 MODEL_PATH = "../exercise_ws/src/object_detection/include/object_detection/weights"
-DATASET_PATH = "/home/jerome/PycharmProjects/dt-exercises/object_detection/dataset"
+DATASET_PATH = "../dataset_sim"
 
 
 def get_transform(train):
@@ -112,7 +112,7 @@ def main():
         train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq=10)
         # update the learning rate
         lr_scheduler.step()
-        torch.save(model.state_dict(), os.path.join(MODEL_PATH, f"model_real_e{epoch}.pt"))
+        torch.save(model.state_dict(), os.path.join(MODEL_PATH, f"model_sim_e{epoch}.pt"))
     # evaluate last epoch
     evaluate(model, data_loader_test, device, epoch + 1)
 
