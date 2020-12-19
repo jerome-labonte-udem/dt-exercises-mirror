@@ -13,7 +13,7 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 import utils
 
 MODEL_PATH = "../exercise_ws/src/object_detection/include/object_detection/weights"
-DATASET_PATH = "/home/jerome/PycharmProjects/dt-exercises/object_detection/dataset"
+DATASET_PATH = "../dataset"
 
 
 def get_transform(train):
