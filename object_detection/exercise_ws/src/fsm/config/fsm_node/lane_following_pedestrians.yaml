@@ -71,6 +71,8 @@ states:
       - decoder_node
       - line_detector_node
       - lane_filter_node
+      - pedestrian_avoidance_controller_node
+      - object_detection_node
       - lane_controller_node
     lights: ["lane_following"]
     current_status: "in_progress"

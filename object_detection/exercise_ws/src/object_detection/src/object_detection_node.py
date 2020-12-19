@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-import numpy as np
-import rospy
-import rospkg
-
-from duckietown.dtros import DTROS, NodeType, TopicType, DTParam, ParamType
-from sensor_msgs.msg import CompressedImage, Image
-from duckietown_msgs.msg import Twist2DStamped, LanePose, WheelsCmdStamped, BoolStamped, FSMState, StopLineReading, AntiInstagramThresholds
-from image_processing.anti_instagram import AntiInstagram
 import cv2
-from object_detection.model import Wrapper
+import rospkg
+import rospy
 from cv_bridge import CvBridge
+from duckietown.dtros import DTROS, DTParam, NodeType, ParamType, TopicType
+from duckietown_msgs.msg import (AntiInstagramThresholds, BoolStamped,
+                                 FSMState, LanePose, StopLineReading,
+                                 Twist2DStamped, WheelsCmdStamped)
+from image_processing.anti_instagram import AntiInstagram
+from object_detection.model import Wrapper
+from sensor_msgs.msg import CompressedImage, Image
+
 
 class ObjectDetectionNode(DTROS):
 
@@ -22,13 +23,20 @@ class ObjectDetectionNode(DTROS):
         )
 
         self.initialized = False
-
+        self.image_count = 0
         # Construct publishers
         self.pub_obj_dets = rospy.Publisher(
             "~duckie_detected",
             BoolStamped,
             queue_size=1,
             dt_topic_type=TopicType.PERCEPTION
+        )
+
+        self.pub_image = rospy.Publisher(
+            "~detection/compressed",
+            CompressedImage,
+            queue_size=1,
+            dt_topic_type=TopicType.DEBUG
         )
 
         # Construct subscribers
@@ -39,26 +47,26 @@ class ObjectDetectionNode(DTROS):
             buff_size=10000000,
             queue_size=1
         )
-        
+
         self.sub_thresholds = rospy.Subscriber(
             "~thresholds",
             AntiInstagramThresholds,
             self.thresholds_cb,
             queue_size=1
         )
-        
+
         self.ai_thresholds_received = False
-        self.anti_instagram_thresholds=dict()
+        self.anti_instagram_thresholds = dict()
         self.ai = AntiInstagram()
         self.bridge = CvBridge()
 
-        model_file = rospy.get_param('~model_file','.')
+        model_file = rospy.get_param('~model_file', '.')
         rospack = rospkg.RosPack()
         model_file_absolute = rospack.get_path('object_detection') + model_file
         self.model_wrapper = Wrapper(model_file_absolute)
         self.initialized = True
         self.log("Initialized!")
-    
+
     def thresholds_cb(self, thresh_msg):
         self.anti_instagram_thresholds["lower"] = thresh_msg.low
         self.anti_instagram_thresholds["higher"] = thresh_msg.high
@@ -67,10 +75,9 @@ class ObjectDetectionNode(DTROS):
     def image_cb(self, image_msg):
         if not self.initialized:
             return
-
-        # TODO to get better hz, you might want to only call your wrapper's predict function only once ever 4-5 images?
-        # This way, you're not calling the model again for two practically identical images. Experiment to find a good number of skipped
-        # images.
+        self.image_count += 1
+        if self.image_count % 5 != 0:
+            return
 
         # Decode from compressed image with OpenCV
         try:
@@ -78,7 +85,7 @@ class ObjectDetectionNode(DTROS):
         except ValueError as e:
             self.logerr('Could not decode image: %s' % e)
             return
-        
+
         # Perform color correction
         if self.ai_thresholds_received:
             image = self.ai.apply_color_balance(
@@ -86,51 +93,45 @@ class ObjectDetectionNode(DTROS):
                 self.anti_instagram_thresholds["higher"],
                 image
             )
-        
-        image = cv2.resize(image, (224,224))
-        bboxes, classes, scores = self.model_wrapper.predict(image)
-        
+
+        image = cv2.resize(image, (224, 224))
+        rgb_image = image[:, :, ::-1].copy()
+        bboxes, classes, scores = self.model_wrapper.predict(rgb_image)
+
         msg = BoolStamped()
         msg.header = image_msg.header
-        msg.data = self.det2bool(bboxes[0], classes[0]) # [0] because our batch size given to the wrapper is 1
-        
+        found_duckie = self.det2bool(bboxes[0], classes[0], scores[0])
+        msg.data = found_duckie
+
         self.pub_obj_dets.publish(msg)
-    
-    def det2bool(self, bboxes, classes):
-        # TODO remove these debugging prints
-        print(bboxes)
-        print(classes)
-        
-        # This is a dummy solution, remove this next line
-        
-        # TODO filter the predictions: the environment here is a bit different versus the data collection environment, and your model might output a bit
-        # of noise. For example, you might see a bunch of predictions with x1=223.4 and x2=224, which makes
-        # no sense. You should remove these.
-        # TODO also filter detections which are outside of the road, or too far away from the bot. Only return True when there's a pedestrian (aka a duckie)
-        # in front of the bot, which you know the bot will have to avoid. A good heuristic would be "if centroid of bounding box is in the center of the image, 
-        # assume duckie is in the road" and "if bouding box's area is more than X pixels, assume duckie is close to us"
-        
-        
-        obj_det_list = []
+
+        # If there are any subscribers to the debug topics, generate a debug image and publish it
+        if self.pub_image.get_num_connections() > 0:
+            for i, box in enumerate(bboxes[0]):
+                if int(classes[0][i]) == 1:
+                    x1, y1, x2, y2 = box
+                    center_x = x1 + (x2 - x1) / 2
+                    if (scores[0][i] > 0.85) and (56 < center_x < 168) and ((x2 - x1) * (y2 - y1)) > 300:
+                        color = (0, 0, 255)
+                    else:
+                        color = (0, 255, 0)
+                    image = cv2.rectangle(image, (int(x1), int(y1)), (int(x2), int(y2)), color, 1)
+            msg = self.bridge.cv2_to_compressed_imgmsg(image)
+            msg.header = image_msg.header
+            self.pub_image.publish(msg)
+
+    def det2bool(self, bboxes, classes, scores):
         for i in range(len(bboxes)):
             x1, y1, x2, y2 = bboxes[i]
             label = classes[i]
-            
-            # TODO if label isn't a duckie, skip
+            center_x = x1 + (x2 - x1) / 2
+
             if label != 1:
                 continue
-            # TODO if detection is a pedestrian in front of us:
             else:
-                print("found duckie !")
-                center_x = x1 + (x2 - x1)/2
-                center_y = y1 + (y2 - y1)/2
-                if 56 < center_x < 168 and 56 < center_y < 168:
-                    print("it's centered !")
-                if (x2-x1) * (y2-y1) > 300:
-                    print("it's a big one !!")
+                if (scores[i] > 0.85) and (56 < center_x < 168) and ((x2 - x1) * (y2 - y1)) > 300:
                     return True
         return False
-
 
 
 if __name__ == "__main__":

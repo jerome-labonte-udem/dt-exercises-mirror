@@ -1,18 +1,15 @@
+import numpy as np
 import torch
 import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
-import os
-import glob
-import torchvision.models as models
-import numpy as np
+
+
 class NoGPUAvailable(Exception):
     pass
 
-class Wrapper():
+
+class Wrapper:
     def __init__(self, model_file):
-        # TODO Instantiate your model and other class instances here!
-        # TODO Don't forget to set your model in evaluation/testing/production mode, and sending it to the GPU
-        # TODO If no GPU is available, raise the NoGPUAvailable exception
         if torch.cuda.is_available():
             device = torch.device('cuda')
         else:
@@ -36,17 +33,19 @@ class Wrapper():
         boxes = []
         labels = []
         scores = []
+        # Handle the case of a sinle image
         if len(batch_or_image.shape) == 3:
             batch_or_image = np.array([batch_or_image])
-        for img in batch_or_image:  # or simply pipe the whole batch to the model instead of using a loop!
-            box, label, score = self.model.predict(img)  # TODO you probably need to send the image to a tensor, etc.
+        for img in batch_or_image:
+            box, label, score = self.model.predict(img)
             boxes.append(box)
             labels.append(label)
             scores.append(score)
 
         return boxes, labels, scores
 
-class Model():    # TODO probably extend a TF or Pytorch class!
+
+class Model:
     def __init__(self, device, model_file):
         self.device = device
         self.model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=False)
@@ -60,16 +59,11 @@ class Model():    # TODO probably extend a TF or Pytorch class!
 
     @torch.no_grad()
     def predict(self, img):
-        img = img[:, :, ::-1]
+        # convert to torch image format
         img = np.transpose(img, (2, 0, 1))/255
-        print("img shape", img.shape)
-        img = torch.from_numpy(img).to(self.device).type(torch.FloatTensor)
-        print("tensor shape", img.shape)
-        print("dtype", img.dtype)
+        img = torch.from_numpy(img).type(torch.FloatTensor).to(self.device)
         predictions = self.model([img])
-        print(predictions)
         boxes = predictions[0]["boxes"]
         labels = predictions[0]["labels"]
         scores = predictions[0]["scores"]
         return boxes, labels, scores
-    # TODO add your own functions if need be!

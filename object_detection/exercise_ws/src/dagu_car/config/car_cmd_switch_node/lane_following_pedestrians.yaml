@@ -7,4 +7,4 @@ source_topics: #Mapping from cmd source name to topics
 mappings: #Mapping from FSMStates.state to cmd source names. Allows different FSM mode to use the same source.
   LANE_FOLLOWING: "lane"
   NORMAL_JOYSTICK_CONTROL: "joystick"
-  PEDESTRIAN_AVOIDANCE: "pedestrian"
+  DUCKIE_AVOID: "pedestrian"
